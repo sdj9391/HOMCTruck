@@ -1,7 +1,9 @@
 package com.homc.homctruck.restapi
 
 import com.homc.homctruck.utils.AppConfig
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Headers
+import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,7 +28,8 @@ object AppApiInstance {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) /*.addCallAdapterFactory(CoroutineCallAdapterFactory.create())*/
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory.invoke())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -48,31 +51,29 @@ object AppApiInstance {
     private fun getInterceptor(authHeader: String?): Interceptor {
         return Interceptor { chain: Interceptor.Chain ->
             val original = chain.request()
-            val headersMap = getHeadersMap(original.headers())
+            val headersMap = getHeadersMap(original.headers)
             authHeader?.let {
                 headersMap["Authorization"] = "Basic $it"
             }
             headersMap["Accept"] = "application/json"
             val request = original.newBuilder()
-                .headers(toHeaders(headersMap))
-                .method(original.method(), original.body())
+                .headers(headersMap.toHeaders())
+                .method(original.method, original.body)
                 .build()
             chain.proceed(request)
         }
     }
 
-    private fun getHeadersMap(headers: Headers?): MutableMap<String, String?> {
-        val headersMap = HashMap<String, String?>()
+    private fun getHeadersMap(headers: Headers?): MutableMap<String, String> {
+        val headersMap = HashMap<String, String>()
         if (headers != null) {
             val names = headers.names()
             for (name in names) {
-                headersMap[name] = headers[name]
+                headers[name]?.let {
+                    headersMap[name] =  it
+                }
             }
         }
         return headersMap
-    }
-
-    private fun toHeaders(headersMap: Map<String, String?>): Headers {
-        return Headers.of(headersMap)
     }
 }

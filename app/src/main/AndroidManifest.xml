@@ -16,6 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HOMCTruck" >
 
+        <activity android:name=".views.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <!--This is declared for the instance id of firebase and init firebase messaging service-->
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>

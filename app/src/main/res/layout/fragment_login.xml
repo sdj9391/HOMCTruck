@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/ic_login_background"
+    tools:context=".views.fragments.LoginFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/mobileNumberTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@color/transparent_white"
+        android:hint="@string/label_mobile_number"
+        android:padding="12dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="10"
+        app:errorTextColor="@android:color/holo_red_light"
+        app:helperText="Write 10 digit mobile number"
+        app:layout_constraintBottom_toTopOf="@+id/otpTextField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_goneMarginBottom="72dp"
+        app:startIconDrawable="@drawable/ic_phone_black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/mobileNumberEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLength="10" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/otpTextField"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="72dp"
+        android:background="@color/transparent_white"
+        android:hint="@string/label_otp"
+        android:padding="12dp"
+        android:visibility="gone"
+        app:counterEnabled="true"
+        app:counterMaxLength="6"
+        app:errorTextColor="@color/error_text"
+        app:helperText="Enter otp send to you"
+        app:layout_constraintBottom_toTopOf="@+id/continueButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mobileNumberTextField"
+        app:startIconDrawable="@drawable/ic_key_black"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/otpEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLength="6" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/continueButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/label_continue"
+        android:textSize="@dimen/normal_font"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/otpTextField"
+        app:strokeColor="@color/primary" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/continueButton"
+        app:layout_constraintEnd_toEndOf="@+id/continueButton"
+        app:layout_constraintStart_toStartOf="@+id/continueButton"
+        app:layout_constraintTop_toTopOf="@+id/continueButton"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
