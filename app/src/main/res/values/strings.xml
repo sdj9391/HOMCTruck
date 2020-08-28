@@ -5,4 +5,7 @@
     <string name="label_mobile_number">Mobile Number</string>
     <string name="label_otp">OTP</string>
     <string name="label_continue">Continue</string>
+    <string name="label_send_otp">Send OTP</string>
+    <string name="label_resend_otp">Resend OTP</string>
+    <string name="placeholder_plus_91">+91%1$s</string>
 </resources>

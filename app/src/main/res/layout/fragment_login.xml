@@ -20,7 +20,7 @@
         app:counterEnabled="true"
         app:counterMaxLength="10"
         app:errorTextColor="@android:color/holo_red_light"
-        app:helperText="Write 10 digit mobile number"
+        app:helperText="Enter 10 digit mobile number"
         app:layout_constraintBottom_toTopOf="@+id/otpTextField"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +33,24 @@
             android:id="@+id/mobileNumberEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:digits="0123456789"
             android:inputType="phone"
             android:maxLength="10" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/editMobileNumberButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#00FFFFFF"
+        android:src="@drawable/ic_edit_black"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/mobileNumberTextField"
+        app:layout_constraintEnd_toEndOf="@+id/mobileNumberTextField"
+        app:layout_constraintTop_toTopOf="@+id/mobileNumberTextField"
+        tools:visibility="visible" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/otpTextField"
@@ -50,11 +65,9 @@
         android:hint="@string/label_otp"
         android:padding="12dp"
         android:visibility="gone"
-        app:counterEnabled="true"
-        app:counterMaxLength="6"
         app:errorTextColor="@color/error_text"
-        app:helperText="Enter otp send to you"
-        app:layout_constraintBottom_toTopOf="@+id/continueButton"
+        app:helperText="Enter otp sent to you"
+        app:layout_constraintBottom_toTopOf="@+id/sendOtpButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mobileNumberTextField"
@@ -66,18 +79,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:maxLength="6" />
+            android:maxLength="8" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/continueButton"
+        android:id="@+id/sendOtpButton"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:backgroundTint="@color/white"
-        android:text="@string/label_continue"
+        android:text="@string/label_send_otp"
         android:textSize="@dimen/normal_font"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,15 +98,32 @@
         app:layout_constraintTop_toBottomOf="@+id/otpTextField"
         app:strokeColor="@color/primary" />
 
+    <Button
+        android:id="@+id/resendButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/label_resend_otp"
+        android:textColor="@color/primary_variant"
+        android:textSize="@dimen/normal_font"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendOtpButton"
+        tools:visibility="visible" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/continueButton"
-        app:layout_constraintEnd_toEndOf="@+id/continueButton"
-        app:layout_constraintStart_toStartOf="@+id/continueButton"
-        app:layout_constraintTop_toTopOf="@+id/continueButton"
+        app:layout_constraintBottom_toBottomOf="@+id/sendOtpButton"
+        app:layout_constraintEnd_toEndOf="@+id/sendOtpButton"
+        app:layout_constraintStart_toStartOf="@+id/sendOtpButton"
+        app:layout_constraintTop_toTopOf="@+id/sendOtpButton"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@ import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import com.homc.homctruck.R
 
-open class BaseFullScreenFragment : Fragment() {
+open class BaseFullScreenFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

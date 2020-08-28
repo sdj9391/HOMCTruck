@@ -16,10 +16,10 @@ android {
 
     signingConfigs {
         config {
-            keyAlias ALIAS_TOASTMASTERS_SOCIAL
-            keyPassword PASSWORD_ALIAS_TOASTMASTERS
-            storeFile file(FILE_KEYSTORE_TOASTMASTERS_SOCIAL)
-            storePassword PASSWORD_KEYSTORE_TOASTMASTERS
+            keyAlias ALIAS_HOMC_TRUCK
+            keyPassword PASSWORD_ALIAS_HOMC_TRUCK
+            storeFile file(FILE_KEYSTORE_HOMC_TRUCK)
+            storePassword PASSWORD_KEYSTORE_HOMC_TRUCK
         }
     }
 
@@ -178,6 +178,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-config:19.2.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
