@@ -1,5 +1,6 @@
 package com.homc.homctruck.views.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +22,8 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.AppConfig
 import com.homc.homctruck.utils.BaseAccountManager
 import com.homc.homctruck.utils.DebugLog
-import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.views.activities.MainDrawerActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -56,6 +57,7 @@ class LoginFragment : BaseFullScreenFragment() {
                 //     detect the incoming verification SMS and perform verification without
                 //     user action.
                 DebugLog.v("onVerificationCompleted:$credential")
+                otpEditText.setText(credential.smsCode)
                 if (verificationId != null) {
                     signInWithPhoneAuthCredential(credential)
                 }
@@ -69,7 +71,8 @@ class LoginFragment : BaseFullScreenFragment() {
 
                 when (e) {
                     is FirebaseAuthInvalidCredentialsException -> {
-                        mobileNumberEditText.error = getString(R.string.msg_enter_valid_mobile_number)
+                        mobileNumberEditText.error =
+                            getString(R.string.msg_enter_valid_mobile_number)
                         mobileNumberEditText.requestFocus()
                     }
                     is FirebaseTooManyRequestsException -> {
@@ -88,6 +91,7 @@ class LoginFragment : BaseFullScreenFragment() {
                 sendOtpButton.text = getString(R.string.label_continue)
                 sendOtpButton.isEnabled = true
                 sendOtpButton.setOnClickListener(onVerifyClickListener)
+                otpTextField.isEnabled = true
                 resendButton.visibility = View.VISIBLE
                 editMobileNumberButton.visibility = View.VISIBLE
                 this@LoginFragment.verificationId = verificationId
@@ -107,12 +111,12 @@ class LoginFragment : BaseFullScreenFragment() {
                 resendToken = token
                 progressBar.visibility = View.VISIBLE
                 otpTextField.visibility = View.VISIBLE
-                sendOtpButton.text = getString(R.string.label_continue)
+                otpTextField.isEnabled = false
+                sendOtpButton.text = getString(R.string.msg_wait_auto_detecting_otp)
                 sendOtpButton.isEnabled = false
                 sendOtpButton.setOnClickListener(onVerifyClickListener)
                 resendButton.visibility = View.GONE
                 editMobileNumberButton.visibility = View.VISIBLE
-                showMessage(getString(R.string.msg_wait_auto_detecting_otp))
             }
         }
 
@@ -249,6 +253,7 @@ class LoginFragment : BaseFullScreenFragment() {
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         progressBar.visibility = View.GONE
                         otpTextField.visibility = View.VISIBLE
+                        otpTextField.isEnabled = true
                         sendOtpButton.text = getString(R.string.label_continue)
                         sendOtpButton.isEnabled = true
                         sendOtpButton.setOnClickListener(onVerifyClickListener)
@@ -300,6 +305,7 @@ class LoginFragment : BaseFullScreenFragment() {
                     userDetails.mobileNumber = mobileNumberEditText.text.toString().trim()
                     BaseAccountManager(requireActivity()).userDetails = userDetails
                     BaseAccountManager(requireActivity()).userAuthToken = firebaseToken
+                    BaseAccountManager(requireActivity()).isMobileVerified = true
                     AppConfig.token = firebaseToken
                     (requireActivity().application as HomcTruckApp).initAppConfig()
                     initViewModel()
@@ -314,7 +320,11 @@ class LoginFragment : BaseFullScreenFragment() {
     }
 
     private fun checkForNewUserApiCall(user: FirebaseUser?) {
-        if (!isInternetAvailable()) {
+
+        startActivity(Intent(requireActivity(), MainDrawerActivity::class.java))
+        requireActivity().finish()
+
+        /*if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
@@ -325,8 +335,8 @@ class LoginFragment : BaseFullScreenFragment() {
             return
         }
 
-        viewModel?.getUserDetails("BEEcQVqm5DXILPwIOUaWRMrddzj2")
-            ?.observe(viewLifecycleOwner, observeUpdateClubMeetingAgendaItem)
+        viewModel?.getUserDetails(userId)
+            ?.observe(viewLifecycleOwner, observeUpdateClubMeetingAgendaItem)*/
     }
 
     private val observeUpdateClubMeetingAgendaItem = Observer<DataBound<User>> {

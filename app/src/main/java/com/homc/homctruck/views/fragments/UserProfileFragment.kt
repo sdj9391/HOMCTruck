@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.homc.homctruck.R
 
-class SignUpFragment : BaseFullScreenFragment() {
+class UserProfileFragment : BaseFullScreenFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        return inflater.inflate(R.layout.fragment_user_profile, container, false)
     }
 }

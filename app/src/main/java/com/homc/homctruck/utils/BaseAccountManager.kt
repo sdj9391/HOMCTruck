@@ -104,8 +104,7 @@ class BaseAccountManager(context: Context) {
             }
         }
 
-
-    var isUserVerified: Boolean?
+    var isMobileVerified: Boolean?
         get() {
             if (account == null) {
                 DebugLog.d("User account not found!")
@@ -113,7 +112,7 @@ class BaseAccountManager(context: Context) {
             }
             var accountVerified: String? = null
             try {
-                accountVerified = accountManager.getUserData(account, KEY_IS_VERIFIED_USER)
+                accountVerified = accountManager.getUserData(account, KEY_IS_MOBILE_VERIFIED)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -136,7 +135,46 @@ class BaseAccountManager(context: Context) {
             try {
                 accountManager.setUserData(
                     account,
-                    KEY_IS_VERIFIED_USER,
+                    KEY_IS_MOBILE_VERIFIED,
+                    accountVerified.toString()
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+    var isAccountVerified: Boolean?
+        get() {
+            if (account == null) {
+                DebugLog.d("User account not found!")
+                return null
+            }
+            var accountVerified: String? = null
+            try {
+                accountVerified = accountManager.getUserData(account, KEY_IS_USER_VERIFIED)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return if (accountVerified != null) {
+                Gson().fromJson(accountVerified, Boolean::class.java)
+            } else {
+                null
+            }
+        }
+        set(accountVerified) {
+            if (account == null) {
+                DebugLog.e("Account is null. Not setting user data")
+                return
+            }
+            if (accountVerified == null) {
+                DebugLog.e("accountVerified is empty.")
+                return
+            }
+            try {
+                accountManager.setUserData(
+                    account,
+                    KEY_IS_USER_VERIFIED,
                     accountVerified.toString()
                 )
             } catch (e: Exception) {
@@ -147,6 +185,7 @@ class BaseAccountManager(context: Context) {
     companion object {
         private const val KEY_USER_AUTH_TOKEN = "logged_in_user_auth_token"
         private const val KEY_USER_DETAILS = "logged_in_user_details"
-        private const val KEY_IS_VERIFIED_USER = "user.isVerified"
+        private const val KEY_IS_MOBILE_VERIFIED = "mobile_verified_status"
+        private const val KEY_IS_USER_VERIFIED = "user_verified_status"
     }
 }

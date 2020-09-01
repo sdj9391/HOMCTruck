@@ -23,21 +23,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HOMCTruck" >
+        android:theme="@style/Theme.HOMCTruck">
 
-        <activity android:name=".views.activities.MainActivity">
+        <activity android:name=".views.activities.AuthenticationActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
 
-        <service
-            android:name=".utils.account.AuthenticatorService">
+        <activity
+            android:name=".views.activities.MainDrawerActivity"
+            android:theme="@style/Theme.HOMCTruck" />
+
+
+        <service android:name=".utils.account.AuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator"/>
+                <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"

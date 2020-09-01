@@ -12,13 +12,13 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/signUpFragment"
-        android:name="com.homc.homctruck.views.fragments.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" />
+        android:id="@+id/userProfileFragment"
+        android:name="com.homc.homctruck.views.fragments.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.homc.homctruck.views.fragments.SplashScreenFragment"

@@ -27,7 +27,15 @@
     <string name="msg_unable_send_sms_quta_exceeded">Unable to send SMS for now, The SMS quota for the project has been exceeded!</string>
     <string name="msg_wait_auto_detecting_otp">Please wait, auto detecting OTP!</string>
     <string name="msg_enter_mobile_number">Enter mobile number please!</string>
-    <string name="msg_enter_valid_mobile_number">Enter valid mobile number please!</string>
     <string name="msg_otp_invalid_try_again">The verification code entered was invalid, please try again!</string>
     <string name="msg_enter_otp_please">Enter OTP please!</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_group_communicate">Communicate</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="menu_details">Details</string>
 </resources>

@@ -1,14 +1,15 @@
 package com.homc.homctruck.views.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.navigation.Navigation
 import com.homc.homctruck.R
+import com.homc.homctruck.utils.BaseAccountManager
+import com.homc.homctruck.views.activities.MainDrawerActivity
 
 class SplashScreenFragment : BaseFullScreenFragment() {
     override fun onCreateView(
@@ -34,8 +35,14 @@ class SplashScreenFragment : BaseFullScreenFragment() {
             return
         }
 
-        val navigationController = Navigation.findNavController(requireView())
-        navigationController.navigate(R.id.action_splashScreenFragment_to_loginFragment)
+        val isMobileVerified = BaseAccountManager(requireActivity()).isMobileVerified
+        if (isMobileVerified == null || !isMobileVerified) {
+            val navigationController = Navigation.findNavController(requireView())
+            navigationController.navigate(R.id.action_splashScreenFragment_to_loginFragment)
+        } else {
+            startActivity(Intent(requireActivity(), MainDrawerActivity::class.java))
+            requireActivity().finish()
+        }
     }
 
     companion object {
