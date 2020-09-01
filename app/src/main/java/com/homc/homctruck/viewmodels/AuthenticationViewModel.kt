@@ -20,7 +20,7 @@ class AuthenticationViewModel
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.loginUser(user)
+                val dataBound = repository.createUserAccount(user)
 
                 dataBound.let {
                     when (it) {
@@ -40,7 +40,7 @@ class AuthenticationViewModel
         return liveData
     }
 
-    fun getUserDetails(userId: Long): MutableLiveData<DataBound<User>> {
+    fun getUserDetails(userId: String): MutableLiveData<DataBound<User>> {
         val liveData = MutableLiveData<DataBound<User>>()
 
         val job = viewModelScope.launch {

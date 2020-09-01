@@ -62,8 +62,7 @@ android {
 
             signingConfig signingConfigs.config
 
-            // rails production server URL
-            buildConfigField "String", "SERVER_URL", "\"https://homctruck.firebaseapp.com/\""
+            buildConfigField "String", "SERVER_URL", "\"https://us-central1-homctruck.cloudfunctions.net/\""
             resValue "string", "authority_provider", "\"com.homc.homctruck.fileprovider\""
             resValue "string", "app_name", "\"HOMCTruck\""
         }
@@ -80,8 +79,7 @@ android {
             // usually show in About section of the app
             versionNameSuffix = '-staging'
 
-            buildConfigField "String", "SERVER_URL", "\"https://homctruck.firebaseapp.com/\""
-
+            buildConfigField "String", "SERVER_URL", "\"https://us-central1-homctruck.cloudfunctions.net/\""
             resValue "string", "authority_provider", "\"com.homc.homctruck.debug.fileprovider\""
             resValue "string", "app_name", "\"St. HOMCTruck\""
 
@@ -106,6 +104,18 @@ android {
 
             def newApkName = project + seperator + "v"+ version + ".apk"
             outputFileName = new File(newApkName)
+
+            def valueAccountType = applicationId + '.account'
+            buildConfigField "String", "ACCOUNT_TYPE", '"' + valueAccountType + '"'
+            resValue "string", "account_type", valueAccountType
+
+            def valueContentAuthority = valueAccountType + '.authority'
+            buildConfigField "String", "ACCOUNT_PROVIDER_AUTHORITY", '"' + valueContentAuthority + '"'
+            resValue "string", "account_provider_authority", valueContentAuthority
+
+            def valueAccountName = applicationId + '.name'
+            buildConfigField "String", "ACCOUNT_NAME", '"' + valueAccountName + '"'
+            resValue "string", "account_name", valueAccountName
         }
     }
 

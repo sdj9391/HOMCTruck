@@ -13,14 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-/**
- * Created by Admin on 1/3/2017.
- */
 object AppApiInstance {
     private val logLevel = HttpLoggingInterceptor.Level.BODY
 
-    val api: AppApiService =  retrofit.create(AppApiService::class.java)
-    private val retrofit: Retrofit
+    val api: AppApiService = retrofit.create(AppApiService::class.java)
+    val retrofit: Retrofit
         get() = getRetrofitForUrl(AppConfig.serverUrl)
 
     private fun getRetrofitForUrl(baseUrl: String): Retrofit {
@@ -53,7 +50,7 @@ object AppApiInstance {
             val original = chain.request()
             val headersMap = getHeadersMap(original.headers)
             authHeader?.let {
-                headersMap["Authorization"] = "Basic $it"
+                headersMap["Authorization"] = "Bearer $it"
             }
             headersMap["Accept"] = "application/json"
             val request = original.newBuilder()

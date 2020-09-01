@@ -8,11 +8,11 @@ import javax.inject.Inject
 
 class AuthenticationRepository @Inject constructor(var dataSource: AuthenticationRemoteDataSource) :
     AuthenticationContract {
-    override suspend fun loginUser(user: User): DataBound<User> {
-        return dataSource.loginUser(user)
+    override suspend fun createUserAccount(user: User): DataBound<User> {
+        return dataSource.createUserAccount(user)
     }
 
-    override suspend fun getUserDetails(userId: Long): DataBound<User> {
+    override suspend fun getUserDetails(userId: String): DataBound<User> {
         return dataSource.getUserDetails(userId)
     }
 }

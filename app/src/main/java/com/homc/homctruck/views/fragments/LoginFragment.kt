@@ -5,17 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.gson.Gson
+import com.homc.homctruck.HomcTruckApp
 import com.homc.homctruck.R
+import com.homc.homctruck.data.models.User
+import com.homc.homctruck.di.DaggerAppComponent
+import com.homc.homctruck.di.modules.AppModule
+import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.restapi.DataBound
+import com.homc.homctruck.utils.AppConfig
+import com.homc.homctruck.utils.BaseAccountManager
 import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.isInternetAvailable
+import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 class LoginFragment : BaseFullScreenFragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private var viewModel: AuthenticationViewModel? = null
 
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private var verificationId: String? = null
@@ -52,14 +69,15 @@ class LoginFragment : BaseFullScreenFragment() {
 
                 when (e) {
                     is FirebaseAuthInvalidCredentialsException -> {
-                        mobileNumberEditText.error = "Enter valid mobile number please!"
+                        mobileNumberEditText.error = getString(R.string.msg_enter_valid_mobile_number)
+                        mobileNumberEditText.requestFocus()
                     }
                     is FirebaseTooManyRequestsException -> {
-                        mobileNumberEditText.error = "Unable to send SMS for now!"
+                        showMessage(getString(R.string.msg_unable_send_sms_quta_exceeded))
                         DebugLog.e("The SMS quota for the project has been exceeded")
                     }
                     else -> {
-                        showMessage("Something went wrong, please try again!")
+                        showMessage(getString(R.string.error_general))
                     }
                 }
             }
@@ -87,8 +105,22 @@ class LoginFragment : BaseFullScreenFragment() {
                 // Save verification ID and resending token so we can use them later
                 this@LoginFragment.verificationId = verificationId
                 resendToken = token
+                progressBar.visibility = View.VISIBLE
+                otpTextField.visibility = View.VISIBLE
+                sendOtpButton.text = getString(R.string.label_continue)
+                sendOtpButton.isEnabled = false
+                sendOtpButton.setOnClickListener(onVerifyClickListener)
+                resendButton.visibility = View.GONE
+                editMobileNumberButton.visibility = View.VISIBLE
+                showMessage(getString(R.string.msg_wait_auto_detecting_otp))
             }
         }
+
+    private fun initViewModel() {
+        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
+            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -134,12 +166,14 @@ class LoginFragment : BaseFullScreenFragment() {
     private fun onResendClick() {
         val mobileNumber = mobileNumberEditText.text.toString().trim()
         if (mobileNumber.isNullOrBlank()) {
-            mobileNumberEditText.error = "Enter mobile number please!"
+            mobileNumberEditText.error = getString(R.string.msg_enter_mobile_number)
+            mobileNumberEditText.requestFocus()
             return
         }
 
         if (mobileNumber.length != 10) {
-            mobileNumberEditText.error = "Enter valid mobile number please!"
+            mobileNumberEditText.error = getString(R.string.msg_enter_valid_mobile_number)
+            mobileNumberEditText.requestFocus()
             return
         }
 
@@ -173,12 +207,14 @@ class LoginFragment : BaseFullScreenFragment() {
     private fun onSendOtpClicked() {
         val mobileNumber = mobileNumberEditText.text.toString().trim()
         if (mobileNumber.isNullOrBlank()) {
-            mobileNumberEditText.error = "Enter mobile number please!"
+            mobileNumberEditText.error = getString(R.string.msg_enter_mobile_number)
+            mobileNumberEditText.requestFocus()
             return
         }
 
         if (mobileNumber.length != 10) {
-            mobileNumberEditText.error = "Enter valid mobile number please!"
+            mobileNumberEditText.error = getString(R.string.msg_enter_valid_mobile_number)
+            mobileNumberEditText.requestFocus()
             return
         }
 
@@ -206,15 +242,23 @@ class LoginFragment : BaseFullScreenFragment() {
                     // Sign in success, update UI with the signed-in user's information
                     DebugLog.v("signInWithCredential:success")
                     val user = task.result.user
-                    checkForNewUser(user)
+                    addUserAccountDetails(user)
                 } else {
-                    onEditMobileNumberClick()
                     // Sign in failed, display a message and update the UI
                     DebugLog.e("signInWithCredential:failure -> ${task.exception}")
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                        showMessage("The verification code entered was invalid, please try again!")
+                        progressBar.visibility = View.GONE
+                        otpTextField.visibility = View.VISIBLE
+                        sendOtpButton.text = getString(R.string.label_continue)
+                        sendOtpButton.isEnabled = true
+                        sendOtpButton.setOnClickListener(onVerifyClickListener)
+                        resendButton.visibility = View.VISIBLE
+                        editMobileNumberButton.visibility = View.VISIBLE
+                        otpEditText.error = getString(R.string.msg_otp_invalid_try_again)
+                        otpEditText.requestFocus()
                     } else {
-                        showMessage("Something went wrong, please try again!")
+                        onEditMobileNumberClick()
+                        showMessage(getString(R.string.error_general))
                     }
                 }
             }
@@ -223,12 +267,13 @@ class LoginFragment : BaseFullScreenFragment() {
     private fun onVerifyClicked() {
         val code = otpEditText.text.toString().trim()
         if (code.isNullOrBlank()) {
-            otpEditText.error = "Enter OTP please!"
+            otpEditText.error = getString(R.string.msg_enter_otp_please)
+            otpEditText.requestFocus()
             return
         }
         if (verificationId.isNullOrBlank()) {
             onEditMobileNumberClick()
-            showMessage("Something went wrong, please try again!")
+            showMessage(getString(R.string.error_general))
             return
         }
 
@@ -239,13 +284,72 @@ class LoginFragment : BaseFullScreenFragment() {
         }
     }
 
-    private fun checkForNewUser(user: FirebaseUser?) {
-        onEditMobileNumberClick()
-        DebugLog.v("Login success -> ${Gson().toJson(user)}")
-        showMessage("Login successful!")
+    private fun addUserAccountDetails(user: FirebaseUser?) {
+        BaseAccountManager(requireActivity()).createAccount()
+
+        user?.getIdToken(true)?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val firebaseToken = task.result.token
+                if (firebaseToken.isNullOrBlank()) {
+                    DebugLog.e("Setting token null.")
+                    AppConfig.token = null
+                    BaseAccountManager(requireActivity()).removeAccount(requireActivity())
+                } else {
+                    DebugLog.w("Setting token $firebaseToken")
+                    val userDetails = User()
+                    userDetails.mobileNumber = mobileNumberEditText.text.toString().trim()
+                    BaseAccountManager(requireActivity()).userDetails = userDetails
+                    BaseAccountManager(requireActivity()).userAuthToken = firebaseToken
+                    AppConfig.token = firebaseToken
+                    (requireActivity().application as HomcTruckApp).initAppConfig()
+                    initViewModel()
+                    checkForNewUserApiCall(user)
+                }
+            } else {
+                DebugLog.w("Setting token null.")
+                AppConfig.token = null
+                BaseAccountManager(requireActivity()).removeAccount(requireActivity())
+            }
+        }
+    }
+
+    private fun checkForNewUserApiCall(user: FirebaseUser?) {
+        if (!isInternetAvailable()) {
+            showMessage(getString(R.string.msg_no_internet))
+            return
+        }
+
+        val userId = user?.uid
+        if (userId == null) {
+            DebugLog.e("userId is null")
+            return
+        }
+
+        viewModel?.getUserDetails("BEEcQVqm5DXILPwIOUaWRMrddzj2")
+            ?.observe(viewLifecycleOwner, observeUpdateClubMeetingAgendaItem)
+    }
+
+    private val observeUpdateClubMeetingAgendaItem = Observer<DataBound<User>> {
+        if (it == null) {
+            DebugLog.e("ApiMessage is null")
+            return@Observer
+        }
+
+        it.let { dataBound ->
+            when (dataBound) {
+                is DataBound.Success -> {
+                    DebugLog.v("Data: ${Gson().toJson(dataBound.data)}")
+                }
+                is DataBound.Error -> {
+                    DebugLog.e("Error: ${dataBound.error}")
+                }
+                is DataBound.Loading -> {
+                }
+            }
+        }
     }
 
     companion object {
-        const val OTP_WAIT_DURATION_SEC = 30L
+        const val OTP_WAIT_DURATION_SEC = 5L
     }
 }
