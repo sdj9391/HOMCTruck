@@ -1,4 +1,4 @@
-package com.homc.homctruck.utils
+package com.homc.homctruck.utils.account
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -7,6 +7,7 @@ import android.content.Context
 import com.google.gson.Gson
 import com.homc.homctruck.BuildConfig
 import com.homc.homctruck.data.models.User
+import com.homc.homctruck.utils.DebugLog
 
 class BaseAccountManager(context: Context) {
 

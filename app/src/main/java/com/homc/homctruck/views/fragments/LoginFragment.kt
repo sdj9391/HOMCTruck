@@ -19,8 +19,8 @@ import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.AppConfig
-import com.homc.homctruck.utils.BaseAccountManager
+import com.homc.homctruck.data.models.AppConfig
+import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.AuthenticationViewModel

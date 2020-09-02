@@ -1,4 +1,4 @@
-package com.homc.homctruck.utils
+package com.homc.homctruck.data.models
 
 object AppConfig {
     lateinit var serverUrl: String

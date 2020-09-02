@@ -3,7 +3,7 @@ package com.homc.homctruck.di.modules
 import android.app.Application
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.AppApiService
-import com.homc.homctruck.utils.AppConfig
+import com.homc.homctruck.data.models.AppConfig
 import com.homc.homctruck.utils.TemporaryCache
 import dagger.Module
 import dagger.Provides

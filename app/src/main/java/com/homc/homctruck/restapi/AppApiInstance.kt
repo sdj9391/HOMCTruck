@@ -1,6 +1,6 @@
 package com.homc.homctruck.restapi
 
-import com.homc.homctruck.utils.AppConfig
+import com.homc.homctruck.data.models.AppConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Headers
 import okhttp3.Headers.Companion.toHeaders

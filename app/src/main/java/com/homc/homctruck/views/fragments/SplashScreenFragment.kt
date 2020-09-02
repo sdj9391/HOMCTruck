@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import com.homc.homctruck.R
-import com.homc.homctruck.utils.BaseAccountManager
+import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.views.activities.MainDrawerActivity
 
 class SplashScreenFragment : BaseFullScreenFragment() {

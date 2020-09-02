@@ -9,8 +9,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.homc.homctruck.di.AppComponent
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.utils.AppConfig
-import com.homc.homctruck.utils.BaseAccountManager
+import com.homc.homctruck.data.models.AppConfig
+import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.DebugLog
 import io.fabric.sdk.android.Fabric
 import java.util.concurrent.TimeUnit
