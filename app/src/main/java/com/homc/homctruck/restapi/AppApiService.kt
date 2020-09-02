@@ -1,5 +1,6 @@
 package com.homc.homctruck.restapi
 
+import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import retrofit2.Response
 import retrofit2.http.*
@@ -34,4 +35,7 @@ interface AppApiService {
 
     @GET("users/{userId}")
     suspend fun getUserDetail(@Path("userId") userId: String): Response<User>
+
+    @POST("users")
+    suspend fun addNewUserDetail(@Body user: User): Response<ApiMessage>
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.repositories.AuthenticationRepository
 import com.homc.homctruck.restapi.DataBound
@@ -14,13 +15,14 @@ import javax.inject.Inject
 class AuthenticationViewModel
 @Inject constructor(var app: Application, private val repository: AuthenticationRepository) :
     ViewModel() {
-    fun loginUser(user: User): MutableLiveData<DataBound<User>> {
-        val liveData = MutableLiveData<DataBound<User>>()
+
+    fun addNewUser(user: User): MutableLiveData<DataBound<ApiMessage>> {
+        val liveData = MutableLiveData<DataBound<ApiMessage>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.createUserAccount(user)
+                val dataBound = repository.addNewUser(user)
 
                 dataBound.let {
                     when (it) {

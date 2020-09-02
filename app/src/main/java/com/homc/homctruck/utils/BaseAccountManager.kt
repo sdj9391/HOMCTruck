@@ -143,45 +143,6 @@ class BaseAccountManager(context: Context) {
             }
         }
 
-    var isAccountVerified: Boolean?
-        get() {
-            if (account == null) {
-                DebugLog.d("User account not found!")
-                return null
-            }
-            var accountVerified: String? = null
-            try {
-                accountVerified = accountManager.getUserData(account, KEY_IS_USER_VERIFIED)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            return if (accountVerified != null) {
-                Gson().fromJson(accountVerified, Boolean::class.java)
-            } else {
-                null
-            }
-        }
-        set(accountVerified) {
-            if (account == null) {
-                DebugLog.e("Account is null. Not setting user data")
-                return
-            }
-            if (accountVerified == null) {
-                DebugLog.e("accountVerified is empty.")
-                return
-            }
-            try {
-                accountManager.setUserData(
-                    account,
-                    KEY_IS_USER_VERIFIED,
-                    accountVerified.toString()
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
     companion object {
         private const val KEY_USER_AUTH_TOKEN = "logged_in_user_auth_token"
         private const val KEY_USER_DETAILS = "logged_in_user_details"

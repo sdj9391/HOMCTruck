@@ -11,7 +11,13 @@ class User {
     var aadharCardNumber: String? = null
     var role: String? = null
     var isUserVerified: Boolean? = null
-    var firebaseToken: String? = null
+    var firebaseAuthToken: String? = null
+    var firebaseMessageToken: String? = null
     var createdDate: Long? = null
     var updatedDate: Long? = null
+
+    companion object {
+        const val ROLE_ADMIN = "admin"
+        const val ROLE_USER = "user"
+    }
 }

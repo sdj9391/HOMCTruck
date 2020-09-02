@@ -78,7 +78,7 @@
             android:id="@+id/otpEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
+            android:inputType="text|textPassword"
             android:maxLength="6" />
     </com.google.android.material.textfield.TextInputLayout>
 
