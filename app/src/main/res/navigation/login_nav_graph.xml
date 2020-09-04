@@ -9,16 +9,7 @@
         android:id="@+id/loginFragment"
         android:name="com.homc.homctruck.views.fragments.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_to_signUpFragment"
-            app:destination="@id/userProfileFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/userProfileFragment"
-        android:name="com.homc.homctruck.views.fragments.UserProfileFragment"
-        android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/splashScreenFragment"
         android:name="com.homc.homctruck.views.fragments.SplashScreenFragment"

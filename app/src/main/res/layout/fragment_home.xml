@@ -9,7 +9,7 @@
         android:id="@+id/demo_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@android:color/holo_purple"
         android:gravity="center"
         android:textSize="@dimen/large_font"
         app:layout_constraintBottom_toBottomOf="parent"

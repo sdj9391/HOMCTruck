@@ -3,8 +3,51 @@ package com.homc.homctruck.views.fragments
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.views.activities.BaseAppActivity
 
 open class BaseAppFragment : Fragment() {
+
+    protected fun setToolBarTitle(string: String?) {
+        if (!isAdded) {
+            DebugLog.e("fragment is not added")
+            return
+        }
+
+        if (activity is BaseAppActivity) {
+            val baseSocialActivity = activity as BaseAppActivity
+            baseSocialActivity.setToolBarTitle(string)
+        } else {
+            DebugLog.v("Wrong instance! Expected: ${BaseAppActivity::class.java.simpleName} Found: $activity")
+        }
+    }
+
+    protected fun setToolBarSubTitle(string: String?) {
+        if (!isAdded) {
+            DebugLog.e("fragment is not added")
+            return
+        }
+
+        if (activity is BaseAppActivity) {
+            val baseSocialActivity = activity as BaseAppActivity
+            baseSocialActivity.setToolBarSubTitle(string)
+        } else {
+            DebugLog.v("Wrong instance! Expected: ${BaseAppActivity::class.java.simpleName} Found: $activity")
+        }
+    }
+
+    protected fun setSubTitleVisibility(isShow: Boolean = false) {
+        if (!isAdded) {
+            DebugLog.e("fragment is not added")
+            return
+        }
+
+        if (activity is BaseAppActivity) {
+            val baseSocialActivity = activity as BaseAppActivity
+            baseSocialActivity.setSubTitleVisibility(isShow)
+        } else {
+            DebugLog.v("Wrong instance! Expected: ${BaseAppActivity::class.java.simpleName} Found: $activity")
+        }
+    }
 
     protected fun showMessage(message: String) {
         if (view != null) {
@@ -13,5 +56,4 @@ open class BaseAppFragment : Fragment() {
             DebugLog.e("Not able to show a message!")
         }
     }
-
 }

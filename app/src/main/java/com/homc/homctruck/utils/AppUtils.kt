@@ -91,7 +91,7 @@ fun parse(networkStatus: NetworkStatus): Int {
     } else if (networkStatus == NetworkStatus.NOT_FOUND) {
         R.string.error_server_404not_found
     } else if (networkStatus == NetworkStatus.UNAUTHORIZED) {
-        R.string.error_server_401unaunthorized
+        R.string.error_server_401unauthorized
     } else if (networkStatus == NetworkStatus.FORBIDDEN) {
         R.string.error_server_403forbidden
     } else if (networkStatus == NetworkStatus.BAD_METHOD) {

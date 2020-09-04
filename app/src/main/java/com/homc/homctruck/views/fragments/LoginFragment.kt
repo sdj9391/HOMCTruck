@@ -78,7 +78,7 @@ class LoginFragment : BaseFullScreenFragment() {
                         mobileNumberEditText.requestFocus()
                     }
                     is FirebaseTooManyRequestsException -> {
-                        showMessage(getString(R.string.msg_unable_send_sms_quta_exceeded))
+                        showMessage(getString(R.string.msg_unable_send_sms_quota_exceeded))
                         DebugLog.e("The SMS quota for the project has been exceeded")
                     }
                     else -> {

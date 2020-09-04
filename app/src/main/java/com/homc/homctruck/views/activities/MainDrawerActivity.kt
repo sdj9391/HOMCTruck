@@ -1,7 +1,8 @@
 package com.homc.homctruck.views.activities
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.widget.TextView
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -10,38 +11,56 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.homc.homctruck.R
-import kotlinx.android.synthetic.main.activity_nav_drawer.*
+import com.homc.homctruck.data.models.getName
+import com.homc.homctruck.utils.account.BaseAccountManager
+import kotlinx.android.synthetic.main.activity_main_drawer.*
 
-class MainDrawerActivity : AppCompatActivity() {
+
+class MainDrawerActivity : BaseAppActivity() {
     private lateinit var appBarConfig: AppBarConfiguration
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_nav_drawer)
-        setSupportActionBar(toolbar)
+        setContentView(R.layout.activity_main_drawer)
+        initToolbar()
+        setToolBarTitle(getString(R.string.menu_home))
+        setHearViewData()
+        // TODO: Use to replace fragment into container when drawer option click
+        /*val topLevelDestinations = setOf(
+            R.id.navHome, R.id.navAddTruckRout,
+            R.id.navSearchTruck, R.id.navAddLoad, R.id.navSearchLoad
+        )*/
+        navController = findNavController(R.id.navHostFragment)
+        appBarConfig = AppBarConfiguration(navController.graph, drawerLayout)
 
-        /*
-         * We could use `AppBarConfiguration(nav_view.menu, drawer_layout)` instead, but since the
-         * Share and Send items are nested, they won't be treated as top-level destinations.
-         */
-        val topLevelDestinations = setOf(R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_tools, R.id.nav_share, R.id.nav_send)
-        appBarConfig = AppBarConfiguration(topLevelDestinations, drawer_layout)
-
-        navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfig)
-        nav_view.setupWithNavController(navController)
+        navigationView.setupWithNavController(navController)
     }
 
-    /** Ask the NavController to handle "navigate up" events. */
+    private fun setHearViewData() {
+        val headerView: View = navigationView.getHeaderView(0)
+        val titleTextView: TextView? = headerView.findViewById(R.id.titleTextView)
+        val subtitleTextView: TextView? = headerView.findViewById(R.id.subtitleTextView)
+        val user = BaseAccountManager(this).userDetails
+        val name = user?.getName()
+        if (name.isNullOrBlank()) {
+            titleTextView?.text = getString(R.string.placeholder_plus_91, user?.mobileNumber)
+            subtitleTextView?.visibility = View.GONE
+        } else {
+            subtitleTextView?.visibility = View.VISIBLE
+            titleTextView?.text = name
+            subtitleTextView?.text = getString(R.string.placeholder_plus_91, user.mobileNumber)
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp(appBarConfig) || super.onSupportNavigateUp()
     }
 
-    /** Close the drawer when hardware back is pressed. */
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }

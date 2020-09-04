@@ -21,3 +21,17 @@ class User {
         const val ROLE_USER = "user"
     }
 }
+
+fun User.getName(): String? {
+    val name: StringBuilder = StringBuilder()
+    firstName?.let {
+        name.append(firstName)
+    }
+    if (!name.isBlank()) {
+        name.append(" ")
+    }
+    lastName?.let {
+        name.append(lastName)
+    }
+    return name.toString().trim()
+}

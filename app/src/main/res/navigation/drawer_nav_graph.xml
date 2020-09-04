@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_navigation"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.homc.homctruck.views.fragments.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.homc.homctruck.views.fragments.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_addTruckRouteFragment"
+            app:destination="@id/addTruckRouteFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addLoadFragment"
+            app:destination="@id/addLoadFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchTruckRouteFragment"
+            app:destination="@id/searchTruckRouteFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchLoadFragment"
+            app:destination="@id/searchLoadFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myTruckRouteFragment"
+            app:destination="@id/myTruckRouteFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myLoadFragment"
+            app:destination="@id/myLoadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLoadFragment"
+        android:name="com.homc.homctruck.views.fragments.AddLoadFragment"
+        android:label="AddLoadFragment" />
+    <fragment
+        android:id="@+id/addTruckRouteFragment"
+        android:name="com.homc.homctruck.views.fragments.AddTruckRouteFragment"
+        android:label="AddTruckRouteFragment" />
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.homc.homctruck.views.fragments.ContactUsFragment"
+        android:label="ContactUsFragment" />
+    <fragment
+        android:id="@+id/myLoadFragment"
+        android:name="com.homc.homctruck.views.fragments.MyLoadFragment"
+        android:label="MyLoadFragment" />
+    <fragment
+        android:id="@+id/myTruckRouteFragment"
+        android:name="com.homc.homctruck.views.fragments.MyTruckRouteFragment"
+        android:label="MyTruckRouteFragment" />
+    <fragment
+        android:id="@+id/searchLoadFragment"
+        android:name="com.homc.homctruck.views.fragments.SearchLoadFragment"
+        android:label="SearchLoadFragment" />
+    <fragment
+        android:id="@+id/searchTruckRouteFragment"
+        android:name="com.homc.homctruck.views.fragments.SearchTruckRouteFragment"
+        android:label="SearchTruckRouteFragment" />
+</navigation>

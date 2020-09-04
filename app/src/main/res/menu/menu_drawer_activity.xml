@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@id/homeFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+
+        <item
+            android:id="@id/userProfileFragment"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_user_profile" />
+
+        <item android:title="@string/menu_group_truck">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@id/addTruckRouteFragment"
+                        android:icon="@drawable/ic_menu_share"
+                        android:title="@string/menu_add_truck_route" />
+                    <item
+                        android:id="@id/searchTruckRouteFragment"
+                        android:icon="@drawable/ic_menu_send"
+                        android:title="@string/menu_search_truck_route" />
+                    <item
+                        android:id="@id/myTruckRouteFragment"
+                        android:icon="@drawable/ic_menu_send"
+                        android:title="@string/menu_my_truck_route" />
+                </group>
+            </menu>
+        </item>
+
+        <item android:title="@string/menu_group_load">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@id/addLoadFragment"
+                        android:icon="@drawable/ic_menu_manage"
+                        android:title="@string/menu_add_load" />
+                    <item
+                        android:id="@id/searchLoadFragment"
+                        android:icon="@drawable/ic_menu_share"
+                        android:title="@string/menu_search_load" />
+                    <item
+                        android:id="@id/myLoadFragment"
+                        android:icon="@drawable/ic_menu_share"
+                        android:title="@string/menu_my_load" />
+                </group>
+            </menu>
+        </item>
+
+        <item android:title="@string/menu_group_other">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@id/contactUsFragment"
+                        android:icon="@drawable/ic_menu_send"
+                        android:title="@string/menu_contact_us" />
+
+                    <item
+                        android:id="@+id/logoutAction"
+                        android:icon="@drawable/ic_menu_send"
+                        android:title="@string/menu_logout" />
+                </group>
+            </menu>
+        </item>
+    </group>
+</menu>
