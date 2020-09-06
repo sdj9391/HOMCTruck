@@ -3,19 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
-        android:id="@+id/demo_text"
+        android:id="@+id/headerTextView1"
+        style="@style/headerTextView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/holo_blue_light"
-        android:gravity="center"
-        android:textSize="@dimen/large_font"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/menu_user_profile"
+        app:layout_constraintEnd_toStartOf="@+id/editProfileButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/editProfileButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:padding="12dp"
+        android:src="@drawable/ic_edit_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/headerDivider"
+        style="@style/divider"
+        android:layout_width="0dp"
+        android:layout_height="1px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Demo text" />
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView1" />
 
+    <include
+        android:id="@+id/userDetails"
+        layout="@layout/item_user_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerDivider" />
+
+    <TextView
+        android:id="@+id/truckProfileButton"
+        style="@style/headerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/label_truck_profiles"
+        android:textAllCaps="false"
+        app:drawableEndCompat="@drawable/ic_arrow_forward_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userDetails" />
+
+    <TextView
+        android:id="@+id/contractorProfileButton"
+        style="@style/headerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/label_contractor_profile"
+        android:textAllCaps="false"
+        app:drawableEndCompat="@drawable/ic_arrow_forward_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/truckProfileButton" />
+
+    <TextView
+        android:id="@+id/manageUsersButton"
+        style="@style/headerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/label_manage_users"
+        android:textAllCaps="false"
+        android:visibility="gone"
+        app:drawableEndCompat="@drawable/ic_arrow_forward_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contractorProfileButton"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

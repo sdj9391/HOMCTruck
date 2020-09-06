@@ -17,8 +17,13 @@ object AppApiInstance {
     private val logLevel = HttpLoggingInterceptor.Level.BODY
 
     val api: AppApiService = retrofit.create(AppApiService::class.java)
+    val apiPostal: PostalApiService = retrofitPostal.create(PostalApiService::class.java)
+
     val retrofit: Retrofit
         get() = getRetrofitForUrl(AppConfig.serverUrl)
+
+    private val retrofitPostal: Retrofit
+        get() = getRetrofitForUrl("https://api.postalpincode.in/")
 
     private fun getRetrofitForUrl(baseUrl: String): Retrofit {
         val client = httpClient

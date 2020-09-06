@@ -10,7 +10,17 @@
         android:id="@+id/userProfileFragment"
         android:name="com.homc.homctruck.views.fragments.UserProfileFragment"
         android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        tools:layout="@layout/fragment_user_profile" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_editUserProfileFragment"
+            app:destination="@id/editUserProfileFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_userTruckListFragment"
+            app:destination="@id/userTruckListFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_editContractorProfileFragment"
+            app:destination="@id/editContractorProfileFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.homc.homctruck.views.fragments.HomeFragment"
@@ -62,4 +72,18 @@
         android:id="@+id/searchTruckRouteFragment"
         android:name="com.homc.homctruck.views.fragments.SearchTruckRouteFragment"
         android:label="SearchTruckRouteFragment" />
+    <fragment
+        android:id="@+id/editUserProfileFragment"
+        android:name="com.homc.homctruck.views.fragments.EditUserProfileFragment"
+        android:label="EditUserProfileFragment" />
+    <fragment
+        android:id="@+id/userTruckListFragment"
+        android:name="com.homc.homctruck.views.fragments.UserTruckListFragment"
+        android:label="fragment_user_truck_list"
+        tools:layout="@layout/fragment_user_truck_list" />
+    <fragment
+        android:id="@+id/editContractorProfileFragment2"
+        android:name="com.homc.homctruck.views.fragments.EditContractorProfileFragment"
+        android:label="fragment_edit_contractor_profile"
+        tools:layout="@layout/fragment_edit_contractor_profile" />
 </navigation>

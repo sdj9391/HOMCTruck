@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="headerTextView" >
+        <item name="android:textSize">@dimen/normal_font</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/title_text</item>
+    </style>
     <style name="titleTextView" >
         <item name="android:textSize">@dimen/normal_font</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/title_text</item>
+    </style>
+    <style name="descriptionTextView" >
+        <item name="android:textSize">@dimen/normal_font</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/description_text</item>
     </style>
     <style name="subTitleTextView" >
         <item name="android:textSize">@dimen/small_font</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/subtitle_text</item>
+    </style>
+    <style name="divider" >
+        <item name="android:background">@color/divider</item>
     </style>
 </resources>
