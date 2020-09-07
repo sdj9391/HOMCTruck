@@ -15,7 +15,7 @@ class User {
     var firebaseMessageToken: String? = null
     var createdDate: Long? = null
     var updatedDate: Long? = null
-    val address: Address? = null
+    var address: Address? = null
 
     companion object {
         const val ROLE_ADMIN = "admin"

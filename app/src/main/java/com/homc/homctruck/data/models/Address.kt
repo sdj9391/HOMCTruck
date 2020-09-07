@@ -65,12 +65,10 @@ class ResponsePostalAddress {
     @SerializedName("Status")
     var status: String? = null
     @SerializedName("PostOffice")
-    var postOffice: MutableList<PostalAddress>? = null
+    var postalAddressList: MutableList<PostalAddress>? = null
 }
 
 class PostalAddress {
-    @SerializedName("Name")
-    var city: String? = null
     @SerializedName("Block")
     var taluka: String? = null
     @SerializedName("District")

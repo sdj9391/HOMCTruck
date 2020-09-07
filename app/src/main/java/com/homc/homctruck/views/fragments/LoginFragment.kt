@@ -82,7 +82,7 @@ class LoginFragment : BaseFullScreenFragment() {
                         DebugLog.e("The SMS quota for the project has been exceeded")
                     }
                     else -> {
-                        showMessage(getString(R.string.error_general))
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
             }
@@ -266,7 +266,7 @@ class LoginFragment : BaseFullScreenFragment() {
                         otpEditText.requestFocus()
                     } else {
                         onEditMobileNumberClick()
-                        showMessage(getString(R.string.error_general))
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
             }
@@ -281,7 +281,7 @@ class LoginFragment : BaseFullScreenFragment() {
         }
         if (verificationId.isNullOrBlank()) {
             onEditMobileNumberClick()
-            showMessage(getString(R.string.error_general))
+            showMessage(getString(R.string.error_something_went_wrong))
             return
         }
 

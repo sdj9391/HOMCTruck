@@ -11,7 +11,10 @@ import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
 import javax.inject.Inject
 
-class AuthenticationRemoteDataSource @Inject constructor(private val api: AppApiService, private val postalApi: PostalApiService) :
+class AuthenticationRemoteDataSource @Inject constructor(
+    private val api: AppApiService,
+    private val postalApi: PostalApiService
+) :
     AuthenticationContract {
 
     override suspend fun addNewUser(user: User): DataBound<ApiMessage> {
@@ -144,7 +147,7 @@ class AuthenticationRemoteDataSource @Inject constructor(private val api: AppApi
                     val message = parseApiMessage(response).message
                     return DataBound.Error(message, code)
                 } else {
-                    data = responseData
+                    data = responseData[0]
                 }
             }
         } catch (t: Throwable) {

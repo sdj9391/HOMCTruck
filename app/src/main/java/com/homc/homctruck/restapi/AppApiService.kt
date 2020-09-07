@@ -28,5 +28,5 @@ interface AppApiService {
 
 interface PostalApiService {
     @GET("pincode/{pinCode}")
-    suspend fun getPostalAddress(@Path("pinCode") pinCode: String): Response<ResponsePostalAddress>
+    suspend fun getPostalAddress(@Path("pinCode") pinCode: String): Response<MutableList<ResponsePostalAddress>>
 }

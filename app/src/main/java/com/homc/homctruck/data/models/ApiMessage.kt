@@ -6,5 +6,5 @@ import com.homc.homctruck.R
 class ApiMessage {
     var message: String? = null
     @StringRes
-    var messageResId : Int = R.string.error_general
+    var messageResId : Int = R.string.error_something_went_wrong
 }
