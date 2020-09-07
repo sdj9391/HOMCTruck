@@ -223,8 +223,8 @@ class EditUserProfileFragment : BaseAppFragment() {
 
         user?.firstName = firstName
         user?.lastName = lastName
-        user?.panCardNumber = firstName
-        user?.aadharCardNumber = firstName
+        user?.panCardNumber = panCardNumber
+        user?.aadharCardNumber = aadharCardNumber
 
         val address = Address()
         address.line1 = addressLine1
