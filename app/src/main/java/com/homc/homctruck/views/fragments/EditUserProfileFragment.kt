@@ -20,6 +20,7 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.isInternetAvailable
+import com.homc.homctruck.utils.isValidEmail
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.*
 import java.net.HttpURLConnection
@@ -98,6 +99,7 @@ class EditUserProfileFragment : BaseAppFragment() {
         firstNameEditText.setText(user.firstName)
         lastNameEditText.setText(user.lastName)
         mobileNumberEditText.setText(user.mobileNumber)
+        emailEditText.setText(user.email)
         panCardNumberEditText.setText(user.panCardNumber)
         aadharCardNumberEditText.setText(user.aadharCardNumber)
 
@@ -143,6 +145,19 @@ class EditUserProfileFragment : BaseAppFragment() {
         if (lastName.isNullOrBlank()) {
             lastNameEditText.error = getString(R.string.msg_enter_last_name)
             lastNameEditText.requestFocus()
+            return null
+        }
+
+        val emailId = emailEditText.text.toString().trim()
+        if (emailId.isNullOrBlank()) {
+            emailEditText.error = getString(R.string.msg_enter_email_id)
+            emailEditText.requestFocus()
+            return null
+        }
+
+        if (!emailId.isValidEmail()) {
+            emailEditText.error = getString(R.string.msg_enter_valid_email_id)
+            emailEditText.requestFocus()
             return null
         }
 
@@ -223,6 +238,7 @@ class EditUserProfileFragment : BaseAppFragment() {
 
         user?.firstName = firstName
         user?.lastName = lastName
+        user?.email = emailId
         user?.panCardNumber = panCardNumber
         user?.aadharCardNumber = aadharCardNumber
 

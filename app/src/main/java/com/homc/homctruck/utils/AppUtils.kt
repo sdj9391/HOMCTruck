@@ -6,6 +6,7 @@ import com.homc.homctruck.restapi.AppApiInstance
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.util.regex.Pattern
 
 @Throws(InterruptedException::class, IOException::class)
 fun isInternetAvailable(): Boolean {
@@ -109,4 +110,19 @@ fun parse(networkStatus: NetworkStatus): Int {
     } else {
         R.string.error_something_went_wrong
     }
+}
+
+/**
+ * Checks if the input parameter is a valid email.
+ * Accepts +
+ *
+ * @param email
+ * @return
+ */
+fun String.isValidEmail(): Boolean {
+    val emailPattern =
+        "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\+[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+    val pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE)
+    val matcher = pattern.matcher(this)
+    return matcher.matches()
 }

@@ -84,7 +84,7 @@ class UserProfileFragment : BaseAppFragment() {
             if (addressString.isNullOrBlank()) {
                 subtitleTextView5.visibility = View.GONE
             } else {
-                subtitleTextView5.text = email
+                subtitleTextView5.text = addressString
                 subtitleTextView5.visibility = View.VISIBLE
             }
         }

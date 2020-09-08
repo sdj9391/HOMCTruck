@@ -72,4 +72,7 @@
     <string name="msg_user_details_updated_successfully">User details updated successfully</string>
     <string name="msg_enter_valid_pan_card_number">Enter valid PAN Card Number</string>
     <string name="msg_enter_valid_aadhar_card_number">Enter valid Aadhar Card Number</string>
+    <string name="label_email_id">Email Id</string>
+    <string name="msg_enter_email_id">Enter Email Id</string>
+    <string name="msg_enter_valid_email_id">Enter Valid Email</string>
 </resources>
