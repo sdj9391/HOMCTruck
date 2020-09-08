@@ -1,5 +1,6 @@
 package com.homc.homctruck.views.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.getName
 import com.homc.homctruck.utils.account.BaseAccountManager
+import com.homc.homctruck.utils.showConfirmDialog
 import kotlinx.android.synthetic.main.activity_main_drawer.*
 
 
@@ -36,6 +38,29 @@ class MainDrawerActivity : BaseAppActivity() {
 
         setupActionBarWithNavController(navController, appBarConfig)
         navigationView.setupWithNavController(navController)
+        navigationView.menu.findItem(R.id.logoutAction).setOnMenuItemClickListener {
+            onLogoutClicked()
+            return@setOnMenuItemClickListener true
+        }
+    }
+
+    private fun onLogoutClicked() {
+        showConfirmDialog(
+            this, getString(R.string.msg_confirm_logout),
+            { _, _ -> removeAccount() }, null,
+            getString(R.string.label_done), getString(R.string.label_cancel)
+        )
+    }
+
+    private fun removeAccount() {
+        BaseAccountManager(this).userDetails = null
+        BaseAccountManager(this).userAuthToken = null
+        BaseAccountManager(this).isMobileVerified = null
+        BaseAccountManager(this).removeAccount(this)
+        val intent = Intent(this, AuthenticationActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun setHearViewData() {

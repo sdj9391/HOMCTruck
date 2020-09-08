@@ -75,4 +75,7 @@
     <string name="label_email_id">Email Id</string>
     <string name="msg_enter_email_id">Enter Email Id</string>
     <string name="msg_enter_valid_email_id">Enter Valid Email</string>
+    <string name="msg_confirm_logout">Are you sure you want to log out?</string>
+    <string name="label_done">Done</string>
+    <string name="label_cancel">Cancel</string>
 </resources>

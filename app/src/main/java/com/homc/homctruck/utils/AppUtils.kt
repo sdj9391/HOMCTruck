@@ -1,5 +1,8 @@
 package com.homc.homctruck.utils
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.restapi.AppApiInstance
@@ -125,4 +128,53 @@ fun String.isValidEmail(): Boolean {
     val pattern = Pattern.compile(emailPattern, Pattern.CASE_INSENSITIVE)
     val matcher = pattern.matcher(this)
     return matcher.matches()
+}
+
+/**
+ * Creates a confirmation dialog with Yes-No Button. By default the buttons just dismiss the
+ * dialog.
+ *
+ * @param ctx
+ * @param message     Message to be shown in the dialog.
+ * @param yesListener Yes click handler
+ * @param noListener
+ */
+fun showConfirmDialog(
+    ctx: Context?, message: String?,
+    yesListener: DialogInterface.OnClickListener?,
+    noListener: DialogInterface.OnClickListener?
+) {
+    showConfirmDialog(ctx, message, yesListener, noListener, "Yes", "No")
+}
+
+/**
+ * Creates a confirmation dialog with Yes-No Button. By default the buttons just dismiss the
+ * dialog.
+ *
+ * @param ctx
+ * @param message     Message to be shown in the dialog.
+ * @param yesListener Yes click handler
+ * @param noListener
+ * @param yesLabel    Label for yes button
+ * @param noLabel     Label for no button
+ */
+fun showConfirmDialog(
+    ctx: Context?,
+    message: String?,
+    yesListener: DialogInterface.OnClickListener?,
+    noListener: DialogInterface.OnClickListener?,
+    yesLabel: String?,
+    noLabel: String?
+) {
+    var yesClickListener = yesListener
+    var noClickListener = noListener
+    val builder = AlertDialog.Builder(ctx)
+    if (yesListener == null) {
+        yesClickListener = DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() }
+    }
+    if (noListener == null) {
+        noClickListener = DialogInterface.OnClickListener { dialog, which -> dialog.dismiss() }
+    }
+    builder.setMessage(message).setPositiveButton(yesLabel, yesClickListener)
+        .setNegativeButton(noLabel, noClickListener).show()
 }
