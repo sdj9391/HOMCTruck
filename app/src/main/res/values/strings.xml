@@ -78,4 +78,12 @@
     <string name="msg_confirm_logout">Are you sure you want to log out?</string>
     <string name="label_done">Done</string>
     <string name="label_cancel">Cancel</string>
+    <string name="label_firm_name">Firm Name</string>
+    <string name="label_email_id_of_firm">Email Id of Firm</string>
+    <string name="label_pan_card_number_of_firm">PAN Card Number of Firm</string>
+    <string name="msg_enter_firm_name">Enter Firm Name</string>
+    <string name="msg_contractor_profile_updated_successfully">Contractor profile updated successfully</string>
+    <string name="msg_on_ui_exit">Looks like you made some changes here. Do you want to exit?</string>
+    <string name="label_exit">Exit</string>
+    <string name="label_user_profile">User profile</string>
 </resources>

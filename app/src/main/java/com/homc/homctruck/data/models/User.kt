@@ -16,11 +16,19 @@ class User {
     var createdDate: Long? = null
     var updatedDate: Long? = null
     var address: Address? = null
+    var contractor: Contractor? = null
 
     companion object {
         const val ROLE_ADMIN = "admin"
         const val ROLE_USER = "user"
     }
+}
+
+class Contractor {
+    var firmName: String? = null
+    var email: String? = null
+    var panCardNumber: String? = null
+    var address: Address? = null
 }
 
 fun User.getName(): String? {

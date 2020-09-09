@@ -86,6 +86,7 @@ class EditUserProfileFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setToolBarTitle(getString(R.string.label_user_profile))
         setUserDetails()
     }
 
@@ -133,7 +134,6 @@ class EditUserProfileFragment : BaseAppFragment() {
     }
 
     private fun validateData(): User? {
-        val user = BaseAccountManager(requireActivity()).userDetails
         val firstName = firstNameEditText.text.toString().trim()
         if (firstName.isNullOrBlank()) {
             firstNameEditText.error = getString(R.string.msg_enter_first_name)
@@ -236,6 +236,7 @@ class EditUserProfileFragment : BaseAppFragment() {
             return null
         }
 
+        val user = BaseAccountManager(requireActivity()).userDetails
         user?.firstName = firstName
         user?.lastName = lastName
         user?.email = emailId
@@ -268,10 +269,10 @@ class EditUserProfileFragment : BaseAppFragment() {
         }
 
         viewModel?.updateUserDetails(userId, user)
-            ?.observe(viewLifecycleOwner, observeGetUserDetails(user))
+            ?.observe(viewLifecycleOwner, observeUpdateUserDetails(user))
     }
 
-    private fun observeGetUserDetails(user: User) = Observer<DataBound<ApiMessage>> {
+    private fun observeUpdateUserDetails(user: User) = Observer<DataBound<ApiMessage>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -284,6 +285,7 @@ class EditUserProfileFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     BaseAccountManager(requireActivity()).userDetails = user
                     showMessage(getString(R.string.msg_user_details_updated_successfully))
+                    isDirty = false
                 }
                 is DataBound.Error -> {
                     saveButton.isEnabled = true

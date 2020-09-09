@@ -11,6 +11,7 @@ import com.homc.homctruck.data.models.getFullAddress
 import com.homc.homctruck.data.models.getName
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
+import com.homc.homctruck.utils.hideSoftKeyboard
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.item_user_details.*
 
@@ -39,6 +40,11 @@ class UserProfileFragment : BaseAppFragment() {
         contractorProfileButton.setOnClickListener {
             navigationController?.navigate(R.id.action_userProfileFragment_to_editContractorProfileFragment)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideSoftKeyboard(requireActivity())
     }
 
     private fun setUserDetails() {

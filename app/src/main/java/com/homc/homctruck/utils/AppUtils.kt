@@ -1,8 +1,10 @@
 package com.homc.homctruck.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.view.inputmethod.InputMethodManager
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.restapi.AppApiInstance
@@ -177,4 +179,16 @@ fun showConfirmDialog(
     }
     builder.setMessage(message).setPositiveButton(yesLabel, yesClickListener)
         .setNegativeButton(noLabel, noClickListener).show()
+}
+
+fun hideSoftKeyboard(activity: Activity) {
+    try {
+        val inputMethodManager =
+            activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (activity.currentFocus != null) {
+            inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }
