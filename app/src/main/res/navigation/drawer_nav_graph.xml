@@ -80,10 +80,27 @@
         android:id="@+id/userTruckListFragment"
         android:name="com.homc.homctruck.views.fragments.UserTruckListFragment"
         android:label="fragment_user_truck_list"
-        tools:layout="@layout/fragment_user_truck_list" />
+        tools:layout="@layout/item_common_list_layout" >
+        <action
+            android:id="@+id/action_userTruckListFragment_to_addTruckFragment"
+            app:destination="@id/addTruckFragment" />
+        <action
+            android:id="@+id/action_userTruckListFragment_to_editTruckFragment"
+            app:destination="@id/editTruckFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editContractorProfileFragment2"
         android:name="com.homc.homctruck.views.fragments.EditContractorProfileFragment"
         android:label="fragment_edit_contractor_profile"
         tools:layout="@layout/fragment_edit_contractor_profile" />
+    <fragment
+        android:id="@+id/addTruckFragment"
+        android:name="com.homc.homctruck.views.fragments.AddTruckFragment"
+        android:label="fragment_add_truck"
+        tools:layout="@layout/fragment_add_truck" />
+    <fragment
+        android:id="@+id/editTruckFragment"
+        android:name="com.homc.homctruck.views.fragments.EditTruckFragment"
+        android:label="fragment_edit_truck"
+        tools:layout="@layout/fragment_add_truck" />
 </navigation>
