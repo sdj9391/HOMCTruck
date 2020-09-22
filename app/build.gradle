@@ -116,6 +116,8 @@ android {
             def valueAccountName = applicationId + '.name'
             buildConfigField "String", "ACCOUNT_NAME", '"' + valueAccountName + '"'
             resValue "string", "account_name", valueAccountName
+
+            resValue "string", "google_apis_places_and_maps", HOMC_MAP_API_KEY
         }
     }
 
@@ -189,7 +191,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-config:19.2.0'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.1.1'
-    implementation 'com.google.firebase:firebase-auth:19.3.2'
+    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -200,6 +203,10 @@ dependencies {
 
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.5'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

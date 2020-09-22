@@ -1,5 +1,6 @@
 package com.homc.homctruck.data.models
 
+import com.google.android.libraries.places.api.model.Place
 import com.google.gson.annotations.SerializedName
 
 class Address {
@@ -75,4 +76,10 @@ class PostalAddress {
     var district: String? = null
     @SerializedName("State")
     var state: String? = null
+}
+
+fun Place.toAddress(): Address {
+    val address = Address()
+    address.city = this.name
+    return address
 }

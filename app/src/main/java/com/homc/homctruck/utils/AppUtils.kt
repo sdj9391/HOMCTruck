@@ -1,5 +1,6 @@
 package com.homc.homctruck.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -11,6 +12,8 @@ import com.homc.homctruck.restapi.AppApiInstance
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 
 @Throws(InterruptedException::class, IOException::class)
@@ -190,5 +193,17 @@ fun hideSoftKeyboard(activity: Activity) {
         }
     } catch (e: Exception) {
         e.printStackTrace()
+    }
+}
+
+const val DEFAULT_DATE_FORMAT = "dd-MMM-yyyy"
+
+@SuppressLint("SimpleDateFormat")
+fun formatDateForDisplay(date: Long, format: String? = DEFAULT_DATE_FORMAT): String? {
+    return try {
+        SimpleDateFormat(format).format(Date(date))
+    } catch (exception: Exception) {
+        exception.printStackTrace()
+        null
     }
 }

@@ -21,6 +21,7 @@
     <string name="error_server_504gateway_timeout">Sorry! Remote server timed out</string>
     <string name="error_server_contract_broken">Sorry! Server error. Contract broken</string>
     <string name="error_something_went_wrong">Sorry! Something went wrong</string>
+    <string name="error_something_went_wrong_try_again">Sorry! Something went wrong. Please try again.</string>
     <string name="msg_enter_valid_mobile_number">Enter valid mobile number please</string>
     <string name="msg_unable_send_sms_quota_exceeded">Unable to send SMS for now, The SMS quota for the project has been exceeded</string>
     <string name="msg_wait_auto_detecting_otp">Please wait, auto detecting OTP</string>
@@ -100,4 +101,18 @@
     <string name="msg_select_truck_type">Select truck type</string>
     <string name="msg_enter_truck_chesse_number">Enter truck chesse number</string>
     <string name="msg_truck_details_saved_successfully">Truck details saved successfully</string>
+    <string name="label_from_city">From City</string>
+    <string name="label_to_city">To City</string>
+    <string name="label_journey_start_date">Journey Start Date</string>
+    <string name="label_journey_end_date">Journey End Date</string>
+    <string name="mag_add_truck_route">Add Truck to Truck Route</string>
+    <string name="msg_truck_route_details_saved_successfully">Truck Route details saved successfully</string>
+    <string name="error_truck_already_added">Truck is already added</string>
+    <string name="msg_select_truck_number">Select Truck Number</string>
+    <string name="msg_select_from_city">Select from city</string>
+    <string name="msg_select_to_city">Select to city</string>
+    <string name="msg_select_journey_start_date">Select journey start date</string>
+    <string name="msg_select_journey_end_date">Select journey end date</string>
+    <string name="msg_journey_end_date_greater_journey_start_date">Journey end date should be greater then journey start date</string>
+    <string name="label_unknown_location">Unknown location</string>
 </resources>

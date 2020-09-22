@@ -1,5 +1,6 @@
 package com.homc.homctruck.views.fragments
 
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.homc.homctruck.utils.DebugLog
@@ -52,6 +53,15 @@ open class BaseAppFragment : Fragment() {
     protected fun showMessage(message: String) {
         if (view != null) {
             Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
+        } else {
+            DebugLog.e("Not able to show a message!")
+        }
+    }
+
+    protected fun showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
+        if (view != null) {
+            val toast: Toast = Toast.makeText(requireActivity(), message, duration)
+            toast.show()
         } else {
             DebugLog.e("Not able to show a message!")
         }

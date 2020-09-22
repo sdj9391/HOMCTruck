@@ -51,7 +51,11 @@
     <fragment
         android:id="@+id/addTruckRouteFragment"
         android:name="com.homc.homctruck.views.fragments.AddTruckRouteFragment"
-        android:label="AddTruckRouteFragment" />
+        android:label="AddTruckRouteFragment" >
+        <action
+            android:id="@+id/action_addTruckRouteFragment_to_addTruckFragment"
+            app:destination="@id/addTruckFragment" />
+    </fragment>
     <fragment
         android:id="@+id/contactUsFragment"
         android:name="com.homc.homctruck.views.fragments.ContactUsFragment"
@@ -103,4 +107,8 @@
         android:name="com.homc.homctruck.views.fragments.EditTruckFragment"
         android:label="fragment_edit_truck"
         tools:layout="@layout/fragment_add_truck" />
+    <fragment
+        android:id="@+id/searchCityFragment"
+        android:name="com.homc.homctruck.views.fragments.SearchCityFragment"
+        android:label="SearchCityFragment" />
 </navigation>

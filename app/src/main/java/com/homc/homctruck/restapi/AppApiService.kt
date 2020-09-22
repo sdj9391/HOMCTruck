@@ -1,9 +1,6 @@
 package com.homc.homctruck.restapi
 
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.ResponsePostalAddress
-import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.data.models.User
+import com.homc.homctruck.data.models.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -43,6 +40,21 @@ interface AppApiService {
 
     @DELETE("trucks/{truckId}")
     suspend fun deleteTruck(@Path("truckId") truckId: String): Response<ApiMessage>
+
+    @POST("truck_routes")
+    suspend fun addNewTruckRoute(@Body truckRoute: TruckRoute): Response<ApiMessage>
+
+    @GET("truck_routes")
+    suspend fun getUserTruckRouteList(): Response<MutableList<TruckRoute>>
+
+    @PUT("truck_routes/{truckRouteId}")
+    suspend fun updateTruckRouteDetails(
+        @Path("truckRouteId") truckRouteId: String,
+        @Body truckRoute: TruckRoute
+    ): Response<ApiMessage>
+
+    @DELETE("truck_routes/{truckRouteId}")
+    suspend fun deleteTruckRoute(@Path("truckRouteId") truckRouteId: String): Response<ApiMessage>
 }
 
 interface PostalApiService {

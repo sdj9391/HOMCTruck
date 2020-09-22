@@ -111,9 +111,9 @@ open class AddTruckFragment : BaseAppFragment() {
         }
 
         val truck = Truck()
-        truck.truckNumber = truckNumber
+        truck.truckNumber = truckNumber.toUpperCase().replace(" ", "")
         truck.type = truckType
-        truck.chesseNumber = chesseNumber
+        truck.chesseNumber = chesseNumber.toUpperCase()
         return truck
     }
 
@@ -146,6 +146,9 @@ open class AddTruckFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
+                    } else if (dataBound.code == HttpURLConnection.HTTP_NOT_ACCEPTABLE) {
+                        truckNumberEditText.error = getString(R.string.error_truck_already_added)
+                        truckNumberEditText.requestFocus()
                     } else {
                         DebugLog.e("Error: ${dataBound.error}")
                         showMessage("${dataBound.error}")
