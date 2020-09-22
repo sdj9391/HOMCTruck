@@ -115,4 +115,9 @@
     <string name="msg_select_journey_end_date">Select journey end date</string>
     <string name="msg_journey_end_date_greater_journey_start_date">Journey end date should be greater then journey start date</string>
     <string name="label_unknown_location">Unknown location</string>
+    <string name="msg_truck_routes_not_added_yet">Truck routes not added yet</string>
+    <string name="label_edit_truck_route">Edite Truck Route</string>
+    <string name="label_delete_truck_route">Delete Truck Route</string>
+    <string name="label_my_truck_routes">My Truck  Routes</string>
+    <string name="placeholder_x_to_y">%1$s to %2$s</string>
 </resources>

@@ -4,9 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.homc.homctruck.R
-import kotlinx.android.synthetic.main.fragment_my_truck_route.*
+import kotlinx.android.synthetic.main.fragment_my_load.*
 
 class MyLoadFragment : BaseAppFragment() {
 

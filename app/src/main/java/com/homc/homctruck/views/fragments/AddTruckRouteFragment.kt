@@ -26,10 +26,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.data.models.TruckRoute
-import com.homc.homctruck.data.models.toAddress
+import com.homc.homctruck.data.models.*
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
@@ -43,18 +40,18 @@ import java.net.HttpURLConnection
 import java.util.*
 import javax.inject.Inject
 
-class AddTruckRouteFragment : BaseAppFragment() {
+open class AddTruckRouteFragment : BaseAppFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private var viewModel: TruckViewModel? = null
+    protected var viewModel: TruckViewModel? = null
 
     private var isFromCitySelected = true
-    private var fromPlace: Place? = null
-    private var toPlace: Place? = null
-    private var startMillis: Long? = null
-    private var endMillis: Long? = null
-    private var isDirty = false
+    protected var fromPlace: Address? = null
+    protected var toPlace: Address? = null
+    protected var startMillis: Long? = null
+    protected var endMillis: Long? = null
+    var isDirty = false
     private var trucks: MutableMap<String, Truck>? = null
     private var navigationController: NavController? = null
 
@@ -95,6 +92,7 @@ class AddTruckRouteFragment : BaseAppFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setToolBarTitle(getString(R.string.menu_add_truck_route))
         initViewModel()
     }
 
@@ -253,10 +251,10 @@ class AddTruckRouteFragment : BaseAppFragment() {
         DebugLog.v("Place: " + Gson().toJson(place))
         if (isFromCitySelected) {
             fromCityEditText.setText(location)
-            fromPlace = place
+            fromPlace = place.toAddress()
         } else {
             toCityEditText.setText(location)
-            toPlace = place
+            toPlace = place.toAddress()
         }
     }
 
@@ -311,8 +309,8 @@ class AddTruckRouteFragment : BaseAppFragment() {
 
         val truckRoute = TruckRoute()
         truckRoute.truckId = truck.id
-        truckRoute.fromPlace = fromPlace?.toAddress()
-        truckRoute.toPlace = toPlace?.toAddress()
+        truckRoute.fromPlace = fromPlace
+        truckRoute.toPlace = toPlace
         truckRoute.startJourneyDate = startMillis
         truckRoute.endJourneyDate = endMillis
         return truckRoute
