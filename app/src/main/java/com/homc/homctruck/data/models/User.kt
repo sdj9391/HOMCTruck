@@ -31,6 +31,17 @@ class Contractor {
     var address: Address? = null
 }
 
+fun Contractor?.isNullOrEmpty(): Boolean {
+    if (this == null) {
+        return true
+    }
+
+    if (firmName.isNullOrBlank()) {
+        return true
+    }
+    return false
+}
+
 fun User.getName(): String? {
     val name: StringBuilder = StringBuilder()
     firstName?.let {

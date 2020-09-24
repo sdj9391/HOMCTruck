@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.view.inputmethod.InputMethodManager
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
@@ -206,4 +207,30 @@ fun formatDateForDisplay(date: Long, format: String? = DEFAULT_DATE_FORMAT): Str
         exception.printStackTrace()
         null
     }
+}
+
+/**
+ * Gets the version name of the application. For e.g. 1.9.3
+ */
+fun getApplicationVersionNumber(context: Context): String? {
+    var versionName: String? = null
+    try {
+        versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return versionName
+}
+
+/**
+ * Gets the version code of the application. For e.g. Maverick Meerkat or 2013050301
+ */
+fun getApplicationVersionCode(ctx: Context): Int {
+    var versionCode = 0
+    try {
+        versionCode = ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionCode
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return versionCode
 }

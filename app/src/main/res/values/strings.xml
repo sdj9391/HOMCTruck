@@ -42,7 +42,7 @@
     <string name="menu_group_other">Other</string>
     <string name="menu_contact_us">Contact Us</string>
     <string name="menu_logout">Logout</string>
-    <string name="label_truck_profiles">Truck Profiles</string>
+    <string name="label_my_trucks">My Trucks</string>
     <string name="label_contractor_profile">Contractor Profile</string>
     <string name="label_manage_users">Manage Users</string>
     <string name="label_name_of_the_user">Name of the user</string>
@@ -92,7 +92,6 @@
     <string name="label_truck_type">Truck Type</string>
     <string name="label_truck_chesse_number">Truck Chesse Number</string>
     <string name="label_add_truck">Add truck</string>
-    <string name="label_your_trucks">Your Trucks</string>
     <string name="label_edit_truck">Edit Truck</string>
     <string name="label_delete_truck">Delete Truck</string>
     <string name="msg_confirm_delete">Are you sure you want to delete it?</string>

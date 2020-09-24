@@ -105,7 +105,7 @@ class MyTruckRouteFragment : BaseAppFragment() {
 
         val truckRouteId = dataItem.id
         if (truckRouteId.isNullOrBlank()) {
-            DebugLog.e("Truck id found null")
+            DebugLog.e("Truck route id found null")
             return
         }
 

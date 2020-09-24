@@ -162,7 +162,7 @@ class UserTruckListFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarTitle(getString(R.string.label_your_trucks))
+        setToolBarTitle(getString(R.string.label_my_trucks))
         navigationController = Navigation.findNavController(requireView())
         swipeRefreshLayout.setOnRefreshListener { getData() }
         recyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
