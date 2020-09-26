@@ -1,0 +1,157 @@
+package com.homc.homctruck.data.sourceremote
+
+import com.homc.homctruck.data.contracts.LoadContract
+import com.homc.homctruck.data.models.ApiMessage
+import com.homc.homctruck.data.models.Load
+import com.homc.homctruck.restapi.AppApiService
+import com.homc.homctruck.restapi.DataBound
+import com.homc.homctruck.restapi.PostalApiService
+import com.homc.homctruck.utils.parse
+import com.homc.homctruck.utils.parseApiMessage
+import javax.inject.Inject
+
+class LoadRemoteDataSource @Inject constructor(
+    private val api: AppApiService,
+    private val postalApi: PostalApiService
+) : LoadContract {
+
+    override suspend fun addNewLoad(load: Load): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.addNewLoad(load)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun getLoadDetails(loadId: String): DataBound<Load> {
+        val data: Load
+        try {
+            val response = api.getLoadDetails(loadId)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun getUserLoadList(): DataBound<MutableList<Load>> {
+        val data: MutableList<Load>
+        try {
+            val response = api.getUserLoadList()
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.updateLoadDetails(loadId, load)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun deleteLoad(loadId: String): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.deleteLoad(loadId)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+}

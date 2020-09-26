@@ -55,6 +55,24 @@ interface AppApiService {
 
     @DELETE("truck_routes/{truckRouteId}")
     suspend fun deleteTruckRoute(@Path("truckRouteId") truckRouteId: String): Response<ApiMessage>
+
+    @GET("loads/{loadId}")
+    suspend fun getLoadDetails(@Path("loadId") loadId: String): Response<Load>
+
+    @POST("loads")
+    suspend fun addNewLoad(@Body load: Load): Response<ApiMessage>
+
+    @GET("loads")
+    suspend fun getUserLoadList(): Response<MutableList<Load>>
+
+    @PUT("loads/{loadId}")
+    suspend fun updateLoadDetails(
+        @Path("loadId") loadId: String,
+        @Body load: Load
+    ): Response<ApiMessage>
+
+    @DELETE("loads/{loadId}")
+    suspend fun deleteLoad(@Path("loadId") loadId: String): Response<ApiMessage>
 }
 
 interface PostalApiService {

@@ -4,11 +4,9 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.repositories.LoadRepository
 import com.homc.homctruck.data.repositories.TruckRepository
-import com.homc.homctruck.viewmodels.AuthenticationViewModel
-import com.homc.homctruck.viewmodels.TruckViewModel
-import com.homc.homctruck.viewmodels.ViewModelFactoryProvider
-import com.homc.homctruck.viewmodels.ViewModelKey
+import com.homc.homctruck.viewmodels.*
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
@@ -28,6 +26,13 @@ class ViewModelModule {
     @ViewModelKey(TruckViewModel::class)
     fun truckViewModel(app: Application, repo: TruckRepository): ViewModel {
         return TruckViewModel(app, repo)
+    }
+
+    @Provides
+    @IntoMap
+    @ViewModelKey(LoadViewModel::class)
+    fun loadViewModel(app: Application, repo: LoadRepository): ViewModel {
+        return LoadViewModel(app, repo)
     }
 
     @Provides
