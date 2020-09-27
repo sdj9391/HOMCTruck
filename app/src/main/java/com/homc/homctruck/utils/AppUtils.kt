@@ -6,7 +6,12 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.text.SpannableStringBuilder
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.text.bold
+import androidx.core.text.color
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.restapi.AppApiInstance
@@ -233,4 +238,13 @@ fun getApplicationVersionCode(ctx: Context): Int {
         e.printStackTrace()
     }
     return versionCode
+}
+
+fun setColorsAndCombineStrings(textView: TextView, string1: String?, string2: String?, color: Int) {
+    textView.text = SpannableStringBuilder().color(ContextCompat.getColor(textView.context, color))
+    { append(SpannableStringBuilder().bold { append("$string1:") }) }.append(" ").append(string2)
+}
+
+fun setColorsAndCombineStrings(textView: TextView, string1: String?, string2: String?) {
+    setColorsAndCombineStrings(textView, string1, string2, R.color.title_text)
 }

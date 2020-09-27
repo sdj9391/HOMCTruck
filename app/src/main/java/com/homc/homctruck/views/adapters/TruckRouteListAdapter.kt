@@ -10,6 +10,7 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.utils.formatDateForDisplay
+import com.homc.homctruck.utils.setColorsAndCombineStrings
 
 class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
 
@@ -24,7 +25,6 @@ class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         return super.onCreateViewHolder(parent, viewType)
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             VIEW_TYPE_TRUCK_ROUTE -> bindTruckRouteView(holder as TruckRouteViewHolder, position)
@@ -35,15 +35,27 @@ class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     private fun bindTruckRouteView(holder: TruckRouteViewHolder, position: Int) {
         val context = holder.itemView.context
         val dataItem = dataItems?.get(position) as TruckRoute
-        holder.titleTextView.text = dataItem.truck?.truckNumber
-        holder.subtitleTextView1.text = context.getString(
-            R.string.placeholder_x_to_y,
-            dataItem.fromPlace?.city, dataItem.toPlace?.city
+        setColorsAndCombineStrings(
+            holder.titleTextView,
+            context.getString(R.string.label_truck_number),
+            dataItem.truck?.truckNumber
         )
-        holder.subtitleTextView2.text = context.getString(
-            R.string.placeholder_x_to_y,
-            formatDateForDisplay(dataItem.startJourneyDate ?: 0),
-            formatDateForDisplay(dataItem.endJourneyDate ?: 0)
+        setColorsAndCombineStrings(
+            holder.subtitleTextView1,
+            context.getString(R.string.label_location),
+            context.getString(
+                R.string.placeholder_x_to_y,
+                dataItem.fromPlace?.city, dataItem.toPlace?.city
+            )
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView2,
+            context.getString(R.string.label_date),
+            context.getString(
+                R.string.placeholder_x_to_y,
+                formatDateForDisplay(dataItem.startJourneyDate ?: 0),
+                formatDateForDisplay(dataItem.endJourneyDate ?: 0)
+            )
         )
         holder.moreButton.tag = dataItem
     }
@@ -60,11 +72,9 @@ class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     override fun getItemViewType(position: Int): Int {
-        val dataItem = dataItems?.get(position)
-        return if (dataItem is TruckRoute) {
-            VIEW_TYPE_TRUCK_ROUTE
-        } else {
-            super.getItemViewType(position)
+        return when (dataItems?.get(position)) {
+            is TruckRoute -> VIEW_TYPE_TRUCK_ROUTE
+            else -> super.getItemViewType(position)
         }
     }
 

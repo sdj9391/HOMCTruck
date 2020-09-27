@@ -119,12 +119,12 @@
     <string name="label_delete_truck_route">Delete Truck Route</string>
     <string name="label_my_truck_routes">My Truck  Routes</string>
     <string name="placeholder_x_to_y">%1$s to %2$s</string>
-    <string name="label_name_of_goods">Name of goods</string>
-    <string name="label_material_type">Material type</string>
-    <string name="label_rate_per_ton">Rate per ton</string>
-    <string name="label_total_load_in_tons">Total load in tons</string>
-    <string name="label_total_amount">Total amount</string>
-    <string name="label_transit_days">Transit days</string>
+    <string name="label_name_of_goods">Name of Goods</string>
+    <string name="label_material_type">Material Type</string>
+    <string name="label_rate_per_ton">Rate per Ton</string>
+    <string name="label_total_load_in_tons">Total Load in Tons</string>
+    <string name="label_total_amount">Total Amount</string>
+    <string name="label_transit_days">Transit Days</string>
     <string name="msg_load_details_saved_successfully">Load details saved successfully</string>
     <string name="msg_enter_goods_name">Enter goods name</string>
     <string name="msg_select_material_ype">select material type</string>
@@ -135,4 +135,13 @@
     <string name="label_edit_load">Edit Load</string>
     <string name="label_delete_load">Delete Load</string>
     <string name="label_my_loads">My Loads</string>
+    <string name="placeholder_x_ton">%1$s Tons</string>
+    <string name="placeholder_x_rs">%1$s ₹</string>
+    <string name="label_name">Name</string>
+    <string name="label_email">Email</string>
+    <string name="label_address">"Address</string>
+    <string name="label_chesse_number">Chesse Number</string>
+    <string name="label_location">"Location</string>
+    <string name="label_date">Date</string>
+    <string name="label_total_load">Total Load</string>
 </resources>

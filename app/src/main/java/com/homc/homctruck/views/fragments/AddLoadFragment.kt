@@ -50,24 +50,34 @@ open class AddLoadFragment : BaseAppFragment() {
     protected var toPlace: Address? = null
     var isDirty = false
 
-    private val onTextChangeListener = object : TextWatcher {
+    private val calculateAmountChangeListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             isDirty = true
-            val rate = ratePerTonEditText.text?.toString()?.trim()?.toFloat() ?: 0.0F
-            val totalLoadInTons = ratePerTonEditText.text?.toString()?.trim()?.toFloat() ?: 0.0F
-            totalAmountEditText.setText(String.format("%.2f", rate * totalLoadInTons))
         }
 
         override fun afterTextChanged(s: Editable?) {
-
+            val rateString = ratePerTonEditText.text.toString().trim()
+            val rate = if (rateString.isNullOrBlank()) {
+                0.0F
+            } else {
+                rateString.toFloat()
+            }
+            val totalLoadInTonsString = totalLoadInTonsEditText.text.toString().trim()
+            val totalLoadInTons = if (totalLoadInTonsString.isNullOrBlank()) {
+                0.0F
+            } else {
+                totalLoadInTonsString.toFloat()
+            }
+            val total = rate * totalLoadInTons
+            totalAmountEditText.setText(String.format("%.2f", total))
         }
     }
 
-    private val calculateAmountChangeListener = object : TextWatcher {
+    private val onTextChangeListener = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
         }
@@ -263,9 +273,9 @@ open class AddLoadFragment : BaseAppFragment() {
         load.fromPlace = fromPlace
         load.toPlace = toPlace
         load.typeOfTruck = truckType
-        load.perTonRate = String.format("%.2f", perTonRate).toFloat()
-        load.totalLoadInTons = String.format("%.2f", perTonRate).toFloat()
-        load.totalAmount = String.format("%.2f", totalAmount).toFloat()
+        load.perTonRate = String.format("%.2f", perTonRate.toFloat()).toFloat()
+        load.totalLoadInTons = String.format("%.2f", perTonRate.toFloat()).toFloat()
+        load.totalAmount = String.format("%.2f", totalAmount.toFloat()).toFloat()
         load.transitDaysForTruck = transitDays.toInt()
         return load
     }

@@ -13,6 +13,7 @@ import com.homc.homctruck.data.models.isNullOrEmpty
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.hideSoftKeyboard
+import com.homc.homctruck.utils.setColorsAndCombineStrings
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.item_user_details.view.*
 
@@ -56,33 +57,52 @@ class UserProfileFragment : BaseAppFragment() {
             return
         }
 
-        userDetails.titleTextView.text = if (user.getName().isNullOrBlank()) {
-            getString(R.string.label_name_of_the_user)
+        if (user.getName().isNullOrBlank()) {
+            userDetails.titleTextView.text = getString(R.string.label_name_of_the_user)
         } else {
-            user.getName()
+            setColorsAndCombineStrings(
+                userDetails.titleTextView,
+                getString(R.string.label_name),
+                user.getName()
+            )
         }
 
-        userDetails.subtitleTextView1.text =
+        setColorsAndCombineStrings(
+            userDetails.subtitleTextView1,
+            getString(R.string.label_mobile_number),
             getString(R.string.placeholder_plus_91, user.mobileNumber)
+        )
         val email = user.email
         if (email.isNullOrBlank()) {
             userDetails.subtitleTextView2.visibility = View.GONE
         } else {
-            userDetails.subtitleTextView2.text = email
+            setColorsAndCombineStrings(
+                userDetails.subtitleTextView2,
+                getString(R.string.label_email),
+                email
+            )
             userDetails.subtitleTextView2.visibility = View.VISIBLE
         }
         val panCardNumber = user.panCardNumber
         if (panCardNumber.isNullOrBlank()) {
             userDetails.subtitleTextView3.visibility = View.GONE
         } else {
-            userDetails.subtitleTextView3.text = panCardNumber
+            setColorsAndCombineStrings(
+                userDetails.subtitleTextView3,
+                getString(R.string.label_pan_card_number),
+                panCardNumber
+            )
             userDetails.subtitleTextView3.visibility = View.VISIBLE
         }
         val aadharCardNumber = user.aadharCardNumber
         if (aadharCardNumber.isNullOrBlank()) {
             userDetails.subtitleTextView4.visibility = View.GONE
         } else {
-            userDetails.subtitleTextView4.text = aadharCardNumber
+            setColorsAndCombineStrings(
+                userDetails.subtitleTextView4,
+                getString(R.string.label_aadhar_card_number),
+                aadharCardNumber
+            )
             userDetails.subtitleTextView4.visibility = View.VISIBLE
         }
         val address = user.address
@@ -93,7 +113,11 @@ class UserProfileFragment : BaseAppFragment() {
             if (addressString.isNullOrBlank()) {
                 userDetails.subtitleTextView5.visibility = View.GONE
             } else {
-                userDetails.subtitleTextView5.text = addressString
+                setColorsAndCombineStrings(
+                    userDetails.subtitleTextView5,
+                    getString(R.string.label_address),
+                    addressString
+                )
                 userDetails.subtitleTextView5.visibility = View.VISIBLE
             }
         }
@@ -113,20 +137,33 @@ class UserProfileFragment : BaseAppFragment() {
             return
         }
 
-        contractorProfileDetails.titleTextView.text = contractorProfile?.firmName
+
+        setColorsAndCombineStrings(
+            contractorProfileDetails.titleTextView,
+            getString(R.string.label_firm_name),
+            contractorProfile?.firmName
+        )
 
         val email = contractorProfile?.email
         if (email.isNullOrBlank()) {
             contractorProfileDetails.subtitleTextView1.visibility = View.GONE
         } else {
-            contractorProfileDetails.subtitleTextView1.text = email
+            setColorsAndCombineStrings(
+                contractorProfileDetails.subtitleTextView1,
+                getString(R.string.label_email),
+                email
+            )
             contractorProfileDetails.subtitleTextView1.visibility = View.VISIBLE
         }
         val panCardNumber = contractorProfile?.panCardNumber
         if (panCardNumber.isNullOrBlank()) {
             contractorProfileDetails.subtitleTextView2.visibility = View.GONE
         } else {
-            contractorProfileDetails.subtitleTextView2.text = panCardNumber
+            setColorsAndCombineStrings(
+                contractorProfileDetails.subtitleTextView2,
+                getString(R.string.label_pan_card_number),
+                panCardNumber
+            )
             contractorProfileDetails.subtitleTextView2.visibility = View.VISIBLE
         }
         val address = contractorProfile?.address
@@ -137,7 +174,11 @@ class UserProfileFragment : BaseAppFragment() {
             if (addressString.isNullOrBlank()) {
                 contractorProfileDetails.subtitleTextView3.visibility = View.GONE
             } else {
-                contractorProfileDetails.subtitleTextView3.text = addressString
+                setColorsAndCombineStrings(
+                    contractorProfileDetails.subtitleTextView3,
+                    getString(R.string.label_address),
+                    addressString
+                )
                 contractorProfileDetails.subtitleTextView3.visibility = View.VISIBLE
             }
         }

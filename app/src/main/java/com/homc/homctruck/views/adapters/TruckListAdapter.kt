@@ -7,7 +7,9 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
+import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.utils.setColorsAndCombineStrings
 
 class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
 
@@ -22,7 +24,6 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         return super.onCreateViewHolder(parent, viewType)
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             VIEW_TYPE_TRUCK -> bindTruckView(holder as TruckViewHolder, position)
@@ -31,10 +32,23 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     private fun bindTruckView(holder: TruckViewHolder, position: Int) {
+        val context = holder.itemView.context
         val dataItem = dataItems?.get(position) as Truck
-        holder.titleTextView.text = dataItem.truckNumber
-        holder.subtitleTextView1.text = dataItem.type
-        holder.subtitleTextView2.text = dataItem.chesseNumber
+        setColorsAndCombineStrings(
+            holder.titleTextView,
+            context.getString(R.string.label_truck_number),
+            dataItem.truckNumber
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView1,
+            context.getString(R.string.label_truck_type),
+            dataItem.type
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView2,
+            context.getString(R.string.label_chesse_number),
+            dataItem.chesseNumber
+        )
         holder.moreButton.tag = dataItem
     }
 
@@ -50,11 +64,9 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     override fun getItemViewType(position: Int): Int {
-        val dataItem = dataItems?.get(position)
-        return if (dataItem is Truck) {
-            VIEW_TYPE_TRUCK
-        } else {
-            super.getItemViewType(position)
+        return when (dataItems?.get(position)) {
+            is Truck -> VIEW_TYPE_TRUCK
+            else -> super.getItemViewType(position)
         }
     }
 

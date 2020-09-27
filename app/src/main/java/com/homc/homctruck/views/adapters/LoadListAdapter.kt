@@ -7,41 +7,87 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.data.models.Load
+import com.homc.homctruck.utils.setColorsAndCombineStrings
 
 class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
 
     var onMoreClickListener: View.OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == VIEW_TYPE_TRUCK) {
+        if (viewType == VIEW_TYPE_LOAD) {
             val itemView: View = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_truck, parent, false)
-            return TruckViewHolder(itemView)
+                .inflate(R.layout.item_load, parent, false)
+            return LoadViewHolder(itemView)
         }
         return super.onCreateViewHolder(parent, viewType)
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            VIEW_TYPE_TRUCK -> bindTruckView(holder as TruckViewHolder, position)
+            VIEW_TYPE_LOAD -> bindLoadView(holder as LoadViewHolder, position)
             else -> super.onBindViewHolder(holder, position)
         }
     }
 
-    private fun bindTruckView(holder: TruckViewHolder, position: Int) {
-        val dataItem = dataItems?.get(position) as Truck
-        holder.titleTextView.text = dataItem.truckNumber
-        holder.subtitleTextView1.text = dataItem.type
-        holder.subtitleTextView2.text = dataItem.chesseNumber
+    private fun bindLoadView(holder: LoadViewHolder, position: Int) {
+        val context = holder.itemView.context
+        val dataItem = dataItems?.get(position) as Load
+        setColorsAndCombineStrings(
+            holder.titleTextView,
+            context.getString(R.string.label_name_of_goods),
+            dataItem.nameOfGoods
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView1,
+            context.getString(R.string.label_material_type),
+            dataItem.typeOfMaterial
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView2,
+            context.getString(R.string.label_location),
+            context.getString(
+                R.string.placeholder_x_to_y,
+                dataItem.fromPlace?.city, dataItem.toPlace?.city
+            )
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView3,
+            context.getString(R.string.label_truck_type),
+            dataItem.typeOfTruck
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView4,
+            context.getString(R.string.label_rate_per_ton),
+            context.getString(R.string.placeholder_x_rs, dataItem.perTonRate.toString())
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView5,
+            context.getString(R.string.label_total_load),
+            context.getString(R.string.placeholder_x_ton, dataItem.totalLoadInTons.toString())
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView6,
+            context.getString(R.string.label_total_amount),
+            context.getString(R.string.placeholder_x_rs, dataItem.totalAmount.toString())
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView7,
+            context.getString(R.string.label_transit_days),
+            dataItem.transitDaysForTruck.toString()
+        )
         holder.moreButton.tag = dataItem
     }
 
-    private inner class TruckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class LoadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
         val subtitleTextView1: TextView = itemView.findViewById(R.id.subtitleTextView1)
         val subtitleTextView2: TextView = itemView.findViewById(R.id.subtitleTextView2)
+        val subtitleTextView3: TextView = itemView.findViewById(R.id.subtitleTextView3)
+        val subtitleTextView4: TextView = itemView.findViewById(R.id.subtitleTextView4)
+        val subtitleTextView5: TextView = itemView.findViewById(R.id.subtitleTextView5)
+        val subtitleTextView6: TextView = itemView.findViewById(R.id.subtitleTextView6)
+        val subtitleTextView7: TextView = itemView.findViewById(R.id.subtitleTextView7)
         val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)
 
         init {
@@ -50,15 +96,13 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     override fun getItemViewType(position: Int): Int {
-        val dataItem = dataItems?.get(position)
-        return if (dataItem is Truck) {
-            VIEW_TYPE_TRUCK
-        } else {
-            super.getItemViewType(position)
+        return when (dataItems?.get(position)) {
+            is Load -> VIEW_TYPE_LOAD
+            else -> super.getItemViewType(position)
         }
     }
 
     companion object {
-        const val VIEW_TYPE_TRUCK = 100
+        const val VIEW_TYPE_LOAD = 100
     }
 }

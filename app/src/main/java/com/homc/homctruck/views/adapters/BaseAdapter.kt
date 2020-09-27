@@ -1,14 +1,18 @@
 package com.homc.homctruck.views.adapters
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.homc.homctruck.R
 import com.homc.homctruck.utils.DebugLog
 
 open class BaseAdapter(val data: MutableList<Any>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     protected var dataItems: MutableList<Any>? = null
+    var onPlankButtonClickListener: View.OnClickListener? = null
 
     init {
         dataItems = data
@@ -17,14 +21,43 @@ open class BaseAdapter(val data: MutableList<Any>?) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == VIEW_TYPE_TEMPORARY) {
             return TempViewHolder(View(parent.context))
+        } else if (viewType == VIEW_TYPE_PLANK_BUTTON) {
+            val itemView: View = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_plank_button, parent, false)
+            return PlankButtonViewHolder(itemView)
         }
         DebugLog.e("Wrong viewType found: $viewType")
         return TempViewHolder(View(parent.context))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        // Nothing to bind here
-        DebugLog.e("Nothing to bind here")
+        when (getItemViewType(position)) {
+            VIEW_TYPE_PLANK_BUTTON -> bindPlankButtonView(holder as PlankButtonViewHolder, position)
+            else -> {
+                // Nothing to bind here
+                DebugLog.e("Nothing to bind here")
+            }
+        }
+    }
+
+    private fun bindPlankButtonView(holder: PlankButtonViewHolder, position: Int) {
+        val dataItem = dataItems?.get(position) as String
+        holder.textPlankButton.text = dataItem
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (val dataItem = dataItems?.get(position)) {
+            is AdapterDataItem -> dataItem.id
+            else -> super.getItemViewType(position)
+        }
+    }
+
+    private inner class PlankButtonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textPlankButton: TextView = itemView.findViewById(R.id.textPlankButton)
+
+        init {
+            textPlankButton.setOnClickListener(onPlankButtonClickListener)
+        }
     }
 
     private class TempViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -123,5 +156,8 @@ open class BaseAdapter(val data: MutableList<Any>?) :
 
     companion object {
         const val VIEW_TYPE_TEMPORARY = 0
+        const val VIEW_TYPE_PLANK_BUTTON = 101
     }
 }
+
+class AdapterDataItem(val id: Int, val data: Any?)

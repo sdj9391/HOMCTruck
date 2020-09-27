@@ -28,9 +28,12 @@ class EditLoadFragment : AddLoadFragment() {
     }
 
     private fun showLoadDetails() {
+        fromPlace = loadDetails?.fromPlace
+        toPlace = loadDetails?.toPlace
+
         goodsNameEditText.setText(loadDetails?.nameOfGoods)
-        fromCityEditText.setText(loadDetails?.fromPlace?.city)
-        toCityEditText.setText(loadDetails?.toPlace?.city)
+        fromCityEditText.setText(fromPlace?.city)
+        toCityEditText.setText(toPlace?.city)
         ratePerTonEditText.setText(loadDetails?.perTonRate?.toString())
         totalLoadInTonsEditText.setText(loadDetails?.totalLoadInTons?.toString())
         totalAmountEditText.setText(loadDetails?.totalAmount?.toString())
