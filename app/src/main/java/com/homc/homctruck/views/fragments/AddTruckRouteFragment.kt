@@ -92,7 +92,6 @@ open class AddTruckRouteFragment : BaseAppFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setToolBarTitle(getString(R.string.menu_add_truck_route))
         initViewModel()
     }
 

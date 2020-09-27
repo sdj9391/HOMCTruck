@@ -119,4 +119,18 @@
     <string name="label_delete_truck_route">Delete Truck Route</string>
     <string name="label_my_truck_routes">My Truck  Routes</string>
     <string name="placeholder_x_to_y">%1$s to %2$s</string>
+    <string name="label_name_of_goods">Name of goods</string>
+    <string name="label_material_type">Material type</string>
+    <string name="label_rate_per_ton">Rate per ton</string>
+    <string name="label_total_load_in_tons">Total load in tons</string>
+    <string name="label_total_amount">Total amount</string>
+    <string name="label_transit_days">Transit days</string>
+    <string name="msg_load_details_saved_successfully">Load details saved successfully</string>
+    <string name="msg_enter_goods_name">Enter goods name</string>
+    <string name="msg_select_material_ype">select material type</string>
+    <string name="msg_enter_rate_per_ton">Enter rate per ton</string>
+    <string name="msg_enter_total_load_in_tons">Enter total load in tons</string>
+    <string name="msg_enter_transit_days">Enter transit days</string>
+    <string name="msg_unable_to_calculate_total_amount">Unable  to calculate total amount</string>
+    <string name="label_edit_load">Edit Load</string>
 </resources>
