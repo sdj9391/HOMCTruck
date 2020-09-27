@@ -133,4 +133,6 @@
     <string name="msg_enter_transit_days">Enter transit days</string>
     <string name="msg_unable_to_calculate_total_amount">Unable  to calculate total amount</string>
     <string name="label_edit_load">Edit Load</string>
+    <string name="label_delete_load">Delete Load</string>
+    <string name="label_my_loads">My Loads</string>
 </resources>

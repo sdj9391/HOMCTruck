@@ -19,4 +19,5 @@ interface AppComponent {
     fun inject(fragment: AddTruckRouteFragment)
     fun inject(fragment: MyTruckRouteFragment)
     fun inject(fragment: AddLoadFragment)
+    fun inject(fragment: MyLoadFragment)
 }
