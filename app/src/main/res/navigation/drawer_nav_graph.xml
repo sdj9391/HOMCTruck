@@ -96,7 +96,7 @@
         android:label="EditUserProfileFragment" />
     <fragment
         android:id="@+id/userTruckListFragment"
-        android:name="com.homc.homctruck.views.fragments.UserTruckListFragment"
+        android:name="com.homc.homctruck.views.fragments.MyTruckListFragment"
         android:label="fragment_user_truck_list"
         tools:layout="@layout/item_common_list_layout" >
         <action

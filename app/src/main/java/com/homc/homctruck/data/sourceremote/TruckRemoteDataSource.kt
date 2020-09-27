@@ -73,7 +73,7 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getUserTruckList(): DataBound<MutableList<Truck>> {
+    override suspend fun getMyTruckList(): DataBound<MutableList<Truck>> {
         val data: MutableList<Truck>
         try {
             val response = api.getUserTruckList()
@@ -185,7 +185,7 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getUserTruckRouteList(): DataBound<MutableList<TruckRoute>> {
+    override suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
             val response = api.getUserTruckRouteList()

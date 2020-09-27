@@ -43,13 +43,13 @@ class TruckViewModel
         return liveData
     }
 
-    fun getUserTruckList(): MutableLiveData<DataBound<MutableList<Truck>>> {
+    fun getMyTruckList(): MutableLiveData<DataBound<MutableList<Truck>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Truck>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getUserTruckList()
+                val dataBound = repository.getMyTruckList()
 
                 dataBound.let {
                     when (it) {
@@ -148,13 +148,13 @@ class TruckViewModel
         return liveData
     }
 
-    fun getUserTruckRouteList(): MutableLiveData<DataBound<MutableList<TruckRoute>>> {
+    fun getMyTruckRouteList(): MutableLiveData<DataBound<MutableList<TruckRoute>>> {
         val liveData = MutableLiveData<DataBound<MutableList<TruckRoute>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getUserTruckRouteList()
+                val dataBound = repository.getMyTruckRouteList()
 
                 dataBound.let {
                     when (it) {

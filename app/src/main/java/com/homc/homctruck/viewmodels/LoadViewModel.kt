@@ -42,13 +42,13 @@ class LoadViewModel
         return liveData
     }
 
-    fun getUserLoadList(): MutableLiveData<DataBound<MutableList<Load>>> {
+    fun getMyLoadList(): MutableLiveData<DataBound<MutableList<Load>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getUserLoadList()
+                val dataBound = repository.getMyLoadList()
 
                 dataBound.let {
                     when (it) {

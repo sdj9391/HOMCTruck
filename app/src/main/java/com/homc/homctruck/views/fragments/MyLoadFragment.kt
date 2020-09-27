@@ -187,7 +187,7 @@ class MyLoadFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getUserLoadList()
+        viewModel?.getMyLoadList()
             ?.observe(viewLifecycleOwner, observeLoadList)
     }
 

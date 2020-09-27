@@ -169,7 +169,7 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getUserTruckList()
+        viewModel?.getMyTruckList()
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 

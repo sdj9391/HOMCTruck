@@ -71,7 +71,7 @@ class LoadRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getUserLoadList(): DataBound<MutableList<Load>> {
+    override suspend fun getMyLoadList(): DataBound<MutableList<Load>> {
         val data: MutableList<Load>
         try {
             val response = api.getUserLoadList()

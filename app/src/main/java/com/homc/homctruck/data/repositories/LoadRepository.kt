@@ -17,8 +17,8 @@ class LoadRepository @Inject constructor(var dataSource: LoadRemoteDataSource) :
         return dataSource.getLoadDetails(loadId)
     }
 
-    override suspend fun getUserLoadList(): DataBound<MutableList<Load>> {
-        return dataSource.getUserLoadList()
+    override suspend fun getMyLoadList(): DataBound<MutableList<Load>> {
+        return dataSource.getMyLoadList()
     }
 
     override suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage> {

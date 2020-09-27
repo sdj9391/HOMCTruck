@@ -14,7 +14,7 @@ interface AppComponent {
     fun inject(fragment: LoginFragment)
     fun inject(fragment: EditUserProfileFragment)
     fun inject(fragment: EditContractorProfileFragment)
-    fun inject(fragment: UserTruckListFragment)
+    fun inject(fragment: MyTruckListFragment)
     fun inject(fragment: AddTruckFragment)
     fun inject(fragment: AddTruckRouteFragment)
     fun inject(fragment: MyTruckRouteFragment)

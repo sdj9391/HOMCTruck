@@ -187,7 +187,7 @@ class MyTruckRouteFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getUserTruckRouteList()
+        viewModel?.getMyTruckRouteList()
             ?.observe(viewLifecycleOwner, observeTruckRouteList)
     }
 

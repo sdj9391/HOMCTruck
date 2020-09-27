@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.item_common_list_layout.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class UserTruckListFragment : BaseAppFragment() {
+class MyTruckListFragment : BaseAppFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -187,7 +187,7 @@ class UserTruckListFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getUserTruckList()
+        viewModel?.getMyTruckList()
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 
