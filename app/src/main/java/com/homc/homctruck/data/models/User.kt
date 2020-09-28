@@ -13,10 +13,10 @@ class User {
     var isUserVerified: Boolean? = null
     var firebaseAuthToken: String? = null
     var firebaseMessageToken: String? = null
-    var createdDate: Long? = null
-    var updatedDate: Long? = null
     var address: Address? = null
     var contractor: Contractor? = null
+    var createdAt: Long? = null
+    var updatedAt: Long? = null
 
     companion object {
         const val ROLE_ADMIN = "admin"

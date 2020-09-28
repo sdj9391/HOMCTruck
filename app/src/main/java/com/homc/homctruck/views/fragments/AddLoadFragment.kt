@@ -1,6 +1,7 @@
 package com.homc.homctruck.views.fragments
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -9,10 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -33,10 +33,12 @@ import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.formatDateForDisplay
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.LoadViewModel
 import kotlinx.android.synthetic.main.fragment_add_load.*
 import java.net.HttpURLConnection
+import java.util.*
 import javax.inject.Inject
 
 open class AddLoadFragment : BaseAppFragment() {
@@ -48,6 +50,7 @@ open class AddLoadFragment : BaseAppFragment() {
     private var isFromCitySelected = true
     protected var fromPlace: Address? = null
     protected var toPlace: Address? = null
+    protected var startMillis: Long? = null
     var isDirty = false
 
     private val calculateAmountChangeListener = object : TextWatcher {
@@ -134,6 +137,7 @@ open class AddLoadFragment : BaseAppFragment() {
         materialTypeDropDown.addTextChangedListener(onTextChangeListener)
         fromCityEditText.addTextChangedListener(onTextChangeListener)
         toCityEditText.addTextChangedListener(onTextChangeListener)
+        expectedPickUpDateEditText.addTextChangedListener(onTextChangeListener)
         truckTypeDropDown.addTextChangedListener(onTextChangeListener)
         ratePerTonEditText.addTextChangedListener(calculateAmountChangeListener)
         totalLoadInTonsEditText.addTextChangedListener(calculateAmountChangeListener)
@@ -149,6 +153,24 @@ open class AddLoadFragment : BaseAppFragment() {
         toCityEditText.setOnClickListener {
             isFromCitySelected = false
             searchCity()
+        }
+        expectedPickUpDateEditText.setOnClickListener {
+            val datePickerDialog = DatePickerDialog(
+                requireActivity(),
+                { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                    val calendar = Calendar.getInstance()
+                    calendar[Calendar.YEAR] = year
+                    calendar[Calendar.MONTH] = monthOfYear
+                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                    startMillis = calendar.timeInMillis
+                    expectedPickUpDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                },
+                Calendar.getInstance()[Calendar.YEAR],
+                Calendar.getInstance()[Calendar.MONTH],
+                Calendar.getInstance()[Calendar.DAY_OF_MONTH]
+            )
+            datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
+            datePickerDialog.show()
         }
     }
 
@@ -234,6 +256,11 @@ open class AddLoadFragment : BaseAppFragment() {
             return null
         }
 
+        if (startMillis == null) {
+            showMessage(getString(R.string.msg_select_expected_pickup_date))
+            return null
+        }
+
         val truckType = truckTypeDropDown.text.toString().trim()
         if (truckType.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_truck_type))
@@ -272,6 +299,7 @@ open class AddLoadFragment : BaseAppFragment() {
         load.typeOfMaterial = materialType
         load.fromPlace = fromPlace
         load.toPlace = toPlace
+        load.expectedPickUpDate = startMillis
         load.typeOfTruck = truckType
         load.perTonRate = String.format("%.2f", perTonRate.toFloat()).toFloat()
         load.totalLoadInTons = String.format("%.2f", perTonRate.toFloat()).toFloat()

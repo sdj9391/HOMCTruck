@@ -12,4 +12,9 @@ class Load {
     var totalLoadInTons: Float? = null
     var totalAmount: Float? = null
     var transitDaysForTruck: Int? = null
+    var expectedPickUpDate: Long? = null
+    var createdAt: Long? = null
+    var updatedAt: Long? = null
 }
+
+// q = toCity, fromCity, pickUpDate

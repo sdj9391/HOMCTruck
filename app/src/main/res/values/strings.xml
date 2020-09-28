@@ -144,4 +144,6 @@
     <string name="label_location">"Location</string>
     <string name="label_date">Date</string>
     <string name="label_total_load">Total Load</string>
+    <string name="label_expected_pickup_date">Expected Pickup Date</string>
+    <string name="msg_select_expected_pickup_date">Select expected pickup date</string>
 </resources>

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.Load
+import com.homc.homctruck.utils.formatDateForDisplay
 import com.homc.homctruck.utils.setColorsAndCombineStrings
 
 class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
@@ -53,26 +54,31 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         )
         setColorsAndCombineStrings(
             holder.subtitleTextView3,
+            context.getString(R.string.label_expected_pickup_date),
+            formatDateForDisplay(dataItem.expectedPickUpDate ?: 0)
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView4,
             context.getString(R.string.label_truck_type),
             dataItem.typeOfTruck
         )
         setColorsAndCombineStrings(
-            holder.subtitleTextView4,
+            holder.subtitleTextView5,
             context.getString(R.string.label_rate_per_ton),
             context.getString(R.string.placeholder_x_rs, dataItem.perTonRate.toString())
         )
         setColorsAndCombineStrings(
-            holder.subtitleTextView5,
+            holder.subtitleTextView6,
             context.getString(R.string.label_total_load),
             context.getString(R.string.placeholder_x_ton, dataItem.totalLoadInTons.toString())
         )
         setColorsAndCombineStrings(
-            holder.subtitleTextView6,
+            holder.subtitleTextView7,
             context.getString(R.string.label_total_amount),
             context.getString(R.string.placeholder_x_rs, dataItem.totalAmount.toString())
         )
         setColorsAndCombineStrings(
-            holder.subtitleTextView7,
+            holder.subtitleTextView8,
             context.getString(R.string.label_transit_days),
             dataItem.transitDaysForTruck.toString()
         )
@@ -88,6 +94,7 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         val subtitleTextView5: TextView = itemView.findViewById(R.id.subtitleTextView5)
         val subtitleTextView6: TextView = itemView.findViewById(R.id.subtitleTextView6)
         val subtitleTextView7: TextView = itemView.findViewById(R.id.subtitleTextView7)
+        val subtitleTextView8: TextView = itemView.findViewById(R.id.subtitleTextView8)
         val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)
 
         init {

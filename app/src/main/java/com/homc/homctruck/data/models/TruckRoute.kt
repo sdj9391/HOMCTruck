@@ -8,4 +8,8 @@ class TruckRoute {
     var endJourneyDate: Long? = null
     var fromPlace: Address? = null
     var toPlace: Address? = null
+    var createdAt: Long? = null
+    var updatedAt: Long? = null
 }
+
+// q = toCity, fromCity, toDate, fromDate

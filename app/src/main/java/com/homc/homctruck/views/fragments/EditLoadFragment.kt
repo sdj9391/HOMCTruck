@@ -6,6 +6,7 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.TemporaryCache
+import com.homc.homctruck.utils.formatDateForDisplay
 import com.homc.homctruck.utils.isInternetAvailable
 import kotlinx.android.synthetic.main.fragment_add_load.*
 
@@ -30,10 +31,12 @@ class EditLoadFragment : AddLoadFragment() {
     private fun showLoadDetails() {
         fromPlace = loadDetails?.fromPlace
         toPlace = loadDetails?.toPlace
+        startMillis = loadDetails?.expectedPickUpDate
 
         goodsNameEditText.setText(loadDetails?.nameOfGoods)
         fromCityEditText.setText(fromPlace?.city)
         toCityEditText.setText(toPlace?.city)
+        expectedPickUpDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
         ratePerTonEditText.setText(loadDetails?.perTonRate?.toString())
         totalLoadInTonsEditText.setText(loadDetails?.totalLoadInTons?.toString())
         totalAmountEditText.setText(loadDetails?.totalAmount?.toString())

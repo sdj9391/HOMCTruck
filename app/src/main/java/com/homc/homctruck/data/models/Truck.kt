@@ -6,4 +6,6 @@ class Truck {
     var type: String? = null
     var truckNumber: String? = null
     var ownerId: String? = null
+    var createdAt: Long? = null
+    var updatedAt: Long? = null
 }

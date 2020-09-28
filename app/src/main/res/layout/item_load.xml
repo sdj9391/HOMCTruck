@@ -103,4 +103,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtitleTextView6"
         tools:text="Kothrud, Pune, Maharashtra" />
+
+    <TextView
+        android:id="@+id/subtitleTextView8"
+        style="@style/subTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/moreButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitleTextView7"
+        tools:text="Kothrud, Pune, Maharashtra" />
 </androidx.constraintlayout.widget.ConstraintLayout>
