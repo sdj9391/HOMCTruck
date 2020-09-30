@@ -30,7 +30,7 @@ interface AppApiService {
     suspend fun addNewTruck(@Body truck: Truck): Response<ApiMessage>
 
     @GET("trucks")
-    suspend fun getUserTruckList(): Response<MutableList<Truck>>
+    suspend fun getMyTruckList(): Response<MutableList<Truck>>
 
     @PUT("trucks/{truckId}")
     suspend fun updateTruckDetails(
@@ -45,7 +45,7 @@ interface AppApiService {
     suspend fun addNewTruckRoute(@Body truckRoute: TruckRoute): Response<ApiMessage>
 
     @GET("truck_routes")
-    suspend fun getUserTruckRouteList(): Response<MutableList<TruckRoute>>
+    suspend fun getMyTruckRouteList(): Response<MutableList<TruckRoute>>
 
     @GET("truck_routes/past_truck_routes")
     suspend fun getMyPastTruckRouteList(): Response<MutableList<TruckRoute>>
@@ -66,7 +66,10 @@ interface AppApiService {
     suspend fun addNewLoad(@Body load: Load): Response<ApiMessage>
 
     @GET("loads")
-    suspend fun getUserLoadList(): Response<MutableList<Load>>
+    suspend fun getMyLoadList(): Response<MutableList<Load>>
+
+    @GET("loads/past_loads")
+    suspend fun getMyPastLoadList(): Response<MutableList<Load>>
 
     @PUT("loads/{loadId}")
     suspend fun updateLoadDetails(

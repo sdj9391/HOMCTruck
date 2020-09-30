@@ -76,7 +76,7 @@ class TruckRemoteDataSource @Inject constructor(
     override suspend fun getMyTruckList(): DataBound<MutableList<Truck>> {
         val data: MutableList<Truck>
         try {
-            val response = api.getUserTruckList()
+            val response = api.getMyTruckList()
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
@@ -188,7 +188,7 @@ class TruckRemoteDataSource @Inject constructor(
     override suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
-            val response = api.getUserTruckRouteList()
+            val response = api.getMyTruckRouteList()
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message

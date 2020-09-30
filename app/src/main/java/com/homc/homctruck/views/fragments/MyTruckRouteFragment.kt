@@ -247,7 +247,13 @@ open class MyTruckRouteFragment : BaseAppFragment() {
     }
 
     protected open fun addPastTruckRoutePlank(data: MutableList<Any>) {
-        data.add(0, AdapterDataItem(BaseAdapter.VIEW_TYPE_PLANK_BUTTON, getString(R.string.label_past_truck_routes)))
+        data.add(
+            0,
+            AdapterDataItem(
+                BaseAdapter.VIEW_TYPE_PLANK_BUTTON,
+                getString(R.string.label_past_truck_routes)
+            )
+        )
     }
 
     private fun showMessageView(message: String) {

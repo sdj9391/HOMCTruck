@@ -20,6 +20,8 @@ import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.LoadViewModel
+import com.homc.homctruck.views.adapters.AdapterDataItem
+import com.homc.homctruck.views.adapters.BaseAdapter
 import com.homc.homctruck.views.adapters.LoadListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
@@ -29,11 +31,11 @@ import kotlinx.android.synthetic.main.item_common_list_layout.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class MyLoadFragment : BaseAppFragment() {
+open class MyLoadFragment : BaseAppFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private var viewModel: LoadViewModel? = null
+    protected var viewModel: LoadViewModel? = null
     private var loadAdapter: LoadListAdapter? = null
     private var navigationController: NavController? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
@@ -46,6 +48,10 @@ class MyLoadFragment : BaseAppFragment() {
         }
 
         showMoreOptionBottomSheet(dataItem)
+    }
+
+    private val onPlankButtonClickListener = View.OnClickListener {
+        navigationController?.navigate(R.id.action_myLoadFragment_to_myPastLoadFragment)
     }
 
     private fun showMoreOptionBottomSheet(dataItem: Load) {
@@ -181,7 +187,7 @@ class MyLoadFragment : BaseAppFragment() {
         navigationController?.navigate(R.id.action_myLoadFragment_to_addLoadFragment)
     }
 
-    private fun getData() {
+    protected open fun getData() {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
@@ -191,7 +197,7 @@ class MyLoadFragment : BaseAppFragment() {
             ?.observe(viewLifecycleOwner, observeLoadList)
     }
 
-    private var observeLoadList = Observer<DataBound<MutableList<Load>>> {
+    protected var observeLoadList = Observer<DataBound<MutableList<Load>>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -225,13 +231,28 @@ class MyLoadFragment : BaseAppFragment() {
     private fun showData(data: MutableList<Load>) {
         loadAdapter = LoadListAdapter(data as MutableList<Any>)
         loadAdapter?.onMoreClickListener = onMoreClickListener
+        loadAdapter?.onPlankButtonClickListener = onPlankButtonClickListener
         recyclerview.adapter = loadAdapter
 
-        if (loadAdapter?.itemCount == 0 || loadAdapter?.itemCount == -1) {
+        if (loadAdapter?.itemCount ?: getPickCountToShowError() >= getPickCountToShowError()) {
             showMessageView(getString(R.string.msg_add_truck_to_showcase))
         } else {
             hideMessageView()
         }
+    }
+
+    protected open fun getPickCountToShowError(): Int {
+        return 1
+    }
+
+    protected open fun addPastLoadPlank(data: MutableList<Any>) {
+        data.add(
+            0,
+            AdapterDataItem(
+                BaseAdapter.VIEW_TYPE_PLANK_BUTTON,
+                getString(R.string.label_past_loads)
+            )
+        )
     }
 
     private fun showMessageView(message: String) {
