@@ -20,6 +20,8 @@ import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
+import com.homc.homctruck.views.adapters.AdapterDataItem
+import com.homc.homctruck.views.adapters.BaseAdapter
 import com.homc.homctruck.views.adapters.TruckRouteListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
@@ -29,11 +31,11 @@ import kotlinx.android.synthetic.main.item_common_list_layout.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class MyTruckRouteFragment : BaseAppFragment() {
+open class MyTruckRouteFragment : BaseAppFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private var viewModel: TruckViewModel? = null
+    protected var viewModel: TruckViewModel? = null
     private var truckRouteAdapter: TruckRouteListAdapter? = null
     private var navigationController: NavController? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
@@ -46,6 +48,10 @@ class MyTruckRouteFragment : BaseAppFragment() {
         }
 
         showMoreOptionBottomSheet(dataItem)
+    }
+
+    private val onPlankButtonClickListener = View.OnClickListener {
+        navigationController?.navigate(R.id.action_myTruckRouteFragment_to_myPastTruckRouteFragment)
     }
 
     private fun showMoreOptionBottomSheet(dataItem: TruckRoute) {
@@ -181,7 +187,7 @@ class MyTruckRouteFragment : BaseAppFragment() {
         navigationController?.navigate(R.id.action_myTruckRouteFragment_to_addTruckRouteFragment)
     }
 
-    private fun getData() {
+    protected open fun getData() {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
@@ -191,7 +197,7 @@ class MyTruckRouteFragment : BaseAppFragment() {
             ?.observe(viewLifecycleOwner, observeTruckRouteList)
     }
 
-    private var observeTruckRouteList = Observer<DataBound<MutableList<TruckRoute>>> {
+    protected var observeTruckRouteList = Observer<DataBound<MutableList<TruckRoute>>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -223,15 +229,25 @@ class MyTruckRouteFragment : BaseAppFragment() {
     }
 
     private fun showData(data: MutableList<TruckRoute>) {
+        addPastTruckRoutePlank(data as MutableList<Any>)
         truckRouteAdapter = TruckRouteListAdapter(data as MutableList<Any>)
         truckRouteAdapter?.onMoreClickListener = onMoreClickListener
+        truckRouteAdapter?.onPlankButtonClickListener = onPlankButtonClickListener
         recyclerview.adapter = truckRouteAdapter
 
-        if (truckRouteAdapter?.itemCount == 0 || truckRouteAdapter?.itemCount == -1) {
+        if (truckRouteAdapter?.itemCount ?: getPickCountToShowError() <= getPickCountToShowError()) {
             showMessageView(getString(R.string.msg_truck_routes_not_added_yet))
         } else {
             hideMessageView()
         }
+    }
+
+    protected open fun getPickCountToShowError(): Int {
+        return 1
+    }
+
+    protected open fun addPastTruckRoutePlank(data: MutableList<Any>) {
+        data.add(0, AdapterDataItem(BaseAdapter.VIEW_TYPE_PLANK_BUTTON, getString(R.string.label_past_truck_routes)))
     }
 
     private fun showMessageView(message: String) {

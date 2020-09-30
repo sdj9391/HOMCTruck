@@ -47,6 +47,9 @@ interface AppApiService {
     @GET("truck_routes")
     suspend fun getUserTruckRouteList(): Response<MutableList<TruckRoute>>
 
+    @GET("truck_routes/past_truck_routes")
+    suspend fun getMyPastTruckRouteList(): Response<MutableList<TruckRoute>>
+
     @PUT("truck_routes/{truckRouteId}")
     suspend fun updateTruckRouteDetails(
         @Path("truckRouteId") truckRouteId: String,

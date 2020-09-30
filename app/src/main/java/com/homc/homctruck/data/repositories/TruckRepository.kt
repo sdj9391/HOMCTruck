@@ -38,6 +38,10 @@ class TruckRepository @Inject constructor(var dataSource: TruckRemoteDataSource)
         return dataSource.getMyTruckRouteList()
     }
 
+    override suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>> {
+        return dataSource.getMyPastTruckRouteList()
+    }
+
     override suspend fun updateTruckRouteDetails(
         truckRouteId: String, truckRoute: TruckRoute
     ): DataBound<ApiMessage> {

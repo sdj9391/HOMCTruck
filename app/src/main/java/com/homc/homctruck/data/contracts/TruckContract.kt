@@ -12,6 +12,7 @@ interface TruckContract {
 
     suspend fun addNewTruckRoute(truckRoute: TruckRoute): DataBound<ApiMessage>
     suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>>
+    suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>>
     suspend fun updateTruckRouteDetails(truckRouteId: String, truckRoute: TruckRoute): DataBound<ApiMessage>
     suspend fun deleteTruckRoute(truckRouteId: String): DataBound<ApiMessage>
 }
