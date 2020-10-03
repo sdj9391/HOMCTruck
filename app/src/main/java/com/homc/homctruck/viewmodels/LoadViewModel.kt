@@ -94,6 +94,35 @@ class LoadViewModel
         return liveData
     }
 
+    fun findLoadList(
+        toCity: String, fromCity: String, pickUpDate: Long
+    ): MutableLiveData<DataBound<MutableList<Load>>> {
+        val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound =
+                    repository.findLoadList(toCity, fromCity, pickUpDate)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.error, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
     fun updateLoadDetails(loadId: String, load: Load): MutableLiveData<DataBound<ApiMessage>> {
         val liveData = MutableLiveData<DataBound<ApiMessage>>()
 

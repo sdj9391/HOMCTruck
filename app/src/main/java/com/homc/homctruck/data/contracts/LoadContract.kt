@@ -9,6 +9,10 @@ interface LoadContract {
     suspend fun getLoadDetails(loadId: String): DataBound<Load>
     suspend fun getMyLoadList(): DataBound<MutableList<Load>>
     suspend fun getMyPastLoadList(): DataBound<MutableList<Load>>
+    suspend fun findLoadList(
+        toCity: String, fromCity: String, pickUpDate: Long
+    ): DataBound<MutableList<Load>>
+
     suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage>
     suspend fun deleteLoad(loadId: String): DataBound<ApiMessage>
 }

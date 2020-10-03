@@ -11,7 +11,7 @@ class MyPastTruckRouteFragment : MyTruckRouteFragment() {
             return
         }
 
-        viewModel?.getMyTruckRouteList()
+        viewModel?.getMyPastTruckRouteList()
             ?.observe(viewLifecycleOwner, observeTruckRouteList)
     }
 

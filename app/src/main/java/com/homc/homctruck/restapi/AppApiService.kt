@@ -50,6 +50,14 @@ interface AppApiService {
     @GET("truck_routes/past_truck_routes")
     suspend fun getMyPastTruckRouteList(): Response<MutableList<TruckRoute>>
 
+    @GET("truck_routes/find")
+    suspend fun findTruckRouteList(
+        @Query("toCity") toCity: String,
+        @Query("fromCity") fromCity: String,
+        @Query("toDate") toDate: Long,
+        @Query("fromDate") fromDate: Long
+    ): Response<MutableList<TruckRoute>>
+
     @PUT("truck_routes/{truckRouteId}")
     suspend fun updateTruckRouteDetails(
         @Path("truckRouteId") truckRouteId: String,
@@ -70,6 +78,13 @@ interface AppApiService {
 
     @GET("loads/past_loads")
     suspend fun getMyPastLoadList(): Response<MutableList<Load>>
+
+    @GET("loads/find")
+    suspend fun findLoadList(
+        @Query("toCity") toCity: String,
+        @Query("fromCity") fromCity: String,
+        @Query("pickUpDate") pickUpDate: Long
+    ): Response<MutableList<Load>>
 
     @PUT("loads/{loadId}")
     suspend fun updateLoadDetails(

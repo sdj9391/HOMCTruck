@@ -127,6 +127,36 @@ class LoadRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
+    override suspend fun findLoadList(
+        toCity: String, fromCity: String, pickUpDate: Long
+    ): DataBound<MutableList<Load>> {
+        val data: MutableList<Load>
+        try {
+            val response = api.findLoadList(toCity, fromCity, pickUpDate)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
     override suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage> {
         val data: ApiMessage
         try {

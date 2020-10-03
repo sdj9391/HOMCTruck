@@ -11,7 +11,7 @@ class MyPastLoadFragment : MyLoadFragment() {
             return
         }
 
-        viewModel?.getMyLoadList()
+        viewModel?.getMyPastLoadList()
             ?.observe(viewLifecycleOwner, observeLoadList)
     }
 

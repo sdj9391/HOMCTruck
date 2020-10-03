@@ -25,6 +25,12 @@ class LoadRepository @Inject constructor(var dataSource: LoadRemoteDataSource) :
         return dataSource.getMyPastLoadList()
     }
 
+    override suspend fun findLoadList(
+        toCity: String, fromCity: String, pickUpDate: Long
+    ): DataBound<MutableList<Load>> {
+        return dataSource.findLoadList(toCity, fromCity, pickUpDate)
+    }
+
     override suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage> {
         return dataSource.updateLoadDetails(loadId, load)
     }

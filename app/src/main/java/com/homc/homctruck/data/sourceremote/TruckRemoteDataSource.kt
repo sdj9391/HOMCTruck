@@ -241,6 +241,37 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
+    override suspend fun findTruckRouteList(
+        toCity: String, fromCity: String, toDate: Long, fromDate: Long
+    ): DataBound<MutableList<TruckRoute>> {
+        val data: MutableList<TruckRoute>
+        try {
+            val response =
+                api.findTruckRouteList(toCity, fromCity, toDate, fromDate)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
     override suspend fun updateTruckRouteDetails(
         truckRouteId: String,
         truckRoute: TruckRoute

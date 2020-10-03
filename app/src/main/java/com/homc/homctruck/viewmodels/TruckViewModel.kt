@@ -200,6 +200,35 @@ class TruckViewModel
         return liveData
     }
 
+    fun findTruckRouteList(
+        toCity: String, fromCity: String, toDate: Long, fromDate: Long
+    ): MutableLiveData<DataBound<MutableList<TruckRoute>>> {
+        val liveData = MutableLiveData<DataBound<MutableList<TruckRoute>>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound =
+                    repository.findTruckRouteList(toCity, fromCity, toDate, fromDate)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.error, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
     fun updateTruckRouteDetails(
         truckRouteId: String,
         truckRoute: TruckRoute
