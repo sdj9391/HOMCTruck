@@ -31,7 +31,7 @@ class MainDrawerActivity : BaseAppActivity() {
         // TODO: Use to replace fragment into container when drawer option click
         /*val topLevelDestinations = setOf(
             R.id.navHome, R.id.navAddTruckRout,
-            R.id.navSearchTruck, R.id.navAddLoad, R.id.navSearchLoad
+            R.id.navFindTruck, R.id.navAddLoad, R.id.navFindLoad
         )*/
         navController = findNavController(R.id.navHostFragment)
         appBarConfig = AppBarConfiguration(navController.graph, drawerLayout)

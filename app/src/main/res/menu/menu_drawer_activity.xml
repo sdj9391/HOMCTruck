@@ -21,9 +21,9 @@
                         android:icon="@drawable/ic_menu_share"
                         android:title="@string/menu_add_truck_route" />
                     <item
-                        android:id="@id/searchTruckRouteFragment"
+                        android:id="@id/findTruckRouteFragment"
                         android:icon="@drawable/ic_menu_send"
-                        android:title="@string/menu_search_truck_route" />
+                        android:title="@string/menu_find_truck_route" />
                     <item
                         android:id="@id/myTruckRouteFragment"
                         android:icon="@drawable/ic_menu_send"
@@ -40,9 +40,9 @@
                         android:icon="@drawable/ic_menu_manage"
                         android:title="@string/menu_add_load" />
                     <item
-                        android:id="@id/searchLoadFragment"
+                        android:id="@id/findLoadFragment"
                         android:icon="@drawable/ic_menu_share"
-                        android:title="@string/menu_search_load" />
+                        android:title="@string/menu_find_load" />
                     <item
                         android:id="@id/myLoadFragment"
                         android:icon="@drawable/ic_menu_share"

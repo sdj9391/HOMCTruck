@@ -32,11 +32,11 @@
             android:id="@+id/action_homeFragment_to_addLoadFragment"
             app:destination="@id/addLoadFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_searchTruckRouteFragment"
-            app:destination="@id/searchTruckRouteFragment" />
+            android:id="@+id/action_homeFragment_to_findTruckRouteFragment"
+            app:destination="@id/findTruckRouteFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_searchLoadFragment"
-            app:destination="@id/searchLoadFragment" />
+            android:id="@+id/action_homeFragment_to_findLoadFragment"
+            app:destination="@id/findLoadFragment" />
         <action
             android:id="@+id/action_homeFragment_to_myTruckRouteFragment"
             app:destination="@id/myTruckRouteFragment" />
@@ -89,13 +89,13 @@
             app:destination="@id/myPastTruckRouteFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchLoadFragment"
-        android:name="com.homc.homctruck.views.fragments.SearchLoadFragment"
-        android:label="SearchLoadFragment" />
+        android:id="@+id/findLoadFragment"
+        android:name="com.homc.homctruck.views.fragments.FindLoadFragment"
+        android:label="FindLoadFragment" />
     <fragment
-        android:id="@+id/searchTruckRouteFragment"
-        android:name="com.homc.homctruck.views.fragments.SearchTruckRouteFragment"
-        android:label="SearchTruckRouteFragment" />
+        android:id="@+id/findTruckRouteFragment"
+        android:name="com.homc.homctruck.views.fragments.FindTruckRouteFragment"
+        android:label="FindTruckRouteFragment" />
     <fragment
         android:id="@+id/editUserProfileFragment"
         android:name="com.homc.homctruck.views.fragments.EditUserProfileFragment"

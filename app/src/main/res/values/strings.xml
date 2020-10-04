@@ -33,11 +33,11 @@
     <string name="menu_home">Home</string>
     <string name="menu_group_truck">Truck</string>
     <string name="menu_add_truck_route">Add Truck Route</string>
-    <string name="menu_search_truck_route">Search Truck Route</string>
+    <string name="menu_find_truck_route">Find Truck Route</string>
     <string name="menu_my_truck_route">My Truck Route</string>
     <string name="menu_group_load">Load</string>
     <string name="menu_add_load">Add Load</string>
-    <string name="menu_search_load">Search Load</string>
+    <string name="menu_find_load">Find Load</string>
     <string name="menu_my_load">My Load</string>
     <string name="menu_group_other">Other</string>
     <string name="menu_contact_us">Contact Us</string>

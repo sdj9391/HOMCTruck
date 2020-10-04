@@ -41,8 +41,7 @@ class HomcTruckApp : MultiDexApplication() {
     }
 
     /**
-     * This is the new Places api to resolve the problem of City search in the address/job.
-     * Also updated the dependency in dependencies.gradle
+     * This is the new Places api to resolve the problem of City search
      */
     private fun initPlacesSDK() {
         val key: String? = getLocationKeyFromManifest()
