@@ -302,7 +302,7 @@ open class AddLoadFragment : BaseAppFragment() {
         load.expectedPickUpDate = startMillis
         load.typeOfTruck = truckType
         load.perTonRate = String.format("%.2f", perTonRate.toFloat()).toFloat()
-        load.totalLoadInTons = String.format("%.2f", perTonRate.toFloat()).toFloat()
+        load.totalLoadInTons = String.format("%.2f", totalLoadInTons.toFloat()).toFloat()
         load.totalAmount = String.format("%.2f", totalAmount.toFloat()).toFloat()
         load.transitDaysForTruck = transitDays.toInt()
         return load

@@ -41,8 +41,8 @@ open class BaseAdapter(val data: MutableList<Any>?) :
     }
 
     private fun bindPlankButtonView(holder: PlankButtonViewHolder, position: Int) {
-        val dataItem = dataItems?.get(position) as String
-        holder.textPlankButton.text = dataItem
+        val dataItem = dataItems?.get(position) as AdapterDataItem
+        holder.textPlankButton.text = dataItem.data.toString()
     }
 
     override fun getItemViewType(position: Int): Int {

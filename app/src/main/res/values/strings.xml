@@ -148,4 +148,5 @@
     <string name="msg_select_expected_pickup_date">Select expected pickup date</string>
     <string name="label_past_truck_routes">Past Truck Routes</string>
     <string name="label_past_loads">Past Loads</string>
+    <string name="msg_loads_not_added_yet">Loads not added yet</string>
 </resources>

@@ -229,13 +229,14 @@ open class MyLoadFragment : BaseAppFragment() {
     }
 
     private fun showData(data: MutableList<Load>) {
+        addPastLoadPlank(data as MutableList<Any>)
         loadAdapter = LoadListAdapter(data as MutableList<Any>)
         loadAdapter?.onMoreClickListener = onMoreClickListener
         loadAdapter?.onPlankButtonClickListener = onPlankButtonClickListener
         recyclerview.adapter = loadAdapter
 
         if (loadAdapter?.itemCount ?: getPickCountToShowError() >= getPickCountToShowError()) {
-            showMessageView(getString(R.string.msg_add_truck_to_showcase))
+            showMessageView(getString(R.string.msg_loads_not_added_yet))
         } else {
             hideMessageView()
         }
@@ -259,12 +260,12 @@ open class MyLoadFragment : BaseAppFragment() {
         emptyView.visibility = View.VISIBLE
         val errorTitle = emptyView.findViewById<TextView>(R.id.messageTitle)
         errorTitle?.text = message
-        recyclerview.visibility = View.GONE
+        // recyclerview.visibility = View.GONE
     }
 
     private fun hideMessageView() {
         emptyView?.visibility = View.GONE
-        recyclerview.visibility = View.VISIBLE
+        // recyclerview.visibility = View.VISIBLE
     }
 
     companion object {

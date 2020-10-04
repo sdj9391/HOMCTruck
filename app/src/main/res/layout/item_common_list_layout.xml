@@ -42,7 +42,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/default_space"
-            android:background="@color/background"
             app:layout_constraintBottom_toTopOf="@+id/bottomButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

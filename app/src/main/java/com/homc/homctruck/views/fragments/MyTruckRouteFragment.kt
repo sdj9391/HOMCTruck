@@ -260,12 +260,12 @@ open class MyTruckRouteFragment : BaseAppFragment() {
         emptyView.visibility = View.VISIBLE
         val errorTitle = emptyView.findViewById<TextView>(R.id.messageTitle)
         errorTitle?.text = message
-        recyclerview.visibility = View.GONE
+        // recyclerview.visibility = View.GONE
     }
 
     private fun hideMessageView() {
         emptyView?.visibility = View.GONE
-        recyclerview.visibility = View.VISIBLE
+        // recyclerview.visibility = View.VISIBLE
     }
 
     companion object {
