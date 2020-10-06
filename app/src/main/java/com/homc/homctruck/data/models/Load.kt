@@ -5,8 +5,8 @@ class Load {
     var ownerId: String? = null
     var nameOfGoods: String? = null
     var typeOfMaterial: String? = null
-    var fromPlace: Address? = null
-    var toPlace: Address? = null
+    var fromCity: String? = null
+    var toCity: String? = null
     var typeOfTruck: String? = null
     var perTonRate: Float? = null
     var totalLoadInTons: Float? = null

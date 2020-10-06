@@ -95,7 +95,7 @@ class LoadViewModel
     }
 
     fun findLoadList(
-        toCity: String, fromCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long
     ): MutableLiveData<DataBound<MutableList<Load>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
 
@@ -103,7 +103,7 @@ class LoadViewModel
             try {
                 liveData.value = DataBound.Loading()
                 val dataBound =
-                    repository.findLoadList(toCity, fromCity, pickUpDate)
+                    repository.findLoadList(fromCity, toCity, pickUpDate)
 
                 dataBound.let {
                     when (it) {

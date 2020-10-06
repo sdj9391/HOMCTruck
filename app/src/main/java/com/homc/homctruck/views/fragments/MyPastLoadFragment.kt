@@ -3,6 +3,8 @@ package com.homc.homctruck.views.fragments
 import android.os.Bundle
 import android.view.View
 import com.homc.homctruck.R
+import com.homc.homctruck.data.models.Load
+import com.homc.homctruck.utils.TemporaryCache
 import com.homc.homctruck.utils.isInternetAvailable
 
 class MyPastLoadFragment : MyLoadFragment() {
@@ -20,6 +22,11 @@ class MyPastLoadFragment : MyLoadFragment() {
 
         viewModel?.getMyPastLoadList()
             ?.observe(viewLifecycleOwner, observeLoadList)
+    }
+
+    override fun editLoadItem(dataItem: Load) {
+        TemporaryCache.put(EditLoadFragment.EXTRA_LOAD_DETAILS, dataItem)
+        navigationController?.navigate(R.id.action_myPastLoadFragment_to_editLoadFragment)
     }
 
     override fun addPastLoadPlank(data: MutableList<Any>) {

@@ -242,12 +242,12 @@ class TruckRemoteDataSource @Inject constructor(
     }
 
     override suspend fun findTruckRouteList(
-        toCity: String, fromCity: String, toDate: Long, fromDate: Long
+        fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
             val response =
-                api.findTruckRouteList(toCity, fromCity, toDate, fromDate)
+                api.findTruckRouteList(fromCity, toCity, fromDate, toDate)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message

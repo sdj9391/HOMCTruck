@@ -11,7 +11,7 @@ import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.utils.formatDateForDisplay
 import com.homc.homctruck.utils.setColorsAndCombineStrings
 
-class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
+open class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
 
     var onMoreClickListener: View.OnClickListener? = null
 
@@ -31,7 +31,7 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         }
     }
 
-    private fun bindLoadView(holder: LoadViewHolder, position: Int) {
+    protected open fun bindLoadView(holder: LoadViewHolder, position: Int) {
         val context = holder.itemView.context
         val dataItem = dataItems?.get(position) as Load
         setColorsAndCombineStrings(
@@ -49,7 +49,7 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
             context.getString(R.string.label_location),
             context.getString(
                 R.string.placeholder_x_to_y,
-                dataItem.fromPlace?.city, dataItem.toPlace?.city
+                dataItem.fromCity, dataItem.toCity
             )
         )
         setColorsAndCombineStrings(
@@ -85,7 +85,7 @@ class LoadListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         holder.moreButton.tag = dataItem
     }
 
-    private inner class LoadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    protected inner class LoadViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
         val subtitleTextView1: TextView = itemView.findViewById(R.id.subtitleTextView1)
         val subtitleTextView2: TextView = itemView.findViewById(R.id.subtitleTextView2)

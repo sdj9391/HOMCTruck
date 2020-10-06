@@ -1,22 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/demo_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/black"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textSize="@dimen/large_font"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Demo text" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminateOnly="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/headerTextView"
+            style="@style/headerTextView"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/default_space"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/default_space"
+            android:paddingEnd="@dimen/default_space"
+            android:text="@string/label_filters"
+            app:layout_constraintEnd_toStartOf="@+id/editFilterButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <ImageButton
+            android:id="@+id/editFilterButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/default_space"
+            android:background="@color/white"
+            android:padding="@dimen/default_space"
+            android:src="@drawable/ic_arrow_down_black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <View
+            android:id="@+id/headerDivider"
+            style="@style/divider"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerTextView" />
+
+        <TextView
+            android:id="@+id/titleTextView1"
+            style="@style/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="@dimen/default_space"
+            android:paddingTop="@dimen/default_space"
+            android:paddingEnd="@dimen/default_space"
+            android:paddingBottom="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerDivider"
+            tools:text="Medul D Kapadni" />
+
+        <TextView
+            android:id="@+id/titleTextView2"
+            style="@style/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="@dimen/default_space"
+            android:paddingTop="2dp"
+            android:paddingEnd="@dimen/default_space"
+            android:paddingBottom="@dimen/default_space"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView1"
+            tools:text="Medul D Kapadni" />
+
+        <View
+            android:id="@+id/backView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/applyButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView2" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fromCityTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            android:focusable="false"
+            android:hint="@string/label_from_city"
+            app:errorTextColor="@android:color/holo_red_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fromCityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/toCityTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            android:focusable="false"
+            android:hint="@string/label_to_city"
+            app:errorTextColor="@android:color/holo_red_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fromCityTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/toCityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/toDateTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            android:focusable="false"
+            android:hint="@string/label_journey_start_date"
+            app:errorTextColor="@android:color/holo_red_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toCityTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/toDateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/fromDateTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            android:focusable="false"
+            android:hint="@string/label_journey_end_date"
+            app:errorTextColor="@android:color/holo_red_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toDateTextField">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fromDateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/applyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            android:layout_marginBottom="@dimen/default_space"
+            android:text="@string/label_apply"
+            android:textSize="@dimen/normal_font"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fromDateTextField" />
+
+        <include
+            android:id="@+id/emptyView"
+            layout="@layout/message_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
+            app:layout_goneMarginBottom="0dp"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
+            app:layout_goneMarginBottom="0dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

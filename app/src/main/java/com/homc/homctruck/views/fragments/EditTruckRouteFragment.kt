@@ -31,14 +31,12 @@ class EditTruckRouteFragment : AddTruckRouteFragment() {
 
     private fun showTruckRouteDetails() {
         // truckNumberDropDown.isEnabled = false
-        fromPlace = truckRouteDetails?.fromPlace
-        toPlace = truckRouteDetails?.toPlace
         startMillis = truckRouteDetails?.startJourneyDate
         endMillis = truckRouteDetails?.endJourneyDate
 
         truckNumberDropDown.setText(truckRouteDetails?.truck?.truckNumber)
-        fromCityEditText.setText(fromPlace?.city)
-        toCityEditText.setText(toPlace?.city)
+        fromCityEditText.setText(truckRouteDetails?.fromCity)
+        toCityEditText.setText(truckRouteDetails?.toCity)
         startJourneyDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
         endJourneyDateEditText.setText(formatDateForDisplay(endMillis ?: 0))
         isDirty = false

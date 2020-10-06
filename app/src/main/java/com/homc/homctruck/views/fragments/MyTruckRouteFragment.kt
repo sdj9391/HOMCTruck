@@ -37,7 +37,7 @@ open class MyTruckRouteFragment : BaseAppFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     protected var viewModel: TruckViewModel? = null
     private var truckRouteAdapter: TruckRouteListAdapter? = null
-    private var navigationController: NavController? = null
+    protected var navigationController: NavController? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
     private val onMoreClickListener = View.OnClickListener {
@@ -90,7 +90,7 @@ open class MyTruckRouteFragment : BaseAppFragment() {
         }
     }
 
-    private fun editTruckRouteItem(dataItem: TruckRoute) {
+    protected open fun editTruckRouteItem(dataItem: TruckRoute) {
         TemporaryCache.put(EditTruckRouteFragment.EXTRA_TRUCK_ROUTE_DETAILS, dataItem)
         navigationController?.navigate(R.id.action_myTruckRouteFragment_to_editTruckRouteFragment)
     }

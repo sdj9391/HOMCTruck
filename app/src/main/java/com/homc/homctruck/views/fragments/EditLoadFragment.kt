@@ -29,13 +29,11 @@ class EditLoadFragment : AddLoadFragment() {
     }
 
     private fun showLoadDetails() {
-        fromPlace = loadDetails?.fromPlace
-        toPlace = loadDetails?.toPlace
         startMillis = loadDetails?.expectedPickUpDate
 
         goodsNameEditText.setText(loadDetails?.nameOfGoods)
-        fromCityEditText.setText(fromPlace?.city)
-        toCityEditText.setText(toPlace?.city)
+        fromCityEditText.setText(loadDetails?.fromCity)
+        toCityEditText.setText(loadDetails?.toCity)
         expectedPickUpDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
         ratePerTonEditText.setText(loadDetails?.perTonRate?.toString())
         totalLoadInTonsEditText.setText(loadDetails?.totalLoadInTons?.toString())

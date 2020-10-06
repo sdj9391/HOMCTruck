@@ -128,11 +128,11 @@ class LoadRemoteDataSource @Inject constructor(
     }
 
     override suspend fun findLoadList(
-        toCity: String, fromCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long
     ): DataBound<MutableList<Load>> {
         val data: MutableList<Load>
         try {
-            val response = api.findLoadList(toCity, fromCity, pickUpDate)
+            val response = api.findLoadList(fromCity, toCity, pickUpDate)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message

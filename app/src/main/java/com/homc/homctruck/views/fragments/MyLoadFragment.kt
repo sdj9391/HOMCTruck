@@ -37,7 +37,7 @@ open class MyLoadFragment : BaseAppFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     protected var viewModel: LoadViewModel? = null
     private var loadAdapter: LoadListAdapter? = null
-    private var navigationController: NavController? = null
+    protected var navigationController: NavController? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
     private val onMoreClickListener = View.OnClickListener {
@@ -90,7 +90,7 @@ open class MyLoadFragment : BaseAppFragment() {
         }
     }
 
-    private fun editLoadItem(dataItem: Load) {
+    protected open fun editLoadItem(dataItem: Load) {
         TemporaryCache.put(EditLoadFragment.EXTRA_LOAD_DETAILS, dataItem)
         navigationController?.navigate(R.id.action_myLoadFragment_to_editLoadFragment)
     }

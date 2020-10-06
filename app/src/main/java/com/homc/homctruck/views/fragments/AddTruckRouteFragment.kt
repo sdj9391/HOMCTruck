@@ -47,8 +47,6 @@ open class AddTruckRouteFragment : BaseAppFragment() {
     protected var viewModel: TruckViewModel? = null
 
     private var isFromCitySelected = true
-    protected var fromPlace: Address? = null
-    protected var toPlace: Address? = null
     protected var startMillis: Long? = null
     protected var endMillis: Long? = null
     var isDirty = false
@@ -250,10 +248,8 @@ open class AddTruckRouteFragment : BaseAppFragment() {
         DebugLog.v("Place: " + Gson().toJson(place))
         if (isFromCitySelected) {
             fromCityEditText.setText(location)
-            fromPlace = place.toAddress()
         } else {
             toCityEditText.setText(location)
-            toPlace = place.toAddress()
         }
     }
 
@@ -274,12 +270,14 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             return null
         }
 
-        if (fromPlace == null) {
+        val fromCity = fromCityEditText.text.toString().trim()
+        if (fromCity.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_from_city))
             return null
         }
 
-        if (toPlace == null) {
+        val toCity = toCityEditText.text.toString().trim()
+        if (toCity.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_to_city))
             return null
         }
@@ -308,8 +306,8 @@ open class AddTruckRouteFragment : BaseAppFragment() {
 
         val truckRoute = TruckRoute()
         truckRoute.truckId = truck.id
-        truckRoute.fromPlace = fromPlace
-        truckRoute.toPlace = toPlace
+        truckRoute.fromCity = fromCity
+        truckRoute.fromCity = fromCity
         truckRoute.startJourneyDate = startMillis
         truckRoute.endJourneyDate = endMillis
         return truckRoute

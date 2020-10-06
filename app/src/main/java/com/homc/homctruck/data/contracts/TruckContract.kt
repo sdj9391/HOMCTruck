@@ -16,7 +16,7 @@ interface TruckContract {
     suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>>
     suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>>
     suspend fun findTruckRouteList(
-        toCity: String, fromCity: String, toDate: Long, fromDate: Long
+        fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): DataBound<MutableList<TruckRoute>>
 
     suspend fun updateTruckRouteDetails(

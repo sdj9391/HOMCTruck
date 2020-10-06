@@ -24,10 +24,8 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.Address
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Load
-import com.homc.homctruck.data.models.toAddress
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
@@ -48,8 +46,6 @@ open class AddLoadFragment : BaseAppFragment() {
     protected var viewModel: LoadViewModel? = null
 
     private var isFromCitySelected = true
-    protected var fromPlace: Address? = null
-    protected var toPlace: Address? = null
     protected var startMillis: Long? = null
     var isDirty = false
 
@@ -215,10 +211,8 @@ open class AddLoadFragment : BaseAppFragment() {
         DebugLog.v("Place: " + Gson().toJson(place))
         if (isFromCitySelected) {
             fromCityEditText.setText(location)
-            fromPlace = place.toAddress()
         } else {
             toCityEditText.setText(location)
-            toPlace = place.toAddress()
         }
     }
 
@@ -246,12 +240,14 @@ open class AddLoadFragment : BaseAppFragment() {
             return null
         }
 
-        if (fromPlace == null) {
+        val fromCity = fromCityEditText.text.toString().trim()
+        if (fromCity.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_from_city))
             return null
         }
 
-        if (toPlace == null) {
+        val toCity = toCityEditText.text.toString().trim()
+        if (toCity.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_to_city))
             return null
         }
@@ -297,8 +293,8 @@ open class AddLoadFragment : BaseAppFragment() {
         val load = Load()
         load.nameOfGoods = goodsName
         load.typeOfMaterial = materialType
-        load.fromPlace = fromPlace
-        load.toPlace = toPlace
+        load.fromCity = fromCity
+        load.toCity = toCity
         load.expectedPickUpDate = startMillis
         load.typeOfTruck = truckType
         load.perTonRate = String.format("%.2f", perTonRate.toFloat()).toFloat()

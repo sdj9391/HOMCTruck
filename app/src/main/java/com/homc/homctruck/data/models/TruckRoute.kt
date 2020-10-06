@@ -6,8 +6,8 @@ class TruckRoute {
     var truck: Truck? = null
     var startJourneyDate: Long? = null
     var endJourneyDate: Long? = null
-    var fromPlace: Address? = null
-    var toPlace: Address? = null
+    var fromCity: String? = null
+    var toCity: String? = null
     var createdAt: Long? = null
     var updatedAt: Long? = null
 }

@@ -52,10 +52,10 @@ interface AppApiService {
 
     @GET("truck_routes/find")
     suspend fun findTruckRouteList(
-        @Query("toCity") toCity: String,
         @Query("fromCity") fromCity: String,
-        @Query("toDate") toDate: Long,
-        @Query("fromDate") fromDate: Long
+        @Query("toCity") toCity: String,
+        @Query("fromDate") fromDate: Long,
+        @Query("toDate") toDate: Long
     ): Response<MutableList<TruckRoute>>
 
     @PUT("truck_routes/{truckRouteId}")
@@ -81,8 +81,8 @@ interface AppApiService {
 
     @GET("loads/find")
     suspend fun findLoadList(
-        @Query("toCity") toCity: String,
         @Query("fromCity") fromCity: String,
+        @Query("toCity") toCity: String,
         @Query("pickUpDate") pickUpDate: Long
     ): Response<MutableList<Load>>
 

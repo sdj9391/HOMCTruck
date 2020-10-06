@@ -149,4 +149,7 @@
     <string name="label_past_truck_routes">Past Truck Routes</string>
     <string name="label_past_loads">Past Loads</string>
     <string name="msg_loads_not_added_yet">Loads not added yet</string>
+    <string name="label_filters">Filters</string>
+    <string name="label_apply">Apply</string>
+    <string name="msg_data_not_found">Data not found</string>
 </resources>

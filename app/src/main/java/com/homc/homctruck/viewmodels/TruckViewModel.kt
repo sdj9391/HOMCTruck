@@ -201,7 +201,7 @@ class TruckViewModel
     }
 
     fun findTruckRouteList(
-        toCity: String, fromCity: String, toDate: Long, fromDate: Long
+        fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): MutableLiveData<DataBound<MutableList<TruckRoute>>> {
         val liveData = MutableLiveData<DataBound<MutableList<TruckRoute>>>()
 
@@ -209,7 +209,7 @@ class TruckViewModel
             try {
                 liveData.value = DataBound.Loading()
                 val dataBound =
-                    repository.findTruckRouteList(toCity, fromCity, toDate, fromDate)
+                    repository.findTruckRouteList(fromCity, toCity, fromDate, toDate)
 
                 dataBound.let {
                     when (it) {
