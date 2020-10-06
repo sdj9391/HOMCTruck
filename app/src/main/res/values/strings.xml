@@ -32,6 +32,7 @@
     <string name="menu_user_profile">User Profile</string>
     <string name="menu_home">Home</string>
     <string name="menu_group_truck">Truck</string>
+    <string name="menu_group_truck_route">Truck Route</string>
     <string name="menu_add_truck_route">Add Truck Route</string>
     <string name="menu_find_truck_route">Find Truck Route</string>
     <string name="menu_my_truck_route">My Truck Route</string>

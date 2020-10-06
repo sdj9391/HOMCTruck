@@ -13,7 +13,7 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_user_profile" />
 
-        <item android:title="@string/menu_group_truck">
+        <item android:title="@string/menu_group_truck_route">
             <menu>
                 <group android:checkableBehavior="single">
                     <item

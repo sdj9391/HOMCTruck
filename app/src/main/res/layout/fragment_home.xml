@@ -1,21 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-    <TextView
-        android:id="@+id/demo_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/holo_purple"
-        android:gravity="center"
-        android:textSize="@dimen/large_font"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Demo text" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/truckRouteDividerTop"
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            android:background="@color/background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/truckRouteTitle"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:padding="@dimen/default_space"
+            android:text="@string/menu_group_truck_route"
+            android:textColor="@color/title_text"
+            android:textSize="@dimen/normal_font"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/truckRouteDividerTop" />
+
+        <View
+            android:id="@+id/truckRouteDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/truckRouteTitle" />
+
+        <ImageButton
+            android:id="@+id/addTruckRoute"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/ic_add_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            android:background="@drawable/ic_truck_route_orange"
+            app:layout_constraintEnd_toStartOf="@+id/findTruckRoute"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/truckRouteDivider" />
+
+        <ImageButton
+            android:id="@+id/findTruckRoute"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/ic_find_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            android:background="@drawable/ic_truck_route_blue"
+            app:layout_constraintEnd_toStartOf="@+id/myTruckRoute"
+            app:layout_constraintStart_toEndOf="@+id/addTruckRoute"
+            app:layout_constraintTop_toBottomOf="@+id/truckRouteDivider" />
+
+        <ImageButton
+            android:id="@+id/myTruckRoute"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_menu_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            android:background="@drawable/ic_truck_route_yellow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/findTruckRoute"
+            app:layout_constraintTop_toBottomOf="@+id/truckRouteDivider" />
+
+        <View
+            android:id="@+id/loadDividerTop"
+            android:layout_width="0dp"
+            android:layout_height="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myTruckRoute" />
+
+        <TextView
+            android:id="@+id/loadTitle"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:padding="@dimen/default_space"
+            android:text="@string/menu_group_load"
+            android:textColor="@color/title_text"
+            android:textSize="@dimen/normal_font"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loadDividerTop" />
+
+        <View
+            android:id="@+id/loadDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loadTitle" />
+
+        <ImageButton
+            android:id="@+id/addLoad"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ic_load_yellow"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_add_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/findLoad"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loadDivider" />
+
+        <ImageButton
+            android:id="@+id/findLoad"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_find_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            android:background="@drawable/ic_load_green"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/myLoad"
+            app:layout_constraintStart_toEndOf="@+id/addLoad"
+            app:layout_constraintTop_toBottomOf="@+id/loadDivider" />
+
+        <ImageButton
+            android:id="@+id/myLoad"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:src="@drawable/ic_menu_circle"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
+            android:background="@drawable/ic_load_red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/findLoad"
+            app:layout_constraintTop_toBottomOf="@+id/loadDivider" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
