@@ -227,7 +227,7 @@ class MyTruckListFragment : BaseAppFragment() {
         truckAdapter?.onMoreClickListener = onMoreClickListener
         recyclerview.adapter = truckAdapter
 
-        if (truckAdapter?.itemCount == 0 || truckAdapter?.itemCount == -1) {
+        if (truckAdapter?.itemCount ?: 0 <= 0) {
             showMessageView(getString(R.string.msg_add_truck_to_showcase))
         } else {
             hideMessageView()

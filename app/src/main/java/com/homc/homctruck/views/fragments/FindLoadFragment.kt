@@ -207,7 +207,7 @@ class FindLoadFragment : BaseAppFragment() {
         loadAdapter = FindLoadListAdapter(data as MutableList<Any>)
         recyclerview.adapter = loadAdapter
 
-        if (loadAdapter?.itemCount ?: 0 == 0) {
+        if (loadAdapter?.itemCount ?: 0 <= 0) {
             showMessageView(getString(R.string.msg_data_not_found))
         } else {
             hideMessageView()

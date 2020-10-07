@@ -235,7 +235,7 @@ open class MyLoadFragment : BaseAppFragment() {
         loadAdapter?.onPlankButtonClickListener = onPlankButtonClickListener
         recyclerview.adapter = loadAdapter
 
-        if (loadAdapter?.itemCount ?: getPickCountToShowError() >= getPickCountToShowError()) {
+        if (loadAdapter?.itemCount ?: getPickCountToShowError() <= getPickCountToShowError()) {
             showMessageView(getString(R.string.msg_loads_not_added_yet))
         } else {
             hideMessageView()

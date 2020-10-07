@@ -206,8 +206,12 @@ class FindTruckRouteFragment : BaseAppFragment() {
                         )
                         setColorsAndCombineStrings(
                             titleTextView2,
-                            getString(R.string.label_expected_pickup_date),
-                            formatDateForDisplay(startMillis ?: 0)
+                            getString(R.string.label_date),
+                            getString(
+                                R.string.placeholder_x_to_y,
+                                formatDateForDisplay(startMillis ?: 0),
+                                formatDateForDisplay(endMillis ?: 0)
+                            )
                         )
                         showData(dataBound.data)
                     }
@@ -233,7 +237,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         loadAdapter = FindTruckRouteListAdapter(data as MutableList<Any>)
         recyclerview.adapter = loadAdapter
 
-        if (loadAdapter?.itemCount ?: 0 == 0) {
+        if (loadAdapter?.itemCount ?: 0 <= 0) {
             showMessageView(getString(R.string.msg_data_not_found))
         } else {
             hideMessageView()

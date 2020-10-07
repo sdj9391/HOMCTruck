@@ -6,12 +6,14 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.utils.TemporaryCache
 import com.homc.homctruck.utils.isInternetAvailable
+import kotlinx.android.synthetic.main.item_common_list_layout.*
 
 class MyPastTruckRouteFragment : MyTruckRouteFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarTitle(getString(R.string.label_past_truck_routes))
+        bottomButton.visibility = View.GONE
     }
 
     override fun getData() {
