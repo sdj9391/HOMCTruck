@@ -32,6 +32,7 @@ import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.formatDateForDisplay
+import com.homc.homctruck.utils.getMillis
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.LoadViewModel
 import kotlinx.android.synthetic.main.fragment_add_load.*
@@ -154,12 +155,9 @@ open class AddLoadFragment : BaseAppFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                    val calendar = Calendar.getInstance()
-                    calendar[Calendar.YEAR] = year
-                    calendar[Calendar.MONTH] = monthOfYear
-                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                    startMillis = calendar.timeInMillis
-                    expectedPickUpDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                    startMillis = getMillis(year, monthOfYear, dayOfMonth)
+                    DebugLog.v("startMillis $startMillis")
+                    expectedPickUpDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
                 },
                 Calendar.getInstance()[Calendar.YEAR],
                 Calendar.getInstance()[Calendar.MONTH],

@@ -173,7 +173,7 @@ open class MyTruckRouteFragment : BaseAppFragment() {
         swipeRefreshLayout.setOnRefreshListener { getData() }
         recyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val offsetPx = resources.getDimension(R.dimen.default_space)
-        val topOffsetDecoration = TopAndBottomOffset(0, offsetPx.toInt())
+        val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
         bottomButton.visibility = View.VISIBLE
         bottomButton.text = getString(R.string.menu_add_truck_route)

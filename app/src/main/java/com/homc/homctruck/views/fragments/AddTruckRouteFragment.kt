@@ -26,13 +26,16 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.*
+import com.homc.homctruck.data.models.ApiMessage
+import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.formatDateForDisplay
+import com.homc.homctruck.utils.getMillis
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.TruckViewModel
 import kotlinx.android.synthetic.main.fragment_add_truck_route.*
@@ -127,12 +130,8 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                    val calendar = Calendar.getInstance()
-                    calendar[Calendar.YEAR] = year
-                    calendar[Calendar.MONTH] = monthOfYear
-                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                    startMillis = calendar.timeInMillis
-                    startJourneyDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                    startMillis = getMillis(year, monthOfYear, dayOfMonth)
+                    startJourneyDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
                 },
                 Calendar.getInstance()[Calendar.YEAR],
                 Calendar.getInstance()[Calendar.MONTH],
@@ -145,12 +144,8 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                    val calendar = Calendar.getInstance()
-                    calendar[Calendar.YEAR] = year
-                    calendar[Calendar.MONTH] = monthOfYear
-                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                    endMillis = calendar.timeInMillis
-                    endJourneyDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                    endMillis = getMillis(year, monthOfYear, dayOfMonth)
+                    endJourneyDateEditText.setText(formatDateForDisplay(endMillis ?: 0))
                 },
                 Calendar.getInstance()[Calendar.YEAR],
                 Calendar.getInstance()[Calendar.MONTH],

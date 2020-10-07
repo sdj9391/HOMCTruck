@@ -11,6 +11,8 @@ import android.widget.DatePicker
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -27,10 +29,7 @@ import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
-import com.homc.homctruck.utils.formatDateForDisplay
-import com.homc.homctruck.utils.isInternetAvailable
-import com.homc.homctruck.utils.setColorsAndCombineStrings
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
@@ -72,6 +71,10 @@ class FindTruckRouteFragment : BaseAppFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarTitle(getString(R.string.menu_find_truck_route))
+        recyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        val offsetPx = resources.getDimension(R.dimen.default_space)
+        val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
+        recyclerview.addItemDecoration(topOffsetDecoration)
         showFilterLayout()
     }
 
@@ -118,12 +121,8 @@ class FindTruckRouteFragment : BaseAppFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                    val calendar = Calendar.getInstance()
-                    calendar[Calendar.YEAR] = year
-                    calendar[Calendar.MONTH] = monthOfYear
-                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                    startMillis = calendar.timeInMillis
-                    fromDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                    startMillis = getMillis(year, monthOfYear, dayOfMonth)
+                    fromDateEditText.setText(formatDateForDisplay(startMillis ?: 0))
                 },
                 Calendar.getInstance()[Calendar.YEAR],
                 Calendar.getInstance()[Calendar.MONTH],
@@ -137,12 +136,8 @@ class FindTruckRouteFragment : BaseAppFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireActivity(),
                 { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                    val calendar = Calendar.getInstance()
-                    calendar[Calendar.YEAR] = year
-                    calendar[Calendar.MONTH] = monthOfYear
-                    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                    endMillis = calendar.timeInMillis
-                    toDateEditText.setText(formatDateForDisplay(calendar.timeInMillis))
+                    endMillis = getMillis(year, monthOfYear, dayOfMonth)
+                    toDateEditText.setText(formatDateForDisplay(endMillis ?: 0))
                 },
                 Calendar.getInstance()[Calendar.YEAR],
                 Calendar.getInstance()[Calendar.MONTH],
@@ -196,6 +191,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
             it.let { dataBound ->
                 when (dataBound) {
                     is DataBound.Success -> {
+                        isFilterApplied = true
                         swipeRefreshLayout.isRefreshing = false
                         progressBar.visibility = View.GONE
                         showDataLayout()

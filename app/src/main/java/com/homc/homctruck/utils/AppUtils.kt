@@ -248,3 +248,15 @@ fun setColorsAndCombineStrings(textView: TextView, string1: String?, string2: St
 fun setColorsAndCombineStrings(textView: TextView, string1: String?, string2: String?) {
     setColorsAndCombineStrings(textView, string1, string2, R.color.title_text)
 }
+
+fun getMillis(year: Int, monthOfYear: Int, dayOfMonth: Int, hours: Int = 0, min: Int = 0, sec: Int = 0, millis: Int = 0):Long {
+    val calendar = Calendar.getInstance()
+    calendar[Calendar.YEAR] = year
+    calendar[Calendar.MONTH] = monthOfYear
+    calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+    calendar[Calendar.HOUR] = hours
+    calendar[Calendar.MINUTE] = min
+    calendar[Calendar.SECOND] = sec
+    calendar[Calendar.MILLISECOND] = millis
+    return calendar.timeInMillis
+}
