@@ -359,7 +359,8 @@ class LoginFragment : BaseFullScreenFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         DebugLog.w("Error: ${dataBound.error}")
                         val user = BaseAccountManager(requireActivity()).userDetails
-                        user?.isUserVerified = false
+                        user?.verificationStatus = User.USER_STATUS_PENDING
+                        user?.role = User.ROLE_USER
                         user?.let {
                             viewModel?.addNewUser(user)?.observe(viewLifecycleOwner, observeAddUserDetails)
                         }

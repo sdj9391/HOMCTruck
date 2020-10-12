@@ -73,10 +73,38 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyTruckList(): DataBound<MutableList<Truck>> {
+    override suspend fun getMyTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
         val data: MutableList<Truck>
         try {
-            val response = api.getMyTruckList()
+            val response = api.getMyTruckList(verificationStatus)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun getTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
+        val data: MutableList<Truck>
+        try {
+            val response = api.getTruckList(verificationStatus)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
@@ -242,12 +270,12 @@ class TruckRemoteDataSource @Inject constructor(
     }
 
     override suspend fun findTruckRouteList(
-        fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
             val response =
-                api.findTruckRouteList(fromCity, toCity, fromDate, toDate)
+                api.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message

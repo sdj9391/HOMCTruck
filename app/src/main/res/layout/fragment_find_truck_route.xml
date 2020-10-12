@@ -80,12 +80,26 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:paddingStart="@dimen/default_space"
+            android:paddingEnd="@dimen/default_space"
+            android:paddingBottom="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView1"
+            tools:text="Medul D Kapadni" />
+
+        <TextView
+            android:id="@+id/titleTextView3"
+            style="@style/titleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="@dimen/default_space"
             android:paddingTop="2dp"
             android:paddingEnd="@dimen/default_space"
             android:paddingBottom="@dimen/default_space"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView1"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
             tools:text="Medul D Kapadni" />
 
         <View
@@ -96,7 +110,27 @@
             app:layout_constraintBottom_toBottomOf="@+id/applyButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView2" />
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView3" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/truckTypeDropDownField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:hint="@string/label_truck_type"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_space"
+            android:layout_marginTop="@dimen/default_space"
+            android:layout_marginEnd="@dimen/default_space"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView3">
+
+            <AutoCompleteTextView
+                android:id="@+id/truckTypeDropDown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/fromCityTextField"
@@ -111,7 +145,7 @@
             app:errorTextColor="@android:color/holo_red_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView2">
+            app:layout_constraintTop_toBottomOf="@+id/truckTypeDropDownField">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fromCityEditText"
@@ -211,7 +245,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView3"
             app:layout_goneMarginBottom="0dp"
             tools:visibility="visible" />
 
@@ -222,7 +256,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView3"
             app:layout_goneMarginBottom="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

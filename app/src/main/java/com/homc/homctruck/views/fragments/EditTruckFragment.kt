@@ -28,6 +28,7 @@ class EditTruckFragment : AddTruckFragment() {
     }
 
     private fun showTruckDetails() {
+        ownerNameEditText.setText(truckDetails?.ownerName)
         truckNumberEditText.setText(truckDetails?.truckNumber)
         chesseNumberEditText.setText(truckDetails?.chesseNumber)
         isDirty = false

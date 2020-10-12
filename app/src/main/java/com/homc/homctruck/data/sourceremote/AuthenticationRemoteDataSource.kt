@@ -73,10 +73,10 @@ class AuthenticationRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getUserList(): DataBound<MutableList<User>> {
+    override suspend fun getUserList(verificationStatus: String): DataBound<MutableList<User>> {
         val data: MutableList<User>
         try {
-            val response = api.getUserList()
+            val response = api.getUserList(verificationStatus)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message

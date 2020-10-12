@@ -67,13 +67,14 @@ open class AddTruckFragment : BaseAppFragment() {
         setToolBarTitle(getString(R.string.label_add_truck))
         showTruckTypes()
         saveButton.setOnClickListener { onSaveClicked() }
+        ownerNameEditText.addTextChangedListener(onTextChangeListener)
         truckNumberEditText.addTextChangedListener(onTextChangeListener)
         truckTypeDropDown.addTextChangedListener(onTextChangeListener)
         chesseNumberEditText.addTextChangedListener(onTextChangeListener)
     }
 
     protected open fun showTruckTypes() {
-        val items = listOf("Material", "Design", "Components", "Android")
+        val items = resources.getStringArray(R.array.truck_types)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_drop_down, items)
         truckTypeDropDown.setAdapter(adapter)
     }
@@ -89,6 +90,13 @@ open class AddTruckFragment : BaseAppFragment() {
     }
 
     private fun getValidatedTruckData(): Truck? {
+        val ownerName = ownerNameEditText.text.toString().trim()
+        if (ownerName.isNullOrBlank()) {
+            ownerNameEditText.error = getString(R.string.msg_enter_owner_name)
+            ownerNameEditText.requestFocus()
+            return null
+        }
+
         val truckNumber = truckNumberEditText.text.toString().trim()
         if (truckNumber.isNullOrBlank()) {
             truckNumberEditText.error = getString(R.string.msg_enter_truck_number)
@@ -113,6 +121,7 @@ open class AddTruckFragment : BaseAppFragment() {
         val truck = Truck()
         truck.truckNumber = truckNumber.toUpperCase().replace(" ", "")
         truck.type = truckType
+        truck.ownerName = ownerName
         truck.chesseNumber = chesseNumber.toUpperCase()
         return truck
     }

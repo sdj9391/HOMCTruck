@@ -35,7 +35,12 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         val context = holder.itemView.context
         val dataItem = dataItems?.get(position) as Truck
         setColorsAndCombineStrings(
-            holder.titleTextView,
+            holder.titleTextView1,
+            context.getString(R.string.label_owner_name),
+            dataItem.ownerName
+        )
+        setColorsAndCombineStrings(
+            holder.titleTextView2,
             context.getString(R.string.label_truck_number),
             dataItem.truckNumber
         )
@@ -53,7 +58,8 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     private inner class TruckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
+        val titleTextView1: TextView = itemView.findViewById(R.id.titleTextView1)
+        val titleTextView2: TextView = itemView.findViewById(R.id.titleTextView2)
         val subtitleTextView1: TextView = itemView.findViewById(R.id.subtitleTextView1)
         val subtitleTextView2: TextView = itemView.findViewById(R.id.subtitleTextView2)
         val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)

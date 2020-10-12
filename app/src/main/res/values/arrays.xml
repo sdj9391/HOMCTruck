@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="load_type">
+        <item>Industrial Machinery</item>
+        <item>Household Goods</item>
+        <item>Partload/Parcel/Luggage Transport (NA)</item>
+        <item>Rice/Wheat/Grains</item>
+        <item>Fresh Fruit/Vegetable (NA)</item>
+        <item>FMCG/Packed Food Products</item>
+        <item>Healthcare/Pharmacy Products/Medicines</item>
+        <item>Chemical Powder/Liquid Barrels</item>
+        <item>Fertilizer</item>
+        <item>Electronic Goods/Home Appliances</item>
+        <item>Paper/Packaging/Printed Material</item>
+        <item>Electrical Transformer/Panels/Equipments/Spare Parts</item>
+        <item>Solar/Battery/Inverter Products</item>
+        <item>Ceramic/Hardware Supplies</item>
+        <item>Electrical wires/Cables</item>
+        <item>Books/Stationery/Toys/Gifts</item>
+        <item>Aluminium/Steel/Metal Products</item>
+        <item>Building/Construction Material</item>
+        <item>Paint/House ware Supplies</item>
+        <item>Engineering Goods</item>
+        <item>Textile/Garments</item>
+        <item>Plastic/PVC/Rubber</item>
+        <item>Machine/Auto Parts</item>
+        <item>Exhibitions/Event Supplier</item>
+        <item>Furniture/Plywood/Laminate</item>
+        <item>Parcel and Courier Service (Not Applicable)</item>
+        <item>Car Bike Transport (Not Applicable)</item>
+        <item>Animal Transport (Not Applicable)</item>
+        <item>ODC Consignments</item>
+        <item>Scrap</item>
+        <item>Plants</item>
+        <item>Others</item>
+        <item>Automotive Components</item>
+        <item>Dairy products</item>
+        <item>Cement</item>
+        <item>Corrugated Box</item>
+        <item>Bardana Jute or Plastic</item>
+        <item>Cotton Seed</item>
+        <item>Mill Jute Oil</item>
+    </string-array>
+
+    <string-array name="truck_types">
+        <item>CANTER (14 FT - 17 FT 5 TON)</item>
+        <item>CANTER (19 FT 7 TON)</item>
+        <item>CAR CARRIER</item>
+        <item>CONTAINER CLOSE BODY (20 FT - 40 FT 10 TON)</item>
+        <item>CONTAINER CLOSE BODY (32 FT - 36 FT 10 TON)</item>
+        <item>LCV (LIGHT COMMERCIAL VEHICLE - 4 TON)</item>
+        <item>LCV (5 TON)</item>
+        <item>LCV (7 TON)</item>
+        <item>MULTI AXEL (24 FT - 14.5 TON)</item>
+        <item>MULTI AXEL (28 FT - 14.5 TON)</item>
+        <item>MULTI AXEL (32 FT - 14.5 TON)</item>
+        <item>ODC (OVER DIMENSIONAL CARGO)</item>
+        <item>PICK UP (1 TON)</item>
+        <item>ROAD TANKERS (10 WHEELS)</item>
+        <item>ROAD TANKERS (6 WHEELS)</item>
+        <item>TEMPO / TATA 407 (4 WHEEL - 3.5 TON)</item>
+        <item>TATA ACE (1 TON)</item>
+        <item>TAURUS (7 TON)</item>
+        <item>TIPPER DUMPER</item>
+        <item>TRAILER 14 WHEELS (22 TON - 24 TON)</item>
+        <item>TRCUK 16 WHEEL (29 TON)</item>
+        <item>TRAILER 18 WHEELS (26 TON - 28 TON)</item>
+        <item>TRAILER 22 WHEELS (39 TON - 40 TON)</item>
+        <item>TRUCK FLAT BED</item>
+        <item>TRAILERS FLAT BED (20 FT - 32 FT 27 TON)</item>
+        <item>TRAILERS FLAT BED (40 FT - 54 FT 37 TON)</item>
+        <item>TRUCK (6 WHEEL - 9 TON)</item>
+        <item>TRUCK 10 WHEEL (22 FT - 16 TON)</item>
+        <item>TRUCK 12 WHEEL (22 FT - 21 TON)</item>
+        <item>TRUCK 14 WHEEL (25 FT - 26 TON)</item>
+        <item>TRUCK CLOSE (14 FT - 5 TONS)</item>
+        <item>TRUCK OPEN (14 FT - 5 TONS)</item>
+        <item>TRUCK OPEN (17 FT - 7 TONS)</item>
+        <item>TRUCK CLOSE (17 FT - 7 TONS)</item>
+        <item>TRUCK OPEN (19 FT - 9 TONS)</item>
+        <item>TRUCK CLOSE (20 FT)</item>
+    </string-array>
+</resources>

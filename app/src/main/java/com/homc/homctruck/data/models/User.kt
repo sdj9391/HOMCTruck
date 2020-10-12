@@ -10,7 +10,7 @@ class User {
     var panCardNumber: String? = null
     var aadharCardNumber: String? = null
     var role: String? = null
-    var isUserVerified: Boolean? = null
+    var verificationStatus: String? = null
     var firebaseAuthToken: String? = null
     var firebaseMessageToken: String? = null
     var address: Address? = null
@@ -21,6 +21,10 @@ class User {
     companion object {
         const val ROLE_ADMIN = "admin"
         const val ROLE_USER = "user"
+
+        const val USER_STATUS_CONFIRMED = "confirmed"
+        const val USER_STATUS_PENDING = "pending"
+        const val USER_STATUS_REJECT = "reject"
     }
 }
 

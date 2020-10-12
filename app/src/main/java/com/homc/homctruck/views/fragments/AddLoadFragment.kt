@@ -169,13 +169,13 @@ open class AddLoadFragment : BaseAppFragment() {
     }
 
     protected open fun showMaterialTypes() {
-        val items = listOf("Material 1", "Material 2", "Material 3", "Material 4")
+        val items = resources.getStringArray(R.array.load_type)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_drop_down, items)
         materialTypeDropDown.setAdapter(adapter)
     }
 
     protected open fun showTruckTypes() {
-        val items = listOf("Material", "Design", "Components", "Android")
+        val items = resources.getStringArray(R.array.truck_types)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_drop_down, items)
         truckTypeDropDown.setAdapter(adapter)
     }

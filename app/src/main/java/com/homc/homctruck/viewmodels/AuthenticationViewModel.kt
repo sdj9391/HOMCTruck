@@ -69,13 +69,13 @@ class AuthenticationViewModel
         return liveData
     }
 
-    fun getUserList(): MutableLiveData<DataBound<MutableList<User>>> {
+    fun getUserList(verificationStatus: String): MutableLiveData<DataBound<MutableList<User>>> {
         val liveData = MutableLiveData<DataBound<MutableList<User>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getUserList()
+                val dataBound = repository.getUserList(verificationStatus)
 
                 dataBound.let {
                     when (it) {

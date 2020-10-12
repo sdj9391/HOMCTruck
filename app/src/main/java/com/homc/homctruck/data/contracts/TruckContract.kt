@@ -8,7 +8,8 @@ import com.homc.homctruck.restapi.DataBound
 interface TruckContract {
     suspend fun addNewTruck(truck: Truck): DataBound<ApiMessage>
     suspend fun getTruckDetails(truckId: String): DataBound<Truck>
-    suspend fun getMyTruckList(): DataBound<MutableList<Truck>>
+    suspend fun getMyTruckList(verificationStatus: String?): DataBound<MutableList<Truck>>
+    suspend fun getTruckList(verificationStatus: String?): DataBound<MutableList<Truck>>
     suspend fun updateTruckDetails(truckId: String, truck: Truck): DataBound<ApiMessage>
     suspend fun deleteTruck(truckId: String): DataBound<ApiMessage>
 
@@ -16,7 +17,7 @@ interface TruckContract {
     suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>>
     suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>>
     suspend fun findTruckRouteList(
-        fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): DataBound<MutableList<TruckRoute>>
 
     suspend fun updateTruckRouteDetails(

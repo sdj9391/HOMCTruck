@@ -153,4 +153,7 @@
     <string name="label_filters">Filters</string>
     <string name="label_apply">Apply</string>
     <string name="msg_data_not_found">Data not found</string>
+    <string name="label_owner_name">Owner Name</string>
+    <string name="msg_enter_owner_name">Enter Owner Name</string>
+    <string name="label_truck_owner">Truck Owner</string>
 </resources>

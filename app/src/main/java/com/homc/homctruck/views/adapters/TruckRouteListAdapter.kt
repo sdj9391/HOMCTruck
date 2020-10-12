@@ -36,7 +36,12 @@ open class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         val context = holder.itemView.context
         val dataItem = dataItems?.get(position) as TruckRoute
         setColorsAndCombineStrings(
-            holder.titleTextView,
+            holder.titleTextView1,
+            context.getString(R.string.label_truck_owner),
+            dataItem.truck?.ownerName
+        )
+        setColorsAndCombineStrings(
+            holder.titleTextView2,
             context.getString(R.string.label_truck_number),
             dataItem.truck?.truckNumber
         )
@@ -50,6 +55,11 @@ open class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
         )
         setColorsAndCombineStrings(
             holder.subtitleTextView2,
+            context.getString(R.string.label_truck_type),
+            dataItem.truck?.type
+        )
+        setColorsAndCombineStrings(
+            holder.subtitleTextView3,
             context.getString(R.string.label_date),
             context.getString(
                 R.string.placeholder_x_to_y,
@@ -61,9 +71,11 @@ open class TruckRouteListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
     }
 
     protected inner class TruckRouteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
+        val titleTextView1: TextView = itemView.findViewById(R.id.titleTextView1)
+        val titleTextView2: TextView = itemView.findViewById(R.id.titleTextView2)
         val subtitleTextView1: TextView = itemView.findViewById(R.id.subtitleTextView1)
         val subtitleTextView2: TextView = itemView.findViewById(R.id.subtitleTextView2)
+        val subtitleTextView3: TextView = itemView.findViewById(R.id.subtitleTextView3)
         val moreButton: ImageButton = itemView.findViewById(R.id.moreButton)
 
         init {

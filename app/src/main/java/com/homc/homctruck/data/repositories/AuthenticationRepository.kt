@@ -18,8 +18,8 @@ class AuthenticationRepository @Inject constructor(var dataSource: Authenticatio
         return dataSource.getUserDetails(userId)
     }
 
-    override suspend fun getUserList(): DataBound<MutableList<User>> {
-        return dataSource.getUserList()
+    override suspend fun getUserList(verificationStatus: String): DataBound<MutableList<User>> {
+        return dataSource.getUserList(verificationStatus)
     }
 
     override suspend fun updateUserDetails(userId: String, user: User): DataBound<ApiMessage> {

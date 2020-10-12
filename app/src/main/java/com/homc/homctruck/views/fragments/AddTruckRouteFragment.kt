@@ -162,7 +162,7 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getMyTruckList()
+        viewModel?.getMyTruckList(Truck.TRUCK_STATUS_CONFIRMED)
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 

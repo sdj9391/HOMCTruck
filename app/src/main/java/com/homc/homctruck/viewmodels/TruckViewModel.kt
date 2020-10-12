@@ -43,13 +43,39 @@ class TruckViewModel
         return liveData
     }
 
-    fun getMyTruckList(): MutableLiveData<DataBound<MutableList<Truck>>> {
+    fun getMyTruckList(verificationStatus: String? = null): MutableLiveData<DataBound<MutableList<Truck>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Truck>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getMyTruckList()
+                val dataBound = repository.getMyTruckList(verificationStatus)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.error, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
+    fun getTruckList(verificationStatus: String? = null): MutableLiveData<DataBound<MutableList<Truck>>> {
+        val liveData = MutableLiveData<DataBound<MutableList<Truck>>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound = repository.getTruckList(verificationStatus)
 
                 dataBound.let {
                     when (it) {
@@ -201,7 +227,7 @@ class TruckViewModel
     }
 
     fun findTruckRouteList(
-        fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
     ): MutableLiveData<DataBound<MutableList<TruckRoute>>> {
         val liveData = MutableLiveData<DataBound<MutableList<TruckRoute>>>()
 
@@ -209,7 +235,7 @@ class TruckViewModel
             try {
                 liveData.value = DataBound.Loading()
                 val dataBound =
-                    repository.findTruckRouteList(fromCity, toCity, fromDate, toDate)
+                    repository.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate)
 
                 dataBound.let {
                     when (it) {

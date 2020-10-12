@@ -15,7 +15,9 @@ interface AppApiService {
     suspend fun addNewUserDetail(@Body user: User): Response<ApiMessage>
 
     @GET("users")
-    suspend fun getUserList(): Response<MutableList<User>>
+    suspend fun getUserList(
+        @Query("verificationStatus") verificationStatus: String
+    ): Response<MutableList<User>>
 
     @PUT("users/{userId}")
     suspend fun updateUserDetail(
@@ -30,7 +32,14 @@ interface AppApiService {
     suspend fun addNewTruck(@Body truck: Truck): Response<ApiMessage>
 
     @GET("trucks")
-    suspend fun getMyTruckList(): Response<MutableList<Truck>>
+    suspend fun getMyTruckList(
+        @Query("verificationStatus") verificationStatus: String?
+    ): Response<MutableList<Truck>>
+
+    @GET("trucks/all")
+    suspend fun getTruckList(
+        @Query("verificationStatus") verificationStatus: String?
+    ): Response<MutableList<Truck>>
 
     @PUT("trucks/{truckId}")
     suspend fun updateTruckDetails(
@@ -52,6 +61,7 @@ interface AppApiService {
 
     @GET("truck_routes/find")
     suspend fun findTruckRouteList(
+        @Query("truckType") truckType: String,
         @Query("fromCity") fromCity: String,
         @Query("toCity") toCity: String,
         @Query("fromDate") fromDate: Long,

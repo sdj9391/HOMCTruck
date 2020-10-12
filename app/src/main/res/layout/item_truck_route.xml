@@ -9,13 +9,23 @@
     android:padding="@dimen/default_space">
 
     <TextView
-        android:id="@+id/titleTextView"
+        android:id="@+id/titleTextView1"
         style="@style/headerTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@+id/moreButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        tools:text="Medul D Kapadni" />
+
+    <TextView
+        android:id="@+id/titleTextView2"
+        style="@style/headerTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/moreButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView1"
         tools:text="Medul D Kapadni" />
 
     <TextView
@@ -26,18 +36,29 @@
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toStartOf="@+id/moreButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
         tools:text="+919898898998" />
 
     <TextView
         android:id="@+id/subtitleTextView2"
-        style="@style/subTitleTextView"
+        style="@style/descriptionTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toStartOf="@+id/moreButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtitleTextView1"
+        tools:text="+919898898998" />
+
+    <TextView
+        android:id="@+id/subtitleTextView3"
+        style="@style/subTitleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/moreButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitleTextView2"
         tools:text="qwe@qwe.com" />
 
     <ImageButton

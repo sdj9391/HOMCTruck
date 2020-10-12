@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TextView
 import androidx.lifecycle.Observer
@@ -82,6 +83,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         editFilterButton.setImageResource(R.drawable.ic_close_black)
         titleTextView1.visibility = View.GONE
         titleTextView2.visibility = View.GONE
+        titleTextView3.visibility = View.GONE
         emptyView.visibility = View.GONE
         recyclerview.visibility = View.GONE
         if (isFilterApplied) {
@@ -99,6 +101,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         }
 
         backView.visibility = View.VISIBLE
+        truckTypeDropDownField.visibility = View.VISIBLE
         fromCityTextField.visibility = View.VISIBLE
         toCityTextField.visibility = View.VISIBLE
         fromDateTextField.visibility = View.VISIBLE
@@ -108,6 +111,10 @@ class FindTruckRouteFragment : BaseAppFragment() {
         applyButton.setOnClickListener {
             onApplyButtonClick()
         }
+
+        val items = resources.getStringArray(R.array.truck_types)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_drop_down, items)
+        truckTypeDropDown.setAdapter(adapter)
 
         fromCityEditText.setOnClickListener {
             isFromCitySelected = true
@@ -150,6 +157,13 @@ class FindTruckRouteFragment : BaseAppFragment() {
 
     private fun onApplyButtonClick() {
 
+        val truckType = truckTypeDropDown.text.toString().trim()
+        if (truckType.isNullOrBlank()) {
+            truckTypeDropDown.error = getString(R.string.msg_select_truck_type)
+            truckTypeDropDown.requestFocus()
+            return
+        }
+
         val fromPlace = fromCityEditText.text.toString()
         if (fromPlace.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_from_city))
@@ -177,11 +191,17 @@ class FindTruckRouteFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.findTruckRouteList(fromPlace, toPlace, startMillis ?: 0, endMillis ?: 0)
-            ?.observe(viewLifecycleOwner, observeTruckRouteList(fromPlace, toPlace))
+        viewModel?.findTruckRouteList(
+            truckType,
+            fromPlace,
+            toPlace,
+            startMillis ?: 0,
+            endMillis ?: 0
+        )
+            ?.observe(viewLifecycleOwner, observeTruckRouteList(truckType, fromPlace, toPlace))
     }
 
-    private fun observeTruckRouteList(fromCity: String, toCity: String) =
+    private fun observeTruckRouteList(truckType: String, fromCity: String, toCity: String) =
         Observer<DataBound<MutableList<TruckRoute>>> {
             if (it == null) {
                 DebugLog.e("ApiMessage is null")
@@ -197,11 +217,16 @@ class FindTruckRouteFragment : BaseAppFragment() {
                         showDataLayout()
                         setColorsAndCombineStrings(
                             titleTextView1,
+                            getString(R.string.label_truck_type),
+                            truckType
+                        )
+                        setColorsAndCombineStrings(
+                            titleTextView2,
                             getString(R.string.label_location),
                             getString(R.string.placeholder_x_to_y, fromCity, toCity)
                         )
                         setColorsAndCombineStrings(
-                            titleTextView2,
+                            titleTextView3,
                             getString(R.string.label_date),
                             getString(
                                 R.string.placeholder_x_to_y,
@@ -281,6 +306,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         editFilterButton.setImageResource(R.drawable.ic_arrow_down_black)
         titleTextView1.visibility = View.VISIBLE
         titleTextView2.visibility = View.VISIBLE
+        titleTextView3.visibility = View.VISIBLE
         recyclerview.visibility = View.VISIBLE
         if (isFilterApplied) {
             editFilterButton.visibility = View.VISIBLE
@@ -297,6 +323,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         fromDateTextField.visibility = View.GONE
         toDateTextField.visibility = View.GONE
         applyButton.visibility = View.GONE
+        truckTypeDropDownField.visibility = View.GONE
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

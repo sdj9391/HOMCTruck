@@ -8,7 +8,7 @@ import com.homc.homctruck.restapi.DataBound
 interface AuthenticationContract {
     suspend fun addNewUser(user: User): DataBound<ApiMessage>
     suspend fun getUserDetails(userId: String): DataBound<User>
-    suspend fun getUserList(): DataBound<MutableList<User>>
+    suspend fun getUserList(verificationStatus: String): DataBound<MutableList<User>>
     suspend fun updateUserDetails(userId: String, user: User): DataBound<ApiMessage>
     suspend fun getPostalAddress(pinCode: String): DataBound<ResponsePostalAddress>
 }
