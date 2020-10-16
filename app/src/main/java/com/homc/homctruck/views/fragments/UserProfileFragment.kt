@@ -1,23 +1,43 @@
 package com.homc.homctruck.views.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.getFullAddress
-import com.homc.homctruck.data.models.getName
-import com.homc.homctruck.data.models.isNullOrEmpty
+import com.homc.homctruck.data.models.*
+import com.homc.homctruck.di.DaggerAppComponent
+import com.homc.homctruck.di.modules.AppModule
+import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.hideSoftKeyboard
+import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.utils.setColorsAndCombineStrings
+import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.views.activities.AuthenticationActivity
+import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
+import com.homc.homctruck.views.dialogs.BottomSheetViewData
+import com.homc.homctruck.views.dialogs.BottomSheetViewItem
+import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.item_user_details.view.*
+import java.net.HttpURLConnection
+import javax.inject.Inject
 
 class UserProfileFragment : BaseAppFragment() {
+
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    private var viewModel: AuthenticationViewModel? = null
+    private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
     private var navigationController: NavController? = null
 
@@ -28,9 +48,21 @@ class UserProfileFragment : BaseAppFragment() {
         return inflater.inflate(R.layout.fragment_user_profile, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
+            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarTitle(getString(R.string.menu_user_profile))
+        getUserDetails()
         setUserDetails()
         setUserContractorProfileDetails()
         navigationController = Navigation.findNavController(requireView())
@@ -50,11 +82,73 @@ class UserProfileFragment : BaseAppFragment() {
         hideSoftKeyboard(requireActivity())
     }
 
+    private fun getUserDetails() {
+        if (!isInternetAvailable()) {
+            DebugLog.e(getString(R.string.msg_no_internet))
+            return
+        }
+
+        val userId = BaseAccountManager(requireActivity()).userDetails?.id
+        if (userId.isNullOrBlank()) {
+            DebugLog.e("User Id found null")
+            openLoginScreen()
+            return
+        }
+
+        viewModel?.getUserDetails(userId)
+            ?.observe(viewLifecycleOwner, observeGetUserDetails)
+    }
+
+    private val observeGetUserDetails = Observer<DataBound<User>> {
+        if (it == null) {
+            DebugLog.e("ApiMessage is null")
+            return@Observer
+        }
+
+        it.let { dataBound ->
+            when (dataBound) {
+                is DataBound.Success -> {
+                    val user = dataBound.data
+                    BaseAccountManager(requireActivity()).userDetails = user
+                    setUserDetails()
+                    setUserContractorProfileDetails()
+                }
+                is DataBound.Error -> {
+                    DebugLog.w("Error: ${dataBound.error}")
+                    if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
+                        openLoginScreen()
+                    }
+                }
+                is DataBound.Loading -> {
+                }
+            }
+        }
+    }
+
+    private fun openLoginScreen() {
+        BaseAccountManager(requireActivity()).userDetails = null
+        BaseAccountManager(requireActivity()).userAuthToken = null
+        BaseAccountManager(requireActivity()).isMobileVerified = null
+        val intent = Intent(requireActivity(), AuthenticationActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
     private fun setUserDetails() {
         val user = BaseAccountManager(requireActivity()).userDetails
         if (user == null) {
             DebugLog.e("User Found null")
             return
+        }
+
+        if (user.role.equals(User.ROLE_ADMIN, true)) {
+            adminToolsButton.visibility = View.VISIBLE
+            adminToolsButton.setOnClickListener {
+                showAdminTools()
+            }
+        } else {
+            adminToolsButton.visibility = View.GONE
         }
 
         if (user.getName().isNullOrBlank()) {
@@ -185,5 +279,41 @@ class UserProfileFragment : BaseAppFragment() {
 
         contractorProfileDetails.subtitleTextView4.visibility = View.GONE
         contractorProfileDetails.subtitleTextView5.visibility = View.GONE
+    }
+
+    private fun showAdminTools() {
+        val sectionItems = mutableListOf<BottomSheetViewItem>()
+        sectionItems.add(
+            BottomSheetViewItem(
+                ACTION_ID_MANAGE_USER, R.drawable.ic_user_black,
+                getString(R.string.label_manage_users), null, null
+            )
+        )
+        sectionItems.add(
+            BottomSheetViewItem(
+                ACTION_ID_MANAGE_TRUCK, R.drawable.ic_truck_black,
+                getString(R.string.label_manage_trucks), null, null
+            )
+        )
+        val sections = mutableListOf<BottomSheetViewSection>()
+        sections.add(BottomSheetViewSection(viewItems = sectionItems))
+        val bottomSheetViewData = BottomSheetViewData(bottomSheetViewSections = sections)
+        bottomSheetListDialogFragment =
+            BottomSheetListDialogFragment(bottomSheetViewData, onMoreOptionClickListener)
+        parentFragmentManager.let { bottomSheetListDialogFragment?.show(it, "ADMIN_TOOLS") }
+    }
+
+    private val onMoreOptionClickListener: View.OnClickListener = View.OnClickListener {
+        bottomSheetListDialogFragment?.dismiss()
+        when (it.id) {
+            ACTION_ID_MANAGE_USER -> navigationController?.navigate(R.id.action_userProfileFragment_to_userTabFragment)
+            ACTION_ID_MANAGE_TRUCK -> navigationController?.navigate(R.id.action_userProfileFragment_to_truckTabFragment)
+            else -> DebugLog.e("Id not matched")
+        }
+    }
+
+    companion object {
+        const val ACTION_ID_MANAGE_USER = 111
+        const val ACTION_ID_MANAGE_TRUCK = 222
     }
 }

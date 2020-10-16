@@ -13,6 +13,7 @@ class MyPastTruckRouteFragment : MyTruckRouteFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setToolBarTitle(getString(R.string.label_past_truck_routes))
+        buttonBackView.visibility = View.GONE
         bottomButton.visibility = View.GONE
     }
 

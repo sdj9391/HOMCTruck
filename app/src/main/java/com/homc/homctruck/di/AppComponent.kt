@@ -22,4 +22,7 @@ interface AppComponent {
     fun inject(fragment: MyLoadFragment)
     fun inject(fragment: FindLoadFragment)
     fun inject(fragment: FindTruckRouteFragment)
+    fun inject(fragment: UserProfileFragment)
+    fun inject(fragment: PendingUserListFragment)
+    fun inject(fragment: PendingTruckListFragment)
 }

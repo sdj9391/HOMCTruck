@@ -49,7 +49,7 @@ class MyTruckListFragment : BaseAppFragment() {
     }
 
     private fun showMoreOptionBottomSheet(dataItem: Truck) {
-        val sectionItems = ArrayList<BottomSheetViewItem>()
+        val sectionItems = mutableListOf<BottomSheetViewItem>()
         sectionItems.add(
             BottomSheetViewItem(
                 ACTION_ID_EDIT, R.drawable.ic_edit_black,
@@ -62,7 +62,7 @@ class MyTruckListFragment : BaseAppFragment() {
                 getString(R.string.label_delete_truck), null, dataItem
             )
         )
-        val sections = ArrayList<BottomSheetViewSection>()
+        val sections = mutableListOf<BottomSheetViewSection>()
         sections.add(BottomSheetViewSection(viewItems = sectionItems))
         val bottomSheetViewData = BottomSheetViewData(bottomSheetViewSections = sections)
         bottomSheetListDialogFragment =
@@ -169,6 +169,7 @@ class MyTruckListFragment : BaseAppFragment() {
         val offsetPx = resources.getDimension(R.dimen.default_space)
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
+        buttonBackView.visibility = View.VISIBLE
         bottomButton.visibility = View.VISIBLE
         bottomButton.text = getString(R.string.label_add_truck)
         bottomButton.setOnClickListener {

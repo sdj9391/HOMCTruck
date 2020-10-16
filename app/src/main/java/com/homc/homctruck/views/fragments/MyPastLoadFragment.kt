@@ -14,6 +14,7 @@ class MyPastLoadFragment : MyLoadFragment() {
         super.onViewCreated(view, savedInstanceState)
         setToolBarTitle(getString(R.string.label_past_loads))
         bottomButton.visibility = View.GONE
+        buttonBackView.visibility = View.GONE
     }
 
     override fun getData() {

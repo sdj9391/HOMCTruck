@@ -55,7 +55,7 @@ open class MyLoadFragment : BaseAppFragment() {
     }
 
     private fun showMoreOptionBottomSheet(dataItem: Load) {
-        val sectionItems = ArrayList<BottomSheetViewItem>()
+        val sectionItems = mutableListOf<BottomSheetViewItem>()
         sectionItems.add(
             BottomSheetViewItem(
                 ACTION_ID_EDIT, R.drawable.ic_edit_black,
@@ -68,7 +68,7 @@ open class MyLoadFragment : BaseAppFragment() {
                 getString(R.string.label_delete_load), null, dataItem
             )
         )
-        val sections = ArrayList<BottomSheetViewSection>()
+        val sections = mutableListOf<BottomSheetViewSection>()
         sections.add(BottomSheetViewSection(viewItems = sectionItems))
         val bottomSheetViewData = BottomSheetViewData(bottomSheetViewSections = sections)
         bottomSheetListDialogFragment =
@@ -175,6 +175,7 @@ open class MyLoadFragment : BaseAppFragment() {
         val offsetPx = resources.getDimension(R.dimen.default_space)
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
+        buttonBackView.visibility = View.VISIBLE
         bottomButton.visibility = View.VISIBLE
         bottomButton.text = getString(R.string.menu_add_load)
         bottomButton.setOnClickListener {

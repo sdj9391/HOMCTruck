@@ -141,16 +141,16 @@ class BottomSheetViewData(var title: String? = null, var bottomSheetViewSections
  * Step Example:
  *
  * // Step 1
- * val sectionItems1 = ArrayList<BottomSheetViewItem>()
+ * val sectionItems1 = mutableListOf<BottomSheetViewItem>()
  * sectionItems1.add(BottomSheetViewItem(1, R.drawable.ic_icon1, "Item 1", null))
  * sectionItems1.add(BottomSheetViewItem(2, R.drawable.ic_icon2, "Item 2", null))
  *
- * val sectionItems2 = ArrayList<BottomSheetViewItem>()
+ * val sectionItems2 = mutableListOf<BottomSheetViewItem>()
  * sectionItems2.add(BottomSheetViewItem(3, R.drawable.ic_icon3, "Item 3", null))
  * sectionItems2.add(BottomSheetViewItem(4, R.drawable.ic_icon4, "Item 4", null))
  *
  * // Step 2
- * val sections = ArrayList<BottomSheetViewSection>()
+ * val sections = mutableListOf<BottomSheetViewSection>()
  * sections.add(BottomSheetViewSection("Sections 1", sectionItems1))
  * sections.add(BottomSheetViewSection("Sections 2", sectionItems2))
  *

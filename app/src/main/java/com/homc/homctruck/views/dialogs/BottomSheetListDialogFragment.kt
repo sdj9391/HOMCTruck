@@ -101,12 +101,12 @@ class BottomSheetListDialogFragment(override var bottomSheetViewData: BottomShee
  * Step Example:
  *
  * // Step 1
- * val sectionItems1 = ArrayList<BottomSheetViewItem>()
+ * val sectionItems1 = mutableListOf<BottomSheetViewItem>()
  * sectionItems1.add(BottomSheetViewItem(1, R.drawable.ic_icon1, "Title 1", "sub Title 1", data1))
  * sectionItems1.add(BottomSheetViewItem(2, R.drawable.ic_icon2, "Title 2", "sub Title 2", data2))
  *
  * // Step 2
- * val sections = ArrayList<BottomSheetViewSection>()
+ * val sections = mutableListOf<BottomSheetViewSection>()
  * sections.add(BottomSheetViewSection(sectionItems1))
  *
  * // Step 3

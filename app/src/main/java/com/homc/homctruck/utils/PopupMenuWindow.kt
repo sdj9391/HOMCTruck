@@ -28,7 +28,7 @@ class PopupMenuWindow : ListPopupWindow {
         width = DEFAULT_WIDTH
         setOnItemClickListener(onItemClickListener)
 
-        val menuItemList = ArrayList<MenuItem>()
+        val menuItemList = mutableListOf<MenuItem>()
         for (index in 0 until menu.size()) {
             val menuItem = menu.getItem(index)
             if (menuItem.isVisible)
@@ -43,7 +43,7 @@ class PopupMenuWindow : ListPopupWindow {
     private inner class PopupWindowAdapter(
         context: Context,
         resource: Int,
-        val menuItemList: ArrayList<MenuItem>
+        val menuItemList: MutableList<MenuItem>
     ) :
         ArrayAdapter<MenuItem>(context, resource, menuItemList) {
 

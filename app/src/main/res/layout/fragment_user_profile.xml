@@ -113,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/headerContractorProfileDivider" />
 
     <TextView
-        android:id="@+id/manageUsersButton"
+        android:id="@+id/adminToolsButton"
         style="@style/headerTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -123,10 +123,9 @@
         android:padding="@dimen/default_space"
         android:paddingStart="@dimen/default_space"
         android:paddingEnd="@dimen/default_space"
-        android:text="@string/label_manage_users"
+        android:text="@string/label_admin_tools"
         android:textAllCaps="false"
         android:visibility="gone"
-        app:drawableEndCompat="@drawable/ic_arrow_forward_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contractorProfileDetails"

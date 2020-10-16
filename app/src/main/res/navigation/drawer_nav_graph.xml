@@ -20,6 +20,12 @@
         <action
             android:id="@+id/action_userProfileFragment_to_editContractorProfileFragment"
             app:destination="@id/editContractorProfileFragment2" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_userTabFragment"
+            app:destination="@id/userTabFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_truckTabFragment"
+            app:destination="@id/truckTabFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -151,4 +157,12 @@
             android:id="@+id/action_myPastLoadFragment_to_editLoadFragment"
             app:destination="@id/editLoadFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userTabFragment"
+        android:name="com.homc.homctruck.views.fragments.UserTabFragment"
+        android:label="UserTabFragment" />
+    <fragment
+        android:id="@+id/truckTabFragment"
+        android:name="com.homc.homctruck.views.fragments.TruckTabFragment"
+        android:label="TruckTabFragment" />
 </navigation>

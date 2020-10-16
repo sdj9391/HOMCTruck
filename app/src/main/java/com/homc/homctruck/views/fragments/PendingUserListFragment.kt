@@ -7,22 +7,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.TruckRoute
+import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.data.models.User
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.*
-import com.homc.homctruck.viewmodels.TruckViewModel
-import com.homc.homctruck.views.adapters.AdapterDataItem
-import com.homc.homctruck.views.adapters.BaseAdapter
-import com.homc.homctruck.views.adapters.TruckRouteListAdapter
+import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.TopAndBottomOffset
+import com.homc.homctruck.utils.isInternetAvailable
+import com.homc.homctruck.utils.showConfirmDialog
+import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.views.adapters.UserListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
@@ -31,43 +31,54 @@ import kotlinx.android.synthetic.main.item_common_list_layout.*
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-open class MyTruckRouteFragment : BaseAppFragment() {
+open class PendingUserListFragment : BaseAppFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    protected var viewModel: TruckViewModel? = null
-    private var truckRouteAdapter: TruckRouteListAdapter? = null
-    protected var navigationController: NavController? = null
+    protected var viewModel: AuthenticationViewModel? = null
+    private var userAdapter: UserListAdapter? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
     private val onMoreClickListener = View.OnClickListener {
         val dataItem = it.tag
-        if (dataItem !is TruckRoute) {
-            DebugLog.e("Wrong instance found. Expected: ${TruckRoute::class.java.simpleName} Found: $dataItem")
+        if (dataItem !is User) {
+            DebugLog.e("Wrong instance found. Expected: ${Truck::class.java.simpleName} Found: $dataItem")
             return@OnClickListener
         }
 
         showMoreOptionBottomSheet(dataItem)
     }
 
-    private val onPlankButtonClickListener = View.OnClickListener {
-        navigationController?.navigate(R.id.action_myTruckRouteFragment_to_myPastTruckRouteFragment)
+    protected fun getBottomSheetViewForApproveAction(dataItem: User): BottomSheetViewItem {
+        return BottomSheetViewItem(
+            ACTION_APPROVE, R.drawable.ic_user_green,
+            getString(R.string.label_approve_user), null, dataItem
+        )
     }
 
-    private fun showMoreOptionBottomSheet(dataItem: TruckRoute) {
+    protected fun getBottomSheetViewForRejectAction(dataItem: User): BottomSheetViewItem {
+        return BottomSheetViewItem(
+            ACTION_REJECT, R.drawable.ic_user_red,
+            getString(R.string.label_reject_user), null, dataItem
+        )
+    }
+
+    protected fun getBottomSheetViewForPendingAction(dataItem: User): BottomSheetViewItem {
+        return BottomSheetViewItem(
+            ACTION_PENDING, R.drawable.ic_user_yellow,
+            getString(R.string.label_move_user_to_pending), null, dataItem
+        )
+    }
+
+    protected open fun getBottomSheetOption(dataItem: User): MutableList<BottomSheetViewItem> {
         val sectionItems = mutableListOf<BottomSheetViewItem>()
-        sectionItems.add(
-            BottomSheetViewItem(
-                ACTION_ID_EDIT, R.drawable.ic_edit_black,
-                getString(R.string.label_edit_truck_route), null, dataItem
-            )
-        )
-        sectionItems.add(
-            BottomSheetViewItem(
-                ACTION_ID_DELETE, R.drawable.ic_delete_black,
-                getString(R.string.label_delete_truck_route), null, dataItem
-            )
-        )
+        sectionItems.add(getBottomSheetViewForApproveAction(dataItem))
+        sectionItems.add(getBottomSheetViewForRejectAction(dataItem))
+        return sectionItems
+    }
+
+    private fun showMoreOptionBottomSheet(dataItem: User) {
+        val sectionItems = getBottomSheetOption(dataItem)
         val sections = mutableListOf<BottomSheetViewSection>()
         sections.add(BottomSheetViewSection(viewItems = sectionItems))
         val bottomSheetViewData = BottomSheetViewData(bottomSheetViewSections = sections)
@@ -79,47 +90,48 @@ open class MyTruckRouteFragment : BaseAppFragment() {
     private val onMoreOptionClickListener: View.OnClickListener = View.OnClickListener {
         bottomSheetListDialogFragment?.dismiss()
         val dataItem = it.tag
-        if (dataItem !is TruckRoute) {
-            DebugLog.e("Wrong instance found. Expected: ${TruckRoute::class.java.simpleName} Found: $dataItem")
+        if (dataItem !is User) {
+            DebugLog.e("Wrong instance found. Expected: ${User::class.java.simpleName} Found: $dataItem")
             return@OnClickListener
         }
         when (it.id) {
-            ACTION_ID_EDIT -> editTruckRouteItem(dataItem)
-            ACTION_ID_DELETE -> deleteTruckRouteItem(dataItem)
+            ACTION_APPROVE -> changeUserStatus(dataItem, User.USER_STATUS_CONFIRMED)
+            ACTION_REJECT -> rejectUser(dataItem)
+            ACTION_PENDING -> changeUserStatus(dataItem, User.USER_STATUS_PENDING)
             else -> DebugLog.e("Id not matched")
         }
     }
 
-    protected open fun editTruckRouteItem(dataItem: TruckRoute) {
-        TemporaryCache.put(EditTruckRouteFragment.EXTRA_TRUCK_ROUTE_DETAILS, dataItem)
-        navigationController?.navigate(R.id.action_myTruckRouteFragment_to_editTruckRouteFragment)
+    private fun changeUserStatus(dataItem: User, usrStatus: String) {
+        dataItem.verificationStatus = usrStatus
+        updateUserDetails(dataItem)
     }
 
-    private fun deleteTruckRouteItem(dataItem: TruckRoute) {
+    private fun rejectUser(dataItem: User) {
         showConfirmDialog(
-            requireActivity(), getString(R.string.msg_confirm_delete),
-            { _, _ -> deleteTruck(dataItem) }, null,
+            requireActivity(), getString(R.string.msg_confirm_reject),
+            { _, _ -> changeUserStatus(dataItem, User.USER_STATUS_REJECT) }, null,
             getString(R.string.label_yes), getString(R.string.label_cancel)
         )
     }
 
-    private fun deleteTruck(dataItem: TruckRoute) {
+    private fun updateUserDetails(dataItem: User) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        val truckRouteId = dataItem.id
-        if (truckRouteId.isNullOrBlank()) {
-            DebugLog.e("Truck route id found null")
+        val userId = dataItem.id
+        if (userId.isNullOrBlank()) {
+            DebugLog.e("Truck id found null")
             return
         }
 
-        viewModel?.deleteTruckRoute(truckRouteId)
-            ?.observe(viewLifecycleOwner, observeDeleteTruckRoute)
+        viewModel?.updateUserDetails(userId, dataItem)
+            ?.observe(viewLifecycleOwner, observeUpdateUser)
     }
 
-    private var observeDeleteTruckRoute = Observer<DataBound<ApiMessage>> {
+    private var observeUpdateUser = Observer<DataBound<ApiMessage>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -163,29 +175,18 @@ open class MyTruckRouteFragment : BaseAppFragment() {
     private fun initViewModel() {
         DaggerAppComponent.builder().viewModelModule(ViewModelModule())
             .appModule(AppModule(requireActivity().application)).build().inject(this)
-        viewModel = ViewModelProvider(this, viewModelFactory)[TruckViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setToolBarTitle(getString(R.string.label_my_truck_routes))
-        navigationController = Navigation.findNavController(requireView())
+        setToolBarTitle(getString(R.string.label_manage_users))
         swipeRefreshLayout.setOnRefreshListener { getData() }
         recyclerview.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         val offsetPx = resources.getDimension(R.dimen.default_space)
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
-        buttonBackView.visibility = View.VISIBLE
-        bottomButton.visibility = View.VISIBLE
-        bottomButton.text = getString(R.string.menu_add_truck_route)
-        bottomButton.setOnClickListener {
-            onAddTruckRouteClicked()
-        }
         getData()
-    }
-
-    private fun onAddTruckRouteClicked() {
-        navigationController?.navigate(R.id.action_myTruckRouteFragment_to_addTruckRouteFragment)
     }
 
     protected open fun getData() {
@@ -194,11 +195,11 @@ open class MyTruckRouteFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getMyTruckRouteList()
-            ?.observe(viewLifecycleOwner, observeTruckRouteList)
+        viewModel?.getUserList(User.USER_STATUS_PENDING)
+            ?.observe(viewLifecycleOwner, observeUserList)
     }
 
-    protected var observeTruckRouteList = Observer<DataBound<MutableList<TruckRoute>>> {
+    protected var observeUserList = Observer<DataBound<MutableList<User>>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -229,48 +230,33 @@ open class MyTruckRouteFragment : BaseAppFragment() {
         }
     }
 
-    private fun showData(data: MutableList<TruckRoute>) {
-        addPastTruckRoutePlank(data as MutableList<Any>)
-        truckRouteAdapter = TruckRouteListAdapter(data as MutableList<Any>)
-        truckRouteAdapter?.onMoreClickListener = onMoreClickListener
-        truckRouteAdapter?.onPlankButtonClickListener = onPlankButtonClickListener
-        recyclerview.adapter = truckRouteAdapter
+    private fun showData(data: MutableList<User>) {
+        userAdapter = UserListAdapter(data as MutableList<Any>)
+        userAdapter?.onMoreClickListener = onMoreClickListener
+        recyclerview.adapter = userAdapter
 
-        if (truckRouteAdapter?.itemCount ?: getPickCountToShowError() <= getPickCountToShowError()) {
-            showMessageView(getString(R.string.msg_truck_routes_not_added_yet))
+        if (userAdapter?.itemCount ?: 0 <= 0) {
+            showMessageView(getString(R.string.msg_users_not_available))
         } else {
             hideMessageView()
         }
-    }
-
-    protected open fun getPickCountToShowError(): Int {
-        return 1
-    }
-
-    protected open fun addPastTruckRoutePlank(data: MutableList<Any>) {
-        data.add(
-            0,
-            AdapterDataItem(
-                BaseAdapter.VIEW_TYPE_PLANK_BUTTON,
-                getString(R.string.label_past_truck_routes)
-            )
-        )
     }
 
     private fun showMessageView(message: String) {
         emptyView.visibility = View.VISIBLE
         val errorTitle = emptyView.findViewById<TextView>(R.id.messageTitle)
         errorTitle?.text = message
-        // recyclerview.visibility = View.GONE
+        recyclerview.visibility = View.GONE
     }
 
     private fun hideMessageView() {
         emptyView?.visibility = View.GONE
-        // recyclerview.visibility = View.VISIBLE
+        recyclerview.visibility = View.VISIBLE
     }
 
     companion object {
-        const val ACTION_ID_EDIT = 111
-        const val ACTION_ID_DELETE = 222
+        const val ACTION_REJECT = 111
+        const val ACTION_APPROVE = 222
+        const val ACTION_PENDING = 333
     }
 }
