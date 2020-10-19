@@ -38,6 +38,14 @@ open class PendingTruckListFragment : BaseAppFragment() {
     private var truckAdapter: TruckListAdapter? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
+    var statusChangedListener: StatusChangedListener? = null
+    val refreshListener = object : RefreshListener {
+        override fun onRefresh(dataItem: Any) {
+            truckAdapter?.addItem(dataItem)
+            hideMessageView()
+        }
+    }
+
     private val onMoreClickListener = View.OnClickListener {
         val dataItem = it.tag
         if (dataItem !is Truck) {
@@ -127,10 +135,10 @@ open class PendingTruckListFragment : BaseAppFragment() {
         }
 
         viewModel?.updateTruckDetails(userId, dataItem)
-            ?.observe(viewLifecycleOwner, observeUpdateTruck)
+            ?.observe(viewLifecycleOwner, observeUpdateTruck(dataItem.verificationStatus, dataItem))
     }
 
-    private var observeUpdateTruck = Observer<DataBound<ApiMessage>> {
+    private fun observeUpdateTruck(verificationStatus: String?, dataItem: Truck) = Observer<DataBound<ApiMessage>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -142,6 +150,12 @@ open class PendingTruckListFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     showMessage("${dataBound.data.message}")
                     getData()
+                    when (verificationStatus) {
+                        Truck.TRUCK_STATUS_REJECT -> statusChangedListener?.onRejected(dataItem)
+                        Truck.TRUCK_STATUS_CONFIRMED -> statusChangedListener?.onConfirmed(dataItem)
+                        Truck.TRUCK_STATUS_PENDING -> statusChangedListener?.onPending(dataItem)
+                        else -> DebugLog.e("Wrong Status Found: $verificationStatus")
+                    }
                 }
                 is DataBound.Error -> {
                     progressBar.visibility = View.GONE

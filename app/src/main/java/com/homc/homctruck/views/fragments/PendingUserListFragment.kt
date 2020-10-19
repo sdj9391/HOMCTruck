@@ -39,6 +39,14 @@ open class PendingUserListFragment : BaseAppFragment() {
     private var userAdapter: UserListAdapter? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
+    var statusChangedListener: StatusChangedListener? = null
+    val refreshListener = object : RefreshListener {
+        override fun onRefresh(dataItem: Any) {
+            userAdapter?.addItem(dataItem)
+            hideMessageView()
+        }
+    }
+
     private val onMoreClickListener = View.OnClickListener {
         val dataItem = it.tag
         if (dataItem !is User) {
@@ -102,8 +110,8 @@ open class PendingUserListFragment : BaseAppFragment() {
         }
     }
 
-    private fun changeUserStatus(dataItem: User, usrStatus: String) {
-        dataItem.verificationStatus = usrStatus
+    private fun changeUserStatus(dataItem: User, userStatus: String) {
+        dataItem.verificationStatus = userStatus
         updateUserDetails(dataItem)
     }
 
@@ -128,10 +136,10 @@ open class PendingUserListFragment : BaseAppFragment() {
         }
 
         viewModel?.updateUserDetails(userId, dataItem)
-            ?.observe(viewLifecycleOwner, observeUpdateUser)
+            ?.observe(viewLifecycleOwner, observeUpdateUser(dataItem.verificationStatus, dataItem))
     }
 
-    private var observeUpdateUser = Observer<DataBound<ApiMessage>> {
+    private fun observeUpdateUser(verificationStatus: String?, dataItem: User) = Observer<DataBound<ApiMessage>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -143,6 +151,12 @@ open class PendingUserListFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     showMessage("${dataBound.data.message}")
                     getData()
+                    when (verificationStatus) {
+                        User.USER_STATUS_REJECT -> statusChangedListener?.onRejected(dataItem)
+                        User.USER_STATUS_CONFIRMED -> statusChangedListener?.onConfirmed(dataItem)
+                        User.USER_STATUS_PENDING -> statusChangedListener?.onPending(dataItem)
+                        else -> DebugLog.e("Wrong Status Found: $verificationStatus")
+                    }
                 }
                 is DataBound.Error -> {
                     progressBar.visibility = View.GONE
@@ -231,9 +245,14 @@ open class PendingUserListFragment : BaseAppFragment() {
     }
 
     private fun showData(data: MutableList<User>) {
-        userAdapter = UserListAdapter(data as MutableList<Any>)
-        userAdapter?.onMoreClickListener = onMoreClickListener
-        recyclerview.adapter = userAdapter
+        if (userAdapter == null) {
+            userAdapter = UserListAdapter(data as MutableList<Any>)
+            userAdapter?.onMoreClickListener = onMoreClickListener
+            recyclerview.adapter = userAdapter
+        } else {
+            userAdapter?.clearList()
+            userAdapter?.addAllItems(data as MutableList<Any>)
+        }
 
         if (userAdapter?.itemCount ?: 0 <= 0) {
             showMessageView(getString(R.string.msg_users_not_available))
