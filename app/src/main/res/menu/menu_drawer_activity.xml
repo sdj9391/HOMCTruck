@@ -5,12 +5,12 @@
 
         <item
             android:id="@id/homeFragment"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_send"
             android:title="@string/menu_home" />
 
         <item
             android:id="@id/userProfileFragment"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_send"
             android:title="@string/menu_user_profile" />
 
         <item android:title="@string/menu_group_truck_route">
@@ -18,7 +18,7 @@
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@id/addTruckRouteFragment"
-                        android:icon="@drawable/ic_menu_share"
+                        android:icon="@drawable/ic_menu_send"
                         android:title="@string/menu_add_truck_route" />
                     <item
                         android:id="@id/findTruckRouteFragment"
@@ -37,15 +37,15 @@
                 <group android:checkableBehavior="single">
                     <item
                         android:id="@id/addLoadFragment"
-                        android:icon="@drawable/ic_menu_manage"
+                        android:icon="@drawable/ic_menu_send"
                         android:title="@string/menu_add_load" />
                     <item
                         android:id="@id/findLoadFragment"
-                        android:icon="@drawable/ic_menu_share"
+                        android:icon="@drawable/ic_menu_send"
                         android:title="@string/menu_find_load" />
                     <item
                         android:id="@id/myLoadFragment"
-                        android:icon="@drawable/ic_menu_share"
+                        android:icon="@drawable/ic_menu_send"
                         android:title="@string/menu_my_load" />
                 </group>
             </menu>

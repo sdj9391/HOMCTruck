@@ -7,13 +7,18 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.homc.homctruck.R
+import com.homc.homctruck.utils.canHaveFeatureAccess
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : BaseAppFragment() {
 
     private var navigationController: NavController? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -23,23 +28,25 @@ class HomeFragment : BaseAppFragment() {
         navigationController = Navigation.findNavController(requireView())
 
         addTruckRoute.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_addTruckRouteFragment)
+            if (!canHaveFeatureAccess((requireContext()))) return@setOnClickListener
+            navigationController?.navigate(R.id.action_homeFragment_to_addTruckRouteFragment)
         }
         findTruckRoute.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_findTruckRouteFragment)
+            navigationController?.navigate(R.id.action_homeFragment_to_findTruckRouteFragment)
         }
         myTruckRoute.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_myTruckRouteFragment)
+            navigationController?.navigate(R.id.action_homeFragment_to_myTruckRouteFragment)
         }
 
         addLoad.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_addLoadFragment)
+            if (!canHaveFeatureAccess((requireContext()))) return@setOnClickListener
+            navigationController?.navigate(R.id.action_homeFragment_to_addLoadFragment)
         }
         findLoad.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_findLoadFragment)
+            navigationController?.navigate(R.id.action_homeFragment_to_findLoadFragment)
         }
         myLoad.setOnClickListener {
-                navigationController?.navigate(R.id.action_homeFragment_to_myLoadFragment)
+            navigationController?.navigate(R.id.action_homeFragment_to_myLoadFragment)
         }
     }
 }

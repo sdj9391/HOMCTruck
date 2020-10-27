@@ -7,7 +7,6 @@ import com.homc.homctruck.views.fragments.*
 import dagger.Component
 import javax.inject.Singleton
 
-@Singleton
 @Component(modules = [AppModule::class, ViewModelModule::class])
 interface AppComponent {
     fun inject(app: HomcTruckApp)
@@ -25,4 +24,5 @@ interface AppComponent {
     fun inject(fragment: UserProfileFragment)
     fun inject(fragment: PendingUserListFragment)
     fun inject(fragment: PendingTruckListFragment)
+    fun inject(fragment: SplashScreenFragment)
 }

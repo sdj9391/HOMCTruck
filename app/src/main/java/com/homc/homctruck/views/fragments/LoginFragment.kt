@@ -303,6 +303,7 @@ class LoginFragment : BaseFullScreenFragment() {
                 if (firebaseAuthToken.isNullOrBlank()) {
                     DebugLog.e("Setting token null.")
                     AppConfig.token = null
+                    DebugLog.e("Here")
                     BaseAccountManager(requireActivity()).removeAccount(requireActivity())
                 } else {
                     DebugLog.w("Setting token $firebaseAuthToken")
@@ -314,6 +315,7 @@ class LoginFragment : BaseFullScreenFragment() {
                     BaseAccountManager(requireActivity()).userAuthToken = firebaseAuthToken
                     BaseAccountManager(requireActivity()).isMobileVerified = true
                     AppConfig.token = firebaseAuthToken
+                    DebugLog.e("Here")
                     (requireActivity().application as HomcTruckApp).initAppConfig()
                     initViewModel()
                     checkForNewUserApiCall(firebaseUser)
@@ -321,6 +323,7 @@ class LoginFragment : BaseFullScreenFragment() {
             } else {
                 DebugLog.w("Setting token null.")
                 AppConfig.token = null
+                DebugLog.e("Here")
                 BaseAccountManager(requireActivity()).removeAccount(requireActivity())
             }
         }

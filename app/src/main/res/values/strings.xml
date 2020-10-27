@@ -170,4 +170,8 @@
     <string name="label_reject_truck">Reject Truck</string>
     <string name="label_approve_truck">Approve Truck</string>
     <string name="label_move_truck_to_pending">Move Truck to Pending</string>
+    <string name="msg_action_deny">You do not have sufficient permission to do this action!</string>
+    <string name="msg_app_access_deny">Your access of the app is restricted. For any query contact us.</string>
+    <string name="msg_call_x">Call %1$s</string>
+    <string name="label_call">Call</string>
 </resources>

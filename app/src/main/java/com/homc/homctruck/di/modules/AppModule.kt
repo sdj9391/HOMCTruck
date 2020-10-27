@@ -14,7 +14,6 @@ import javax.inject.Singleton
 class AppModule(var app: Application) {
 
     @Provides
-    @Singleton
     internal fun provideApp(): Application {
         return app
     }
@@ -30,7 +29,6 @@ class AppModule(var app: Application) {
     }
 
     @Provides
-    @Singleton
     internal fun provideHealthPoleConfig(): AppConfig {
         return AppConfig
     }

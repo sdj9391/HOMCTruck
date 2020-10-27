@@ -8,35 +8,26 @@ import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
-import com.crashlytics.android.Crashlytics
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.homc.homctruck.data.models.AppConfig
-import com.homc.homctruck.di.AppComponent
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.worker.UpdateFirebaseToken
-import io.fabric.sdk.android.Fabric
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
 class HomcTruckApp : MultiDexApplication() {
-    lateinit var appComponent: AppComponent
-
     override fun onCreate() {
         super.onCreate()
         initAppConfig()
         initAppComponent()
-        initFabric()
         if (!BuildConfig.DEBUG) {
             initFirebaseAnalytics()
         }
-        //}
-        // setUpChatSDK(getApplicationContext());
         initPlacesSDK()
     }
 
@@ -53,7 +44,8 @@ class HomcTruckApp : MultiDexApplication() {
     private fun getLocationKeyFromManifest(): String? {
         var key: String? = null
         try {
-            val applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+            val applicationInfo =
+                packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
             val value = applicationInfo.metaData["com.google.android.geo.API_KEY"]
             if (value is String) {
                 key = value
@@ -65,7 +57,6 @@ class HomcTruckApp : MultiDexApplication() {
     }
 
     fun initAppConfig() {
-        AppConfig.serverUrl = BuildConfig.SERVER_URL
         val baseAccountManager = BaseAccountManager(baseContext)
         val isMobileVerified = baseAccountManager.isMobileVerified ?: false
         if (isMobileVerified) {
@@ -80,7 +71,7 @@ class HomcTruckApp : MultiDexApplication() {
                         DebugLog.w("Setting token firebaseToken")
                         baseAccountManager.userAuthToken = firebaseToken
                         AppConfig.token = firebaseToken
-                        // DebugLog.e("it ---> $firebaseToken")
+                        initAppComponent()
                     }
                 } else {
                     DebugLog.w("Setting token null.")
@@ -104,24 +95,14 @@ class HomcTruckApp : MultiDexApplication() {
 
         val dataSyncWorker = PeriodicWorkRequest.Builder(
             UpdateFirebaseToken::class.java, 1, TimeUnit.HOURS
-        )
-            .setConstraints(constraints)
-            .build()
+        ).setConstraints(constraints).build()
 
         WorkManager.getInstance(baseContext).enqueue(dataSyncWorker)
     }
 
     private fun initAppComponent() {
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-    }
-
-    private fun initFabric() {
-        val fabric = Fabric.Builder(this)
-            .kits(Crashlytics())
-            .debuggable(false)
-            .build()
-        Fabric.with(fabric)
-        // setFirebaseUserId()
+        AppConfig.token = BaseAccountManager(applicationContext).userAuthToken
+        DaggerAppComponent.builder().appModule(AppModule(this)).build()
     }
 
     private fun initFirebaseAnalytics() {

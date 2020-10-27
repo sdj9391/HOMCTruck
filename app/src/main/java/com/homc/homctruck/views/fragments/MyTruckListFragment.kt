@@ -72,6 +72,9 @@ class MyTruckListFragment : BaseAppFragment() {
 
     private val onMoreOptionClickListener: View.OnClickListener = View.OnClickListener {
         bottomSheetListDialogFragment?.dismiss()
+
+        if (!canHaveFeatureAccess((requireContext()))) return@OnClickListener
+
         val dataItem = it.tag
         if (dataItem !is Truck) {
             DebugLog.e("Wrong instance found. Expected: ${Truck::class.java.simpleName} Found: $dataItem")
@@ -173,6 +176,7 @@ class MyTruckListFragment : BaseAppFragment() {
         bottomButton.visibility = View.VISIBLE
         bottomButton.text = getString(R.string.label_add_truck)
         bottomButton.setOnClickListener {
+            if (!canHaveFeatureAccess((requireContext()))) return@setOnClickListener
             onAddTruckClicked()
         }
         getData()

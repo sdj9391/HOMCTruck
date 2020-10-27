@@ -78,6 +78,7 @@ open class MyLoadFragment : BaseAppFragment() {
 
     private val onMoreOptionClickListener: View.OnClickListener = View.OnClickListener {
         bottomSheetListDialogFragment?.dismiss()
+        if (!canHaveFeatureAccess((requireContext()))) return@OnClickListener
         val dataItem = it.tag
         if (dataItem !is Load) {
             DebugLog.e("Wrong instance found. Expected: ${Load::class.java.simpleName} Found: $dataItem")
@@ -179,6 +180,7 @@ open class MyLoadFragment : BaseAppFragment() {
         bottomButton.visibility = View.VISIBLE
         bottomButton.text = getString(R.string.menu_add_load)
         bottomButton.setOnClickListener {
+            if (!canHaveFeatureAccess((requireContext()))) return@setOnClickListener
             onAddLoadClicked()
         }
         getData()

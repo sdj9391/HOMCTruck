@@ -33,7 +33,6 @@ import javax.inject.Inject
 
 class UserProfileFragment : BaseAppFragment() {
 
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: AuthenticationViewModel? = null

@@ -1,10 +1,13 @@
 package com.homc.homctruck.views.adapters
 
-import android.view.View
+import com.homc.homctruck.R
+import com.homc.homctruck.data.models.TruckRoute
 
 class FindTruckRouteListAdapter(data: MutableList<Any>?) : TruckRouteListAdapter(data) {
     override fun bindTruckRouteView(holder: TruckRouteViewHolder, position: Int) {
         super.bindTruckRouteView(holder, position)
-        holder.moreButton.visibility = View.GONE
+        val dataItem = dataItems?.get(position) as TruckRoute
+        holder.moreButton.tag = dataItem.truck?.ownerId
+        holder.moreButton.setImageResource(R.drawable.ic_enquiry)
     }
 }

@@ -1,5 +1,6 @@
 package com.homc.homctruck.restapi
 
+import com.homc.homctruck.BuildConfig
 import com.homc.homctruck.data.models.AppConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Headers
@@ -20,7 +21,7 @@ object AppApiInstance {
     val apiPostal: PostalApiService = retrofitPostal.create(PostalApiService::class.java)
 
     val retrofit: Retrofit
-        get() = getRetrofitForUrl(AppConfig.serverUrl)
+        get() = getRetrofitForUrl(BuildConfig.SERVER_URL)
 
     private val retrofitPostal: Retrofit
         get() = getRetrofitForUrl("https://api.postalpincode.in/")

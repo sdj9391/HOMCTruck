@@ -3,6 +3,7 @@ package com.homc.homctruck.views.fragments
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -26,11 +27,15 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.TruckRoute
+import com.homc.homctruck.data.models.User
+import com.homc.homctruck.data.models.getName
 import com.homc.homctruck.di.DaggerAppComponent
 import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.di.modules.ViewModelModule
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
+import com.homc.homctruck.utils.account.BaseAccountManager
+import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
@@ -43,12 +48,24 @@ class FindTruckRouteFragment : BaseAppFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: TruckViewModel? = null
+    private var viewModelUser: AuthenticationViewModel? = null
     private var loadAdapter: FindTruckRouteListAdapter? = null
 
     private var startMillis: Long? = null
     private var endMillis: Long? = null
     private var isFromCitySelected: Boolean = false
     private var isFilterApplied: Boolean = false
+
+    private val onEnquiryClickListener = View.OnClickListener {
+        if (!canHaveFeatureAccess((requireContext()))) return@OnClickListener
+
+        val ownerId = it.tag
+        if (ownerId !is String) {
+            return@OnClickListener
+        }
+
+        getUserDetails(ownerId)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,6 +84,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         DaggerAppComponent.builder().viewModelModule(ViewModelModule())
             .appModule(AppModule(requireActivity().application)).build().inject(this)
         viewModel = ViewModelProvider(this, viewModelFactory)[TruckViewModel::class.java]
+        viewModelUser = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -256,6 +274,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
 
     private fun showData(data: MutableList<TruckRoute>) {
         loadAdapter = FindTruckRouteListAdapter(data as MutableList<Any>)
+        loadAdapter?.onMoreClickListener = onEnquiryClickListener
         recyclerview.adapter = loadAdapter
 
         if (loadAdapter?.itemCount ?: 0 <= 0) {
@@ -324,6 +343,59 @@ class FindTruckRouteFragment : BaseAppFragment() {
         toDateTextField.visibility = View.GONE
         applyButton.visibility = View.GONE
         truckTypeDropDownField.visibility = View.GONE
+    }
+
+    private fun getUserDetails(ownerId: String) {
+        viewModelUser?.getUserDetails(ownerId)
+            ?.observe(viewLifecycleOwner, observeGetUserDetails)
+    }
+
+    private val observeGetUserDetails = Observer<DataBound<User>> {
+        if (it == null) {
+            DebugLog.e("ApiMessage is null")
+            return@Observer
+        }
+
+        it.let { dataBound ->
+            when (dataBound) {
+                is DataBound.Success -> {
+                    progressBar.visibility = View.GONE
+                    val user = dataBound.data
+                    val name = user.getName()
+                    val mobileNumber = user.mobileNumber
+
+                    if (mobileNumber.isNullOrBlank()) {
+                        return@Observer
+                    }
+
+                    val msg = if (name.isNullOrBlank()) {
+                        mobileNumber
+                    } else {
+                        "$name ($mobileNumber)"
+                    }
+
+                    showConfirmDialog(requireContext(), getString(R.string.msg_call_x, msg),
+                        { _, _ -> callClicked(mobileNumber) }, null,
+                        getString(R.string.label_call), getString(R.string.label_cancel)
+                    )
+
+                }
+                is DataBound.Error -> {
+                    DebugLog.w("Error: ${dataBound.error}")
+                    progressBar.visibility = View.GONE
+                }
+                is DataBound.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun callClicked(mobileNumber: String) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_DIAL
+        intent.data = Uri.parse("tel: $mobileNumber")
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

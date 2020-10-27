@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.text.SpannableStringBuilder
+import android.text.TextUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -14,7 +15,9 @@ import androidx.core.text.bold
 import androidx.core.text.color
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
+import com.homc.homctruck.data.models.User
 import com.homc.homctruck.restapi.AppApiInstance
+import com.homc.homctruck.utils.account.BaseAccountManager
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -190,6 +193,32 @@ fun showConfirmDialog(
         .setNegativeButton(noLabel, noClickListener).show()
 }
 
+/**
+ * Shows an alert dialog with the OK button. When the user presses OK button, the dialog
+ * dismisses.
+ */
+fun showAlertDialog(context: Context, title: String, body: String?) {
+    showAlertDialog(context, title, body, null)
+}
+
+/**
+ * Shows an alert dialog with OK button
+ */
+fun showAlertDialog(context: Context, title: String, body: String?,
+    listener: DialogInterface.OnClickListener?
+) {
+    var okListener = listener
+    if (okListener == null) {
+        okListener = DialogInterface.OnClickListener { dialog, which -> dialog.cancel() }
+    }
+    val builder = AlertDialog.Builder(context)
+        .setMessage(body).setPositiveButton("OK", okListener)
+    if (!TextUtils.isEmpty(title)) {
+        builder.setTitle(title)
+    }
+    builder.show()
+}
+
 fun hideSoftKeyboard(activity: Activity) {
     try {
         val inputMethodManager =
@@ -249,7 +278,15 @@ fun setColorsAndCombineStrings(textView: TextView, string1: String?, string2: St
     setColorsAndCombineStrings(textView, string1, string2, R.color.title_text)
 }
 
-fun getMillis(year: Int, monthOfYear: Int, dayOfMonth: Int, hours: Int = 0, min: Int = 0, sec: Int = 0, millis: Int = 0):Long {
+fun getMillis(
+    year: Int,
+    monthOfYear: Int,
+    dayOfMonth: Int,
+    hours: Int = 0,
+    min: Int = 0,
+    sec: Int = 0,
+    millis: Int = 0
+): Long {
     val calendar = Calendar.getInstance()
     calendar[Calendar.YEAR] = year
     calendar[Calendar.MONTH] = monthOfYear
@@ -259,4 +296,31 @@ fun getMillis(year: Int, monthOfYear: Int, dayOfMonth: Int, hours: Int = 0, min:
     calendar[Calendar.SECOND] = sec
     calendar[Calendar.MILLISECOND] = millis
     return calendar.timeInMillis
+}
+
+fun canHaveFeatureAccess(context: Context): Boolean {
+    return when (BaseAccountManager(context).userDetails?.verificationStatus
+        ?: User.USER_STATUS_PENDING) {
+        User.USER_STATUS_PENDING -> {
+            showAlertDialog(context, context.getString(R.string.msg_action_deny), null, null)
+            false
+        }
+        User.USER_STATUS_REJECT -> {
+            showAlertDialog(context, context.getString(R.string.msg_action_deny), null, null)
+            DebugLog.e("Status is rejected and still user is trying to access feature.")
+            false
+        }
+        else -> true
+    }
+}
+
+fun canHaveAppAccess(context: Context): Boolean {
+    return when (BaseAccountManager(context).userDetails?.verificationStatus
+        ?: User.USER_STATUS_PENDING) {
+        User.USER_STATUS_REJECT -> {
+            showAlertDialog(context, context.getString(R.string.msg_app_access_deny), null, null)
+            false
+        }
+        else -> true
+    }
 }
