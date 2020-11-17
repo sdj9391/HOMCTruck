@@ -1,7 +1,6 @@
 package com.homc.homctruck.restapi
 
 import com.homc.homctruck.BuildConfig
-import com.homc.homctruck.data.models.AppConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Headers
 import okhttp3.Headers.Companion.toHeaders
@@ -15,19 +14,17 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object AppApiInstance {
+
     private val logLevel = HttpLoggingInterceptor.Level.BODY
 
-    val api: AppApiService = retrofit.create(AppApiService::class.java)
-    val apiPostal: PostalApiService = retrofitPostal.create(PostalApiService::class.java)
+    fun api(token: String?): AppApiService = retrofit(token).create(AppApiService::class.java)
+    fun apiPostal(token: String?): PostalApiService = retrofitPostal(token).create(PostalApiService::class.java)
 
-    val retrofit: Retrofit
-        get() = getRetrofitForUrl(BuildConfig.SERVER_URL)
+    fun retrofit(token: String?): Retrofit = getRetrofitForUrl(BuildConfig.SERVER_URL, token)
+    private fun retrofitPostal(token: String?): Retrofit = getRetrofitForUrl("https://api.postalpincode.in/", token)
 
-    private val retrofitPostal: Retrofit
-        get() = getRetrofitForUrl("https://api.postalpincode.in/")
-
-    private fun getRetrofitForUrl(baseUrl: String): Retrofit {
-        val client = httpClient
+    private fun getRetrofitForUrl(baseUrl: String, token: String?): Retrofit {
+        val client = httpClient(token)
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(client)
@@ -37,11 +34,10 @@ object AppApiInstance {
             .build()
     }
 
-    private val httpClient: OkHttpClient
-        get() {
+    private fun httpClient(token: String?): OkHttpClient {
             val interceptorLogging = HttpLoggingInterceptor()
             interceptorLogging.level = logLevel
-            val interceptorRequest = getInterceptor(AppConfig.token)
+            val interceptorRequest = getInterceptor(token)
             return OkHttpClient.Builder()
                 .addInterceptor(interceptorLogging)
                 .connectTimeout(3, TimeUnit.MINUTES)

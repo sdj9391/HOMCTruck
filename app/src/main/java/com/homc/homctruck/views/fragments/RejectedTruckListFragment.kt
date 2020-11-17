@@ -4,8 +4,8 @@ import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 
 class RejectedTruckListFragment : PendingTruckListFragment() {
-    override fun getData() {
-        viewModel?.getTruckList(Truck.TRUCK_STATUS_REJECT)
+    override fun getData(truckNumberKeyword: String?) {
+        viewModel?.getTruckList(Truck.TRUCK_STATUS_REJECT, truckNumberKeyword)
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 

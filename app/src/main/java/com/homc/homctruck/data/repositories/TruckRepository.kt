@@ -8,7 +8,7 @@ import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
 import javax.inject.Inject
 
-class TruckRepository @Inject constructor(var dataSource: TruckRemoteDataSource) :
+class TruckRepository(var dataSource: TruckRemoteDataSource) :
     TruckContract {
     override suspend fun addNewTruck(truck: Truck): DataBound<ApiMessage> {
         return dataSource.addNewTruck(truck)
@@ -18,12 +18,12 @@ class TruckRepository @Inject constructor(var dataSource: TruckRemoteDataSource)
         return dataSource.getTruckDetails(truckId)
     }
 
-    override suspend fun getMyTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
-        return dataSource.getMyTruckList(verificationStatus)
+    override suspend fun getMyTruckList(verificationStatus: String?, truckNumberKeyword: String?): DataBound<MutableList<Truck>> {
+        return dataSource.getMyTruckList(verificationStatus, truckNumberKeyword)
     }
 
-    override suspend fun getTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
-        return dataSource.getTruckList(verificationStatus)
+    override suspend fun getTruckList(verificationStatus: String?, truckNumberKeyword: String?): DataBound<MutableList<Truck>> {
+        return dataSource.getTruckList(verificationStatus, truckNumberKeyword)
     }
 
     override suspend fun updateTruckDetails(truckId: String, truck: Truck): DataBound<ApiMessage> {

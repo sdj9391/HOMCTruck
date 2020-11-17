@@ -14,25 +14,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.TruckRepository
+import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
+import com.homc.homctruck.viewmodels.TruckViewModelFactory
 import com.homc.homctruck.views.adapters.TruckListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.item_common_list_layout.*
+import kotlinx.android.synthetic.main.item_common_list_layout.emptyView
+import kotlinx.android.synthetic.main.item_common_list_layout.progressBar
+import kotlinx.android.synthetic.main.item_common_list_layout.recyclerview
+import kotlinx.android.synthetic.main.item_common_list_layout.swipeRefreshLayout
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class MyTruckListFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: TruckViewModel? = null
     private var truckAdapter: TruckListAdapter? = null
     private var navigationController: NavController? = null
@@ -134,8 +136,23 @@ class MyTruckListFragment : BaseAppFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                progressBar.visibility = View.GONE
+                                showMessageView(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        progressBar.visibility = View.GONE
+                        showMessageView(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {
@@ -158,8 +175,9 @@ class MyTruckListFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository =
+            TruckRepository(TruckRemoteDataSource(AppApiInstance.api(getAuthToken(requireActivity()))))
+        val viewModelFactory = TruckViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[TruckViewModel::class.java]
     }
 
@@ -192,7 +210,7 @@ class MyTruckListFragment : BaseAppFragment() {
             return
         }
 
-        viewModel?.getMyTruckList()
+        viewModel?.getMyTruckList(truckNumberKeyword = null)
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 
@@ -215,8 +233,23 @@ class MyTruckListFragment : BaseAppFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                progressBar.visibility = View.GONE
+                                showMessageView(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        progressBar.visibility = View.GONE
+                        showMessageView(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

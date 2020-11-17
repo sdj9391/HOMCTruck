@@ -26,24 +26,23 @@ import com.google.gson.Gson
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Load
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.LoadRepository
+import com.homc.homctruck.data.sourceremote.LoadRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
-import com.homc.homctruck.utils.formatDateForDisplay
-import com.homc.homctruck.utils.getMillis
-import com.homc.homctruck.utils.isInternetAvailable
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.LoadViewModel
+import com.homc.homctruck.viewmodels.LoadViewModelFactory
 import kotlinx.android.synthetic.main.fragment_add_load.*
+import kotlinx.android.synthetic.main.fragment_add_load.expectedPickUpDateEditText
+import kotlinx.android.synthetic.main.fragment_add_load.fromCityEditText
+import kotlinx.android.synthetic.main.fragment_add_load.progressBar
+import kotlinx.android.synthetic.main.fragment_add_load.toCityEditText
 import java.net.HttpURLConnection
 import java.util.*
-import javax.inject.Inject
 
 open class AddLoadFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     protected var viewModel: LoadViewModel? = null
 
     private var isFromCitySelected = true
@@ -119,8 +118,9 @@ open class AddLoadFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository =
+            LoadRepository(LoadRemoteDataSource(AppApiInstance.api(getAuthToken(requireActivity()))))
+        val viewModelFactory = LoadViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[LoadViewModel::class.java]
     }
 
@@ -332,8 +332,25 @@ open class AddLoadFragment : BaseAppFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                saveButton.isEnabled = true
+                                initViewModel()
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        saveButton.isEnabled = true
+                        canRetryApiCall = false
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

@@ -7,7 +7,7 @@ import com.homc.homctruck.data.sourceremote.LoadRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
 import javax.inject.Inject
 
-class LoadRepository @Inject constructor(var dataSource: LoadRemoteDataSource) :
+class LoadRepository(var dataSource: LoadRemoteDataSource) :
     LoadContract {
     override suspend fun addNewLoad(load: Load): DataBound<ApiMessage> {
         return dataSource.addNewLoad(load)

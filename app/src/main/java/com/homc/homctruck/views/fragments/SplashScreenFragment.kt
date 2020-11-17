@@ -11,26 +11,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.AppConfig
 import com.homc.homctruck.data.models.User
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.utils.canHaveAppAccess
-import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.activities.MainDrawerActivity
 import kotlinx.android.synthetic.main.fragment_splash_screen.*
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class SplashScreenFragment : BaseFullScreenFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: AuthenticationViewModel? = null
 
     override fun onCreateView(
@@ -47,8 +42,14 @@ class SplashScreenFragment : BaseFullScreenFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactory =
+            AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
@@ -61,22 +62,25 @@ class SplashScreenFragment : BaseFullScreenFragment() {
         // sleepAndContinue()
 
         val user = FirebaseAuth.getInstance().currentUser
-        user?.getIdToken(true)?.addOnCompleteListener { task ->
+        if (user == null || !isInternetAvailable()) {
+            DebugLog.e("User is null or internet is not available")
+            openLoginScreen()
+            return
+        }
+
+        user.getIdToken(true).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val firebaseToken = task.result.token
                 if (firebaseToken.isNullOrBlank()) {
                     DebugLog.w("Setting token null.")
-                    AppConfig.token = null
                     openLoginScreen()
                 } else {
                     DebugLog.w("Setting token firebaseToken")
                     BaseAccountManager(requireActivity()).userAuthToken = firebaseToken
-                    AppConfig.token = firebaseToken
                     getUserDetails()
                 }
             } else {
                 DebugLog.w("Setting token null.")
-                AppConfig.token = null
                 openLoginScreen()
             }
         }
@@ -113,7 +117,7 @@ class SplashScreenFragment : BaseFullScreenFragment() {
         val userId = BaseAccountManager(requireActivity()).userDetails?.id
         if (userId.isNullOrBlank()) {
             DebugLog.e("User Id found null")
-            sleepAndContinue()
+            openLoginScreen()
             return
         }
 
@@ -122,6 +126,7 @@ class SplashScreenFragment : BaseFullScreenFragment() {
     }
 
     private fun openLoginScreen() {
+        BaseAccountManager(requireActivity()).removeAccount(requireActivity())
         val navigationController = Navigation.findNavController(requireView())
         navigationController.navigate(R.id.action_splashScreenFragment_to_loginFragment)
     }
@@ -142,12 +147,22 @@ class SplashScreenFragment : BaseFullScreenFragment() {
                     progressBar.visibility = View.GONE
                 }
                 is DataBound.Error -> {
-                    DebugLog.w("Error: ${dataBound.error}")
+                    DebugLog.w("Error: ${dataBound.message}")
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         openLoginScreen()
                     }
                     retryButton.visibility = View.VISIBLE
                     progressBar.visibility = View.GONE
+                }
+                is DataBound.Retry -> {
+                    getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                        override fun retry() {
+                            initViewModel()
+                            retryButton.visibility = View.VISIBLE
+                            progressBar.visibility = View.GONE
+                            showMessage(getString(R.string.error_something_went_wrong_try_again))
+                        }
+                    })
                 }
                 is DataBound.Loading -> {
                     retryButton.visibility = View.GONE

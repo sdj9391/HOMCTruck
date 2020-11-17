@@ -9,9 +9,9 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.restapi.PostalApiService
 import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
-import javax.inject.Inject
+import java.net.HttpURLConnection
 
-class AuthenticationRemoteDataSource @Inject constructor(
+class AuthenticationRemoteDataSource(
     private val api: AppApiService,
     private val postalApi: PostalApiService
 ) :
@@ -22,6 +22,9 @@ class AuthenticationRemoteDataSource @Inject constructor(
         try {
             val response = api.addNewUserDetail(user)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -50,6 +53,9 @@ class AuthenticationRemoteDataSource @Inject constructor(
         try {
             val response = api.getUserDetail(userId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -78,6 +84,9 @@ class AuthenticationRemoteDataSource @Inject constructor(
         try {
             val response = api.getUserList(verificationStatus)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -106,6 +115,9 @@ class AuthenticationRemoteDataSource @Inject constructor(
         try {
             val response = api.updateUserDetail(userId, user)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -134,6 +146,9 @@ class AuthenticationRemoteDataSource @Inject constructor(
         try {
             val response = postalApi.getPostalAddress(pinCode)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {

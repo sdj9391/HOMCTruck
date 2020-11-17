@@ -13,23 +13,21 @@ import com.homc.homctruck.data.models.Address
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.ResponsePostalAddress
 import com.homc.homctruck.data.models.User
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.utils.isInternetAvailable
-import com.homc.homctruck.utils.isValidEmail
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.*
+import kotlinx.android.synthetic.main.fragment_edit_user_profile.progressBar
+import kotlinx.android.synthetic.main.fragment_edit_user_profile.saveButton
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class EditUserProfileFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: AuthenticationViewModel? = null
     private var isDirty = false
 
@@ -79,8 +77,14 @@ class EditUserProfileFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactory =
+            AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
@@ -293,8 +297,25 @@ class EditUserProfileFragment : BaseAppFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                saveButton.isEnabled = true
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        saveButton.isEnabled = true
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {
@@ -345,8 +366,25 @@ class EditUserProfileFragment : BaseAppFragment() {
                 is DataBound.Error -> {
                     saveButton.isEnabled = true
                     progressBar.visibility = View.GONE
-                    DebugLog.e("Error: ${dataBound.error}")
-                    showMessage("${dataBound.error}")
+                    DebugLog.e("Error: ${dataBound.message}")
+                    showMessage("${dataBound.message}")
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                saveButton.isEnabled = true
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        saveButton.isEnabled = true
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
+                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

@@ -10,11 +10,9 @@ import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.data.repositories.TruckRepository
 import com.homc.homctruck.restapi.DataBound
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-class TruckViewModel
-@Inject constructor(var app: Application, private val repository: TruckRepository) :
+class TruckViewModel(var app: Application, private val repository: TruckRepository) :
     ViewModel() {
 
     fun addNewTruck(truck: Truck): MutableLiveData<DataBound<ApiMessage>> {
@@ -31,7 +29,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -43,13 +44,16 @@ class TruckViewModel
         return liveData
     }
 
-    fun getMyTruckList(verificationStatus: String? = null): MutableLiveData<DataBound<MutableList<Truck>>> {
+    fun getMyTruckList(
+        verificationStatus: String? = null,
+        truckNumberKeyword: String? = null
+    ): MutableLiveData<DataBound<MutableList<Truck>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Truck>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getMyTruckList(verificationStatus)
+                val dataBound = repository.getMyTruckList(verificationStatus, truckNumberKeyword)
 
                 dataBound.let {
                     when (it) {
@@ -57,7 +61,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -69,13 +76,16 @@ class TruckViewModel
         return liveData
     }
 
-    fun getTruckList(verificationStatus: String? = null): MutableLiveData<DataBound<MutableList<Truck>>> {
+    fun getTruckList(
+        verificationStatus: String? = null,
+        truckNumberKeyword: String? = null
+    ): MutableLiveData<DataBound<MutableList<Truck>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Truck>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getTruckList(verificationStatus)
+                val dataBound = repository.getTruckList(verificationStatus, truckNumberKeyword)
 
                 dataBound.let {
                     when (it) {
@@ -83,7 +93,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -109,7 +122,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -136,7 +152,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -162,7 +181,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -188,7 +210,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -214,7 +239,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -243,7 +271,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -272,7 +303,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -299,7 +333,10 @@ class TruckViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

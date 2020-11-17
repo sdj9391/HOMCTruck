@@ -9,19 +9,19 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.restapi.PostalApiService
 import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class TruckRemoteDataSource @Inject constructor(
-    private val api: AppApiService,
-    private val postalApi: PostalApiService
-) :
-    TruckContract {
+class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
 
     override suspend fun addNewTruck(truck: Truck): DataBound<ApiMessage> {
         val data: ApiMessage
         try {
             val response = api.addNewTruck(truck)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -50,6 +50,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.getTruckDetails(truckId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -73,11 +76,14 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
+    override suspend fun getMyTruckList(verificationStatus: String?, truckNumberKeyword: String?): DataBound<MutableList<Truck>> {
         val data: MutableList<Truck>
         try {
-            val response = api.getMyTruckList(verificationStatus)
+            val response = api.getMyTruckList(verificationStatus, truckNumberKeyword)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -101,11 +107,14 @@ class TruckRemoteDataSource @Inject constructor(
         return DataBound.Success(data)
     }
 
-    override suspend fun getTruckList(verificationStatus: String?): DataBound<MutableList<Truck>> {
+    override suspend fun getTruckList(verificationStatus: String?, truckNumberKeyword: String?): DataBound<MutableList<Truck>> {
         val data: MutableList<Truck>
         try {
-            val response = api.getTruckList(verificationStatus)
+            val response = api.getTruckList(verificationStatus, truckNumberKeyword)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -134,6 +143,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.updateTruckDetails(truckId, truck)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -162,6 +174,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.deleteTruck(truckId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -190,6 +205,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.addNewTruckRoute(truckRoute)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -218,6 +236,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.getMyTruckRouteList()
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -246,6 +267,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.getMyPastTruckRouteList()
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -277,6 +301,9 @@ class TruckRemoteDataSource @Inject constructor(
             val response =
                 api.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -308,6 +335,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.updateTruckRouteDetails(truckRouteId, truckRoute)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -336,6 +366,9 @@ class TruckRemoteDataSource @Inject constructor(
         try {
             val response = api.deleteTruckRoute(truckRouteId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {

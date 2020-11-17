@@ -29,24 +29,24 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.models.getName
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.repositories.TruckRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
-import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.TruckViewModel
+import com.homc.homctruck.viewmodels.TruckViewModelFactory
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
 import java.net.HttpURLConnection
 import java.util.*
-import javax.inject.Inject
 
 class FindTruckRouteFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: TruckViewModel? = null
     private var viewModelUser: AuthenticationViewModel? = null
     private var loadAdapter: FindTruckRouteListAdapter? = null
@@ -81,10 +81,20 @@ class FindTruckRouteFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository =
+            TruckRepository(TruckRemoteDataSource(AppApiInstance.api(getAuthToken(requireActivity()))))
+        val viewModelFactory = TruckViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[TruckViewModel::class.java]
-        viewModelUser = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
+        val repositoryAuth = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactoryAuth =
+            AuthenticationViewModelFactory(requireActivity().application, repositoryAuth)
+        viewModelUser =
+            ViewModelProvider(this, viewModelFactoryAuth)[AuthenticationViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -260,8 +270,25 @@ class FindTruckRouteFragment : BaseAppFragment() {
                         if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                             showMessage(getString(R.string.error_something_went_wrong))
                         } else {
-                            DebugLog.e("Error: ${dataBound.error}")
-                            showMessage("${dataBound.error}")
+                            DebugLog.e("Error: ${dataBound.message}")
+                            showMessage("${dataBound.message}")
+                        }
+                    }
+                    is DataBound.Retry -> {
+                        if (canRetryApiCall) {
+                            getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                                override fun retry() {
+                                    initViewModel()
+                                    swipeRefreshLayout.isRefreshing = false
+                                    progressBar.visibility = View.GONE
+                                    showMessage(getString(R.string.error_something_went_wrong_try_again))
+                                }
+                            })
+                        } else {
+                            canRetryApiCall = false
+                            swipeRefreshLayout.isRefreshing = false
+                            progressBar.visibility = View.GONE
+                            showMessage(getString(R.string.error_something_went_wrong))
                         }
                     }
                     is DataBound.Loading -> {
@@ -374,15 +401,31 @@ class FindTruckRouteFragment : BaseAppFragment() {
                         "$name ($mobileNumber)"
                     }
 
-                    showConfirmDialog(requireContext(), getString(R.string.msg_call_x, msg),
+                    showConfirmDialog(
+                        requireContext(), getString(R.string.msg_call_x, msg),
                         { _, _ -> callClicked(mobileNumber) }, null,
                         getString(R.string.label_call), getString(R.string.label_cancel)
                     )
 
                 }
                 is DataBound.Error -> {
-                    DebugLog.w("Error: ${dataBound.error}")
+                    DebugLog.w("Error: ${dataBound.message}")
                     progressBar.visibility = View.GONE
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
+                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

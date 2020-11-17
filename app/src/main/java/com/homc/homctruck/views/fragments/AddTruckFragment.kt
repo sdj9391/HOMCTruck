@@ -12,21 +12,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.TruckRepository
+import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.getAuthToken
+import com.homc.homctruck.utils.getAuthTokenFromFirebase
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.TruckViewModel
+import com.homc.homctruck.viewmodels.TruckViewModelFactory
 import kotlinx.android.synthetic.main.fragment_add_truck.*
+import kotlinx.android.synthetic.main.fragment_add_truck.progressBar
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 open class AddTruckFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     protected var viewModel: TruckViewModel? = null
     protected var isDirty = false
 
@@ -57,8 +58,9 @@ open class AddTruckFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository =
+            TruckRepository(TruckRemoteDataSource(AppApiInstance.api(getAuthToken(requireActivity()))))
+        val viewModelFactory = TruckViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[TruckViewModel::class.java]
     }
 
@@ -159,8 +161,25 @@ open class AddTruckFragment : BaseAppFragment() {
                         truckNumberEditText.error = getString(R.string.error_truck_already_added)
                         truckNumberEditText.requestFocus()
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                saveButton.isEnabled = true
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        saveButton.isEnabled = true
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

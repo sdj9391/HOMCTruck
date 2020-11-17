@@ -9,11 +9,9 @@ import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.data.repositories.LoadRepository
 import com.homc.homctruck.restapi.DataBound
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-class LoadViewModel
-@Inject constructor(var app: Application, private val repository: LoadRepository) :
+class LoadViewModel(var app: Application, private val repository: LoadRepository) :
     ViewModel() {
 
     fun addNewLoad(load: Load): MutableLiveData<DataBound<ApiMessage>> {
@@ -30,7 +28,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -56,7 +57,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -82,7 +86,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -111,7 +118,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -137,7 +147,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -164,7 +177,10 @@ class LoadViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

@@ -15,26 +15,23 @@ import com.homc.homctruck.HomcTruckApp
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.data.models.AppConfig
-import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.account.BaseAccountManager
+import com.homc.homctruck.utils.getAuthToken
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.activities.MainDrawerActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import java.net.HttpURLConnection
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
-
 
 class LoginFragment : BaseFullScreenFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: AuthenticationViewModel? = null
 
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -123,8 +120,14 @@ class LoginFragment : BaseFullScreenFragment() {
         }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactory =
+            AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
@@ -301,9 +304,7 @@ class LoginFragment : BaseFullScreenFragment() {
             if (task.isSuccessful) {
                 val firebaseAuthToken = task.result.token
                 if (firebaseAuthToken.isNullOrBlank()) {
-                    DebugLog.e("Setting token null.")
-                    AppConfig.token = null
-                    DebugLog.e("Here")
+                    DebugLog.w("Setting token null")
                     BaseAccountManager(requireActivity()).removeAccount(requireActivity())
                 } else {
                     DebugLog.w("Setting token $firebaseAuthToken")
@@ -314,16 +315,12 @@ class LoginFragment : BaseFullScreenFragment() {
                     BaseAccountManager(requireActivity()).userDetails = userDetails
                     BaseAccountManager(requireActivity()).userAuthToken = firebaseAuthToken
                     BaseAccountManager(requireActivity()).isMobileVerified = true
-                    AppConfig.token = firebaseAuthToken
-                    DebugLog.e("Here")
                     (requireActivity().application as HomcTruckApp).initAppConfig()
                     initViewModel()
                     checkForNewUserApiCall(firebaseUser)
                 }
             } else {
-                DebugLog.w("Setting token null.")
-                AppConfig.token = null
-                DebugLog.e("Here")
+                DebugLog.w("Setting token null")
                 BaseAccountManager(requireActivity()).removeAccount(requireActivity())
             }
         }
@@ -360,18 +357,20 @@ class LoginFragment : BaseFullScreenFragment() {
                 }
                 is DataBound.Error -> {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
-                        DebugLog.w("Error: ${dataBound.error}")
+                        DebugLog.w("Error: ${dataBound.message}")
                         val user = BaseAccountManager(requireActivity()).userDetails
                         user?.verificationStatus = User.USER_STATUS_PENDING
                         user?.role = User.ROLE_USER
                         user?.let {
-                            viewModel?.addNewUser(user)?.observe(viewLifecycleOwner, observeAddUserDetails)
+                            viewModel?.addNewUser(user)
+                                ?.observe(viewLifecycleOwner, observeAddUserDetails)
                         }
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
                         openMainDrawerActivity()
                     }
-
+                }
+                is DataBound.Retry -> {
                 }
                 is DataBound.Loading -> {
                 }
@@ -392,8 +391,10 @@ class LoginFragment : BaseFullScreenFragment() {
                     openMainDrawerActivity()
                 }
                 is DataBound.Error -> {
-                    DebugLog.e("Error: ${dataBound.error}")
+                    DebugLog.e("Error: ${dataBound.message}")
                     openMainDrawerActivity()
+                }
+                is DataBound.Retry -> {
                 }
                 is DataBound.Loading -> {
                 }

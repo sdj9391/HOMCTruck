@@ -28,24 +28,25 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.models.getName
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.repositories.LoadRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.data.sourceremote.LoadRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.LoadViewModel
+import com.homc.homctruck.viewmodels.LoadViewModelFactory
 import com.homc.homctruck.views.adapters.FindLoadListAdapter
 import kotlinx.android.synthetic.main.fragment_find_load.*
 import java.net.HttpURLConnection
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class FindLoadFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: LoadViewModel? = null
     private var viewModelUser: AuthenticationViewModel? = null
     private var loadAdapter: FindLoadListAdapter? = null
@@ -79,11 +80,20 @@ class FindLoadFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository =
+            LoadRepository(LoadRemoteDataSource(AppApiInstance.api(getAuthToken(requireActivity()))))
+        val viewModelFactory = LoadViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[LoadViewModel::class.java]
+        val repositoryAuth = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactoryAuth =
+            AuthenticationViewModelFactory(requireActivity().application, repositoryAuth)
         viewModelUser =
-            ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
+            ViewModelProvider(this, viewModelFactoryAuth)[AuthenticationViewModel::class.java]
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -212,8 +222,8 @@ class FindLoadFragment : BaseAppFragment() {
                         if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                             showMessage(getString(R.string.error_something_went_wrong))
                         } else {
-                            DebugLog.e("Error: ${dataBound.error}")
-                            showMessage("${dataBound.error}")
+                            DebugLog.e("Error: ${dataBound.message}")
+                            showMessage("${dataBound.message}")
                         }
                     }
                     is DataBound.Loading -> {
@@ -331,8 +341,24 @@ class FindLoadFragment : BaseAppFragment() {
 
                 }
                 is DataBound.Error -> {
-                    DebugLog.w("Error: ${dataBound.error}")
+                    DebugLog.w("Error: ${dataBound.message}")
                     progressBar.visibility = View.GONE
+                    showMessageView(getString(R.string.error_something_went_wrong))
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                progressBar.visibility = View.GONE
+                                showMessageView(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        progressBar.visibility = View.GONE
+                        showMessageView(getString(R.string.error_something_went_wrong))
+                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

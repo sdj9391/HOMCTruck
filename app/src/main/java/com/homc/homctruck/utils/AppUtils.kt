@@ -8,16 +8,19 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
+import com.google.firebase.auth.FirebaseAuth
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.utils.account.BaseAccountManager
+import com.homc.homctruck.views.fragments.RetryListener
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -37,7 +40,7 @@ fun parseApiMessage(response: Response<*>?): ApiMessage {
         error.messageResId = R.string.error_server_no_response
         return error
     }
-    val converter = AppApiInstance.retrofit
+    val converter = AppApiInstance.retrofit(null)
         .responseBodyConverter<ApiMessage>(ApiMessage::class.java, arrayOfNulls(0))
     try {
         val errorBody = response.errorBody()
@@ -322,5 +325,32 @@ fun canHaveAppAccess(context: Context): Boolean {
             false
         }
         else -> true
+    }
+}
+
+fun getAuthToken(context: Context): String? {
+    return BaseAccountManager(context).userAuthToken
+}
+
+fun getAuthTokenFromFirebase(context: Context, retryListener: RetryListener) {
+    val user = FirebaseAuth.getInstance().currentUser
+    if (user == null || !isInternetAvailable()) {
+        DebugLog.e("User is null or internet is not available")
+        return
+    }
+
+    user.getIdToken(true).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val firebaseToken = task.result.token
+            if (firebaseToken.isNullOrBlank()) {
+                DebugLog.w("Setting token null.")
+            } else {
+                DebugLog.w("Setting firebaseToken")
+                BaseAccountManager(context).userAuthToken = firebaseToken
+            }
+        } else {
+            DebugLog.w("Setting token null.")
+        }
+        retryListener.retry()
     }
 }

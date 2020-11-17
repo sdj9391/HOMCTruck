@@ -8,6 +8,8 @@ import com.homc.homctruck.views.activities.BaseAppActivity
 
 open class BaseAppFragment : Fragment() {
 
+    var canRetryApiCall: Boolean = true
+
     protected fun setToolBarTitle(string: String?) {
         if (!isAdded) {
             DebugLog.e("fragment is not added")

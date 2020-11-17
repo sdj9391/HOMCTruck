@@ -9,3 +9,7 @@ interface StatusChangedListener {
 interface RefreshListener {
     fun onRefresh(dataItem: Any)
 }
+
+interface RetryListener {
+    fun retry()
+}

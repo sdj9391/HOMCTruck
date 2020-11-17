@@ -33,12 +33,14 @@ interface AppApiService {
 
     @GET("trucks")
     suspend fun getMyTruckList(
-        @Query("verificationStatus") verificationStatus: String?
+        @Query("verificationStatus") verificationStatus: String?,
+        @Query("keyword") truckNumberKeyword: String?
     ): Response<MutableList<Truck>>
 
     @GET("trucks/all")
     suspend fun getTruckList(
-        @Query("verificationStatus") verificationStatus: String?
+        @Query("verificationStatus") verificationStatus: String?,
+        @Query("keyword") truckNumberKeyword: String?
     ): Response<MutableList<Truck>>
 
     @PUT("trucks/{truckId}")

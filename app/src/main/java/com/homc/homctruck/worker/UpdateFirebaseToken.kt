@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.firebase.auth.FirebaseAuth
-import com.homc.homctruck.data.models.AppConfig
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import kotlinx.coroutines.async
@@ -29,8 +28,6 @@ class UpdateFirebaseToken(context: Context, params: WorkerParameters) :
                 if (tokenTask.isSuccessful) {
                     val idToken: String? = tokenTask.result.token
                     BaseAccountManager(applicationContext).userAuthToken = idToken
-                    AppConfig.token = idToken
-                    DebugLog.e("Here")
                     return@async Result.success()
                 } else {
                     DebugLog.e("getFirebaseAuthIdToken task fail")

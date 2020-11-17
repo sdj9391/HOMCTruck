@@ -10,12 +10,15 @@ import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.repositories.AuthenticationRepository
 import com.homc.homctruck.restapi.DataBound
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
-class AuthenticationViewModel
-@Inject constructor(var app: Application, private val repository: AuthenticationRepository) :
+class AuthenticationViewModel(
+    var app: Application,
+    private val repository: AuthenticationRepository
+) :
     ViewModel() {
+
+
 
     fun addNewUser(user: User): MutableLiveData<DataBound<ApiMessage>> {
         val liveData = MutableLiveData<DataBound<ApiMessage>>()
@@ -31,7 +34,10 @@ class AuthenticationViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -57,7 +63,10 @@ class AuthenticationViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -83,7 +92,10 @@ class AuthenticationViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -109,7 +121,10 @@ class AuthenticationViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -135,7 +150,10 @@ class AuthenticationViewModel
                             liveData.value = DataBound.Success(it.data)
                         }
                         is DataBound.Error -> {
-                            liveData.value = DataBound.Error(it.error, it.code)
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                        is DataBound.Retry -> {
+                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

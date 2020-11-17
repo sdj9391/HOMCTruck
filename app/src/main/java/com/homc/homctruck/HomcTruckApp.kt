@@ -11,9 +11,6 @@ import androidx.work.WorkManager
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
-import com.homc.homctruck.data.models.AppConfig
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.worker.UpdateFirebaseToken
@@ -24,7 +21,6 @@ class HomcTruckApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         initAppConfig()
-        initAppComponent()
         if (!BuildConfig.DEBUG) {
             initFirebaseAnalytics()
         }
@@ -66,16 +62,12 @@ class HomcTruckApp : MultiDexApplication() {
                     val firebaseToken = task.result.token
                     if (firebaseToken.isNullOrBlank()) {
                         DebugLog.w("Setting token null.")
-                        AppConfig.token = null
                     } else {
                         DebugLog.w("Setting token firebaseToken")
                         baseAccountManager.userAuthToken = firebaseToken
-                        AppConfig.token = firebaseToken
-                        initAppComponent()
                     }
                 } else {
                     DebugLog.w("Setting token null.")
-                    AppConfig.token = null
                 }
             }
         }
@@ -98,11 +90,6 @@ class HomcTruckApp : MultiDexApplication() {
         ).setConstraints(constraints).build()
 
         WorkManager.getInstance(baseContext).enqueue(dataSyncWorker)
-    }
-
-    private fun initAppComponent() {
-        AppConfig.token = BaseAccountManager(applicationContext).userAuthToken
-        DaggerAppComponent.builder().appModule(AppModule(this)).build()
     }
 
     private fun initFirebaseAnalytics() {

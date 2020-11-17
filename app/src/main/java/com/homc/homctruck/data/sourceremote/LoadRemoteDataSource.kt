@@ -8,18 +8,19 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.restapi.PostalApiService
 import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class LoadRemoteDataSource @Inject constructor(
-    private val api: AppApiService,
-    private val postalApi: PostalApiService
-) : LoadContract {
+class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
 
     override suspend fun addNewLoad(load: Load): DataBound<ApiMessage> {
         val data: ApiMessage
         try {
             val response = api.addNewLoad(load)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -48,6 +49,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.getLoadDetails(loadId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -76,6 +80,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.getMyLoadList()
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -104,6 +111,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.getMyPastLoadList()
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -134,6 +144,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.findLoadList(fromCity, toCity, pickUpDate)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -162,6 +175,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.updateLoadDetails(loadId, load)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -190,6 +206,9 @@ class LoadRemoteDataSource @Inject constructor(
         try {
             val response = api.deleteLoad(loadId)
             val code = response.code()
+            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                return DataBound.Retry(code)
+            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {

@@ -13,15 +13,13 @@ import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.data.models.User
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
-import com.homc.homctruck.utils.TopAndBottomOffset
-import com.homc.homctruck.utils.isInternetAvailable
-import com.homc.homctruck.utils.showConfirmDialog
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.adapters.UserListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
@@ -29,12 +27,9 @@ import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.item_common_list_layout.*
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 open class PendingUserListFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     protected var viewModel: AuthenticationViewModel? = null
     private var userAdapter: UserListAdapter? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
@@ -139,40 +134,58 @@ open class PendingUserListFragment : BaseAppFragment() {
             ?.observe(viewLifecycleOwner, observeUpdateUser(dataItem.verificationStatus, dataItem))
     }
 
-    private fun observeUpdateUser(verificationStatus: String?, dataItem: User) = Observer<DataBound<ApiMessage>> {
-        if (it == null) {
-            DebugLog.e("ApiMessage is null")
-            return@Observer
-        }
+    private fun observeUpdateUser(verificationStatus: String?, dataItem: User) =
+        Observer<DataBound<ApiMessage>> {
+            if (it == null) {
+                DebugLog.e("ApiMessage is null")
+                return@Observer
+            }
 
-        it.let { dataBound ->
-            when (dataBound) {
-                is DataBound.Success -> {
-                    progressBar.visibility = View.GONE
-                    showMessage("${dataBound.data.message}")
-                    getData()
-                    when (verificationStatus) {
-                        User.USER_STATUS_REJECT -> statusChangedListener?.onRejected(dataItem)
-                        User.USER_STATUS_CONFIRMED -> statusChangedListener?.onConfirmed(dataItem)
-                        User.USER_STATUS_PENDING -> statusChangedListener?.onPending(dataItem)
-                        else -> DebugLog.e("Wrong Status Found: $verificationStatus")
+            it.let { dataBound ->
+                when (dataBound) {
+                    is DataBound.Success -> {
+                        progressBar.visibility = View.GONE
+                        showMessage("${dataBound.data.message}")
+                        getData()
+                        when (verificationStatus) {
+                            User.USER_STATUS_REJECT -> statusChangedListener?.onRejected(dataItem)
+                            User.USER_STATUS_CONFIRMED -> statusChangedListener?.onConfirmed(
+                                dataItem
+                            )
+                            User.USER_STATUS_PENDING -> statusChangedListener?.onPending(dataItem)
+                            else -> DebugLog.e("Wrong Status Found: $verificationStatus")
+                        }
                     }
-                }
-                is DataBound.Error -> {
-                    progressBar.visibility = View.GONE
-                    if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                    is DataBound.Error -> {
+                        progressBar.visibility = View.GONE
+                        if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
+                            showMessage(getString(R.string.error_something_went_wrong))
+                        } else {
+                            DebugLog.e("Error: ${dataBound.message}")
+                            showMessage("${dataBound.message}")
+                        }
                     }
-                }
-                is DataBound.Loading -> {
-                    progressBar.visibility = View.VISIBLE
+                    is DataBound.Retry -> {
+                        if (canRetryApiCall) {
+                            getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                                override fun retry() {
+                                    initViewModel()
+                                    progressBar.visibility = View.GONE
+                                    showMessage(getString(R.string.error_something_went_wrong_try_again))
+                                }
+                            })
+                        } else {
+                            canRetryApiCall = false
+                            progressBar.visibility = View.GONE
+                            showMessage(getString(R.string.error_something_went_wrong))
+                        }
+                    }
+                    is DataBound.Loading -> {
+                        progressBar.visibility = View.VISIBLE
+                    }
                 }
             }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -187,8 +200,14 @@ open class PendingUserListFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactory =
+            AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
@@ -232,8 +251,25 @@ open class PendingUserListFragment : BaseAppFragment() {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         showMessage(getString(R.string.error_something_went_wrong))
                     } else {
-                        DebugLog.e("Error: ${dataBound.error}")
-                        showMessage("${dataBound.error}")
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                swipeRefreshLayout.isRefreshing = false
+                                progressBar.visibility = View.GONE
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        swipeRefreshLayout.isRefreshing = false
+                        progressBar.visibility = View.GONE
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

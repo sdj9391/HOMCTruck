@@ -10,17 +10,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.*
-import com.homc.homctruck.di.DaggerAppComponent
-import com.homc.homctruck.di.modules.AppModule
-import com.homc.homctruck.di.modules.ViewModelModule
+import com.homc.homctruck.data.models.User
+import com.homc.homctruck.data.models.getFullAddress
+import com.homc.homctruck.data.models.getName
+import com.homc.homctruck.data.models.isNullOrEmpty
+import com.homc.homctruck.data.repositories.AuthenticationRepository
+import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
+import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.utils.DebugLog
+import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.utils.hideSoftKeyboard
-import com.homc.homctruck.utils.isInternetAvailable
-import com.homc.homctruck.utils.setColorsAndCombineStrings
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
+import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.activities.AuthenticationActivity
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
@@ -29,12 +30,9 @@ import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.item_user_details.view.*
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class UserProfileFragment : BaseAppFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
     private var viewModel: AuthenticationViewModel? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
@@ -53,8 +51,14 @@ class UserProfileFragment : BaseAppFragment() {
     }
 
     private fun initViewModel() {
-        DaggerAppComponent.builder().viewModelModule(ViewModelModule())
-            .appModule(AppModule(requireActivity().application)).build().inject(this)
+        val repository = AuthenticationRepository(
+            AuthenticationRemoteDataSource(
+                AppApiInstance.api(getAuthToken(requireActivity())),
+                AppApiInstance.apiPostal(getAuthToken(requireActivity()))
+            )
+        )
+        val viewModelFactory =
+            AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
     }
 
@@ -113,9 +117,22 @@ class UserProfileFragment : BaseAppFragment() {
                     setUserContractorProfileDetails()
                 }
                 is DataBound.Error -> {
-                    DebugLog.w("Error: ${dataBound.error}")
+                    DebugLog.w("Error: ${dataBound.message}")
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         openLoginScreen()
+                    }
+                }
+                is DataBound.Retry -> {
+                    if (canRetryApiCall) {
+                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
+                            override fun retry() {
+                                initViewModel()
+                                showMessage(getString(R.string.error_something_went_wrong_try_again))
+                            }
+                        })
+                    } else {
+                        canRetryApiCall = false
+                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {
