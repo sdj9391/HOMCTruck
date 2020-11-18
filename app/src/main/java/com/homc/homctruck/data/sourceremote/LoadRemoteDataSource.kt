@@ -5,11 +5,9 @@ import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.restapi.AppApiService
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.restapi.PostalApiService
 import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
 
@@ -75,10 +73,10 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyLoadList(): DataBound<MutableList<Load>> {
+    override suspend fun getMyLoadList(materialKeyword: String?): DataBound<MutableList<Load>> {
         val data: MutableList<Load>
         try {
-            val response = api.getMyLoadList()
+            val response = api.getMyLoadList(materialKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)
@@ -106,10 +104,10 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyPastLoadList(): DataBound<MutableList<Load>> {
+    override suspend fun getMyPastLoadList(materialKeyword: String?): DataBound<MutableList<Load>> {
         val data: MutableList<Load>
         try {
-            val response = api.getMyPastLoadList()
+            val response = api.getMyPastLoadList(materialKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)
@@ -138,11 +136,11 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
     }
 
     override suspend fun findLoadList(
-        fromCity: String, toCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long, materialKeyword: String?
     ): DataBound<MutableList<Load>> {
         val data: MutableList<Load>
         try {
-            val response = api.findLoadList(fromCity, toCity, pickUpDate)
+            val response = api.findLoadList(fromCity, toCity, pickUpDate, materialKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)

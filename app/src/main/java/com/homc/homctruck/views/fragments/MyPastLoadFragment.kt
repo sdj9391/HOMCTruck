@@ -17,13 +17,13 @@ class MyPastLoadFragment : MyLoadFragment() {
         buttonBackView.visibility = View.GONE
     }
 
-    override fun getData() {
+    override fun getData(materialKeyword: String?) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getMyPastLoadList()
+        viewModel?.getMyPastLoadList(materialKeyword)
             ?.observe(viewLifecycleOwner, observeLoadList)
     }
 

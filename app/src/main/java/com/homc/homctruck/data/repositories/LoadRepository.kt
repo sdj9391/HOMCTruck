@@ -5,7 +5,6 @@ import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.data.sourceremote.LoadRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
-import javax.inject.Inject
 
 class LoadRepository(var dataSource: LoadRemoteDataSource) :
     LoadContract {
@@ -17,18 +16,18 @@ class LoadRepository(var dataSource: LoadRemoteDataSource) :
         return dataSource.getLoadDetails(loadId)
     }
 
-    override suspend fun getMyLoadList(): DataBound<MutableList<Load>> {
-        return dataSource.getMyLoadList()
+    override suspend fun getMyLoadList(materialKeyword: String?): DataBound<MutableList<Load>> {
+        return dataSource.getMyLoadList(materialKeyword)
     }
 
-    override suspend fun getMyPastLoadList(): DataBound<MutableList<Load>> {
-        return dataSource.getMyPastLoadList()
+    override suspend fun getMyPastLoadList(materialKeyword: String?): DataBound<MutableList<Load>> {
+        return dataSource.getMyPastLoadList(materialKeyword)
     }
 
     override suspend fun findLoadList(
-        fromCity: String, toCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long, materialKeyword: String?
     ): DataBound<MutableList<Load>> {
-        return dataSource.findLoadList(fromCity, toCity, pickUpDate)
+        return dataSource.findLoadList(fromCity, toCity, pickUpDate, materialKeyword)
     }
 
     override suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage> {

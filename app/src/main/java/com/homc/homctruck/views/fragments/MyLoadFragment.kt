@@ -1,6 +1,7 @@
 package com.homc.homctruck.views.fragments
 
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.item_common_list_layout.*
+import kotlinx.android.synthetic.main.item_search_view.view.*
 import java.net.HttpURLConnection
 
 open class MyLoadFragment : BaseAppFragment() {
@@ -37,6 +39,18 @@ open class MyLoadFragment : BaseAppFragment() {
     private var loadAdapter: LoadListAdapter? = null
     protected var navigationController: NavController? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
+
+
+    private val textWatcher: TextWatcher? = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (count > 2 || count == 0) {
+                getData(s.toString())
+            }
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
+    }
 
     private val onMoreClickListener = View.OnClickListener {
         val dataItem = it.tag
@@ -198,19 +212,26 @@ open class MyLoadFragment : BaseAppFragment() {
             onAddLoadClicked()
         }
         getData()
+        showSearchView()
+    }
+
+    private fun showSearchView() {
+        searchView.visibility = View.VISIBLE
+        searchView.searchEditText.hint = getString(R.string.msg_search_load_by_material_type)
+        searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun onAddLoadClicked() {
         navigationController?.navigate(R.id.action_myLoadFragment_to_addLoadFragment)
     }
 
-    protected open fun getData() {
+    protected open fun getData(materialKeyword: String? = null) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getMyLoadList()
+        viewModel?.getMyLoadList(materialKeyword)
             ?.observe(viewLifecycleOwner, observeLoadList)
     }
 

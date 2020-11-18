@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
 import com.homc.homctruck.views.adapters.FindLoadListAdapter
 import kotlinx.android.synthetic.main.fragment_find_load.*
+import kotlinx.android.synthetic.main.item_search_view.view.*
 import java.net.HttpURLConnection
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -64,6 +66,17 @@ class FindLoadFragment : BaseAppFragment() {
         }
 
         getUserDetails(ownerId)
+    }
+
+    private val textWatcher: TextWatcher? = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (count > 2 || count == 0) {
+                onApplyButtonClick(s.toString())
+            }
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
     }
 
     override fun onCreateView(
@@ -104,6 +117,8 @@ class FindLoadFragment : BaseAppFragment() {
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
         showFilterLayout()
+        searchView.searchEditText.hint = getString(R.string.msg_search_load_by_material_type)
+        searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun showFilterLayout() {
@@ -112,6 +127,7 @@ class FindLoadFragment : BaseAppFragment() {
         titleTextView2.visibility = View.GONE
         emptyView.visibility = View.GONE
         recyclerview.visibility = View.GONE
+        searchView.visibility = View.GONE
         if (isFilterApplied) {
             editFilterButton.visibility = View.VISIBLE
         } else {
@@ -133,6 +149,7 @@ class FindLoadFragment : BaseAppFragment() {
         applyButton.visibility = View.VISIBLE
 
         applyButton.setOnClickListener {
+            searchView.searchEditText.text = null
             onApplyButtonClick()
         }
 
@@ -160,8 +177,7 @@ class FindLoadFragment : BaseAppFragment() {
         }
     }
 
-    private fun onApplyButtonClick() {
-
+    private fun onApplyButtonClick(materialKeyword: String? = null) {
         val fromPlace = fromCityEditText.text.toString()
         if (fromPlace.isNullOrBlank()) {
             showMessage(getString(R.string.msg_select_from_city))
@@ -186,7 +202,7 @@ class FindLoadFragment : BaseAppFragment() {
 
         viewModel?.findLoadList(
             fromPlace, toPlace,
-            ((startMillis ?: 0) + TimeUnit.DAYS.toMillis(10))
+            ((startMillis ?: 0) + TimeUnit.DAYS.toMillis(10)), materialKeyword
         )?.observe(viewLifecycleOwner, observeLoadList(fromPlace, toPlace))
     }
 
@@ -288,6 +304,7 @@ class FindLoadFragment : BaseAppFragment() {
         titleTextView1.visibility = View.VISIBLE
         titleTextView2.visibility = View.VISIBLE
         recyclerview.visibility = View.VISIBLE
+        searchView.visibility = View.VISIBLE
         if (isFilterApplied) {
             editFilterButton.visibility = View.VISIBLE
         } else {

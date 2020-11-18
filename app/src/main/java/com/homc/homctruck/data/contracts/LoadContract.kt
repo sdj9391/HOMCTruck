@@ -7,10 +7,10 @@ import com.homc.homctruck.restapi.DataBound
 interface LoadContract {
     suspend fun addNewLoad(load: Load): DataBound<ApiMessage>
     suspend fun getLoadDetails(loadId: String): DataBound<Load>
-    suspend fun getMyLoadList(): DataBound<MutableList<Load>>
-    suspend fun getMyPastLoadList(): DataBound<MutableList<Load>>
+    suspend fun getMyLoadList(materialKeyword: String?): DataBound<MutableList<Load>>
+    suspend fun getMyPastLoadList(materialKeyword: String?): DataBound<MutableList<Load>>
     suspend fun findLoadList(
-        fromCity: String, toCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long, materialKeyword: String?
     ): DataBound<MutableList<Load>>
 
     suspend fun updateLoadDetails(loadId: String, load: Load): DataBound<ApiMessage>

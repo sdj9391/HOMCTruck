@@ -43,13 +43,13 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
         return liveData
     }
 
-    fun getMyLoadList(): MutableLiveData<DataBound<MutableList<Load>>> {
+    fun getMyLoadList(materialKeyword: String? = null): MutableLiveData<DataBound<MutableList<Load>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getMyLoadList()
+                val dataBound = repository.getMyLoadList(materialKeyword)
 
                 dataBound.let {
                     when (it) {
@@ -72,13 +72,13 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
         return liveData
     }
 
-    fun getMyPastLoadList(): MutableLiveData<DataBound<MutableList<Load>>> {
+    fun getMyPastLoadList(materialKeyword: String? = null): MutableLiveData<DataBound<MutableList<Load>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
 
         val job = viewModelScope.launch {
             try {
                 liveData.value = DataBound.Loading()
-                val dataBound = repository.getMyPastLoadList()
+                val dataBound = repository.getMyPastLoadList(materialKeyword)
 
                 dataBound.let {
                     when (it) {
@@ -102,7 +102,7 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
     }
 
     fun findLoadList(
-        fromCity: String, toCity: String, pickUpDate: Long
+        fromCity: String, toCity: String, pickUpDate: Long, materialKeyword: String? = null
     ): MutableLiveData<DataBound<MutableList<Load>>> {
         val liveData = MutableLiveData<DataBound<MutableList<Load>>>()
 
@@ -110,7 +110,7 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
             try {
                 liveData.value = DataBound.Loading()
                 val dataBound =
-                    repository.findLoadList(fromCity, toCity, pickUpDate)
+                    repository.findLoadList(fromCity, toCity, pickUpDate, materialKeyword)
 
                 dataBound.let {
                     when (it) {

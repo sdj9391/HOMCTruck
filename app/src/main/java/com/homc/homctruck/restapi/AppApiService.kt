@@ -87,16 +87,17 @@ interface AppApiService {
     suspend fun addNewLoad(@Body load: Load): Response<ApiMessage>
 
     @GET("loads")
-    suspend fun getMyLoadList(): Response<MutableList<Load>>
+    suspend fun getMyLoadList(@Query("keyword") truckNumberKeyword: String?): Response<MutableList<Load>>
 
     @GET("loads/past_loads")
-    suspend fun getMyPastLoadList(): Response<MutableList<Load>>
+    suspend fun getMyPastLoadList(@Query("keyword") truckNumberKeyword: String?): Response<MutableList<Load>>
 
     @GET("loads/find")
     suspend fun findLoadList(
         @Query("fromCity") fromCity: String,
         @Query("toCity") toCity: String,
-        @Query("pickUpDate") pickUpDate: Long
+        @Query("pickUpDate") pickUpDate: Long,
+        @Query("keyword") truckNumberKeyword: String?
     ): Response<MutableList<Load>>
 
     @PUT("loads/{loadId}")
