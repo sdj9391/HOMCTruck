@@ -17,13 +17,13 @@ class MyPastTruckRouteFragment : MyTruckRouteFragment() {
         bottomButton.visibility = View.GONE
     }
 
-    override fun getData() {
+    override fun getData(truckNumberKeyword: String?) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getMyPastTruckRouteList()
+        viewModel?.getMyPastTruckRouteList(truckNumberKeyword)
             ?.observe(viewLifecycleOwner, observeTruckRouteList)
     }
 

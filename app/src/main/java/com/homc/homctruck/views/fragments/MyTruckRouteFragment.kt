@@ -1,6 +1,7 @@
 package com.homc.homctruck.views.fragments
 
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,7 @@ import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 import com.homc.homctruck.views.dialogs.BottomSheetViewSection
 import kotlinx.android.synthetic.main.item_common_list_layout.*
+import kotlinx.android.synthetic.main.item_search_view.view.*
 import java.net.HttpURLConnection
 
 open class MyTruckRouteFragment : BaseAppFragment() {
@@ -46,6 +48,17 @@ open class MyTruckRouteFragment : BaseAppFragment() {
         }
 
         showMoreOptionBottomSheet(dataItem)
+    }
+
+    private val textWatcher: TextWatcher? = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (count > 2 || count == 0) {
+                getData(s.toString())
+            }
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
     }
 
     private val onPlankButtonClickListener = View.OnClickListener {
@@ -198,19 +211,26 @@ open class MyTruckRouteFragment : BaseAppFragment() {
             onAddTruckRouteClicked()
         }
         getData()
+        showSearchView()
+    }
+
+    private fun showSearchView() {
+        searchView.visibility = View.VISIBLE
+        searchView.searchEditText.hint = getString(R.string.msg_search_truck_route_by_truck_number)
+        searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun onAddTruckRouteClicked() {
         navigationController?.navigate(R.id.action_myTruckRouteFragment_to_addTruckRouteFragment)
     }
 
-    protected open fun getData() {
+    protected open fun getData(truckNumberKeyword: String? = null) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getMyTruckRouteList()
+        viewModel?.getMyTruckRouteList(truckNumberKeyword)
             ?.observe(viewLifecycleOwner, observeTruckRouteList)
     }
 

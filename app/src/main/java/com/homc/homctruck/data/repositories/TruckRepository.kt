@@ -6,7 +6,6 @@ import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
-import javax.inject.Inject
 
 class TruckRepository(var dataSource: TruckRemoteDataSource) :
     TruckContract {
@@ -38,18 +37,23 @@ class TruckRepository(var dataSource: TruckRemoteDataSource) :
         return dataSource.addNewTruckRoute(truckRoute)
     }
 
-    override suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>> {
-        return dataSource.getMyTruckRouteList()
+    override suspend fun getMyTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>> {
+        return dataSource.getMyTruckRouteList(truckNumberKeyword)
     }
 
-    override suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>> {
-        return dataSource.getMyPastTruckRouteList()
+    override suspend fun getMyPastTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>> {
+        return dataSource.getMyPastTruckRouteList(truckNumberKeyword)
     }
 
     override suspend fun findTruckRouteList(
-        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String,
+        fromCity: String,
+        toCity: String,
+        fromDate: Long,
+        toDate: Long,
+        truckNumberKeyword: String?
     ): DataBound<MutableList<TruckRoute>> {
-        return dataSource.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate)
+        return dataSource.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate, truckNumberKeyword)
     }
 
     override suspend fun updateTruckRouteDetails(

@@ -102,6 +102,17 @@
             app:layout_constraintTop_toBottomOf="@+id/titleTextView2"
             tools:text="Medul D Kapadni" />
 
+        <include
+            android:id="@+id/searchView"
+            layout="@layout/item_search_view"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView3"
+            tools:visibility="visible" />
+
         <View
             android:id="@+id/backView"
             android:layout_width="0dp"
@@ -110,7 +121,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/applyButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView3" />
+            app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/truckTypeDropDownField"
@@ -123,7 +134,7 @@
             android:layout_marginEnd="@dimen/default_space"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView3">
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
 
             <AutoCompleteTextView
                 android:id="@+id/truckTypeDropDown"
@@ -245,7 +256,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView3"
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
             app:layout_goneMarginBottom="0dp"
             tools:visibility="visible" />
 
@@ -256,7 +267,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titleTextView3"
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
             app:layout_goneMarginBottom="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

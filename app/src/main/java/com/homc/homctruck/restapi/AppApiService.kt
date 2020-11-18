@@ -57,10 +57,10 @@ interface AppApiService {
     suspend fun addNewTruckRoute(@Body truckRoute: TruckRoute): Response<ApiMessage>
 
     @GET("truck_routes")
-    suspend fun getMyTruckRouteList(): Response<MutableList<TruckRoute>>
+    suspend fun getMyTruckRouteList(@Query("keyword") truckNumberKeyword: String?): Response<MutableList<TruckRoute>>
 
     @GET("truck_routes/past_truck_routes")
-    suspend fun getMyPastTruckRouteList(): Response<MutableList<TruckRoute>>
+    suspend fun getMyPastTruckRouteList(@Query("keyword") truckNumberKeyword: String?): Response<MutableList<TruckRoute>>
 
     @GET("truck_routes/find")
     suspend fun findTruckRouteList(
@@ -68,7 +68,8 @@ interface AppApiService {
         @Query("fromCity") fromCity: String,
         @Query("toCity") toCity: String,
         @Query("fromDate") fromDate: Long,
-        @Query("toDate") toDate: Long
+        @Query("toDate") toDate: Long,
+        @Query("keyword") truckNumberKeyword: String?
     ): Response<MutableList<TruckRoute>>
 
     @PUT("truck_routes/{truckRouteId}")

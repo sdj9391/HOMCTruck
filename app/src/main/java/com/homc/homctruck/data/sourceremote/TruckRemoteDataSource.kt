@@ -6,11 +6,9 @@ import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.restapi.AppApiService
 import com.homc.homctruck.restapi.DataBound
-import com.homc.homctruck.restapi.PostalApiService
 import com.homc.homctruck.utils.parse
 import com.homc.homctruck.utils.parseApiMessage
 import java.net.HttpURLConnection
-import javax.inject.Inject
 
 class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
 
@@ -231,10 +229,10 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>> {
+    override suspend fun getMyTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
-            val response = api.getMyTruckRouteList()
+            val response = api.getMyTruckRouteList(truckNumberKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)
@@ -262,10 +260,10 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         return DataBound.Success(data)
     }
 
-    override suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>> {
+    override suspend fun getMyPastTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
-            val response = api.getMyPastTruckRouteList()
+            val response = api.getMyPastTruckRouteList(truckNumberKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)
@@ -294,12 +292,17 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
     }
 
     override suspend fun findTruckRouteList(
-        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String,
+        fromCity: String,
+        toCity: String,
+        fromDate: Long,
+        toDate: Long,
+        truckNumberKeyword: String?
     ): DataBound<MutableList<TruckRoute>> {
         val data: MutableList<TruckRoute>
         try {
             val response =
-                api.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate)
+                api.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate, truckNumberKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)

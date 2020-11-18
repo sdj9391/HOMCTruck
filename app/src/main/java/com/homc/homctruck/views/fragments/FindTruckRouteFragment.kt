@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,7 @@ import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
+import kotlinx.android.synthetic.main.item_search_view.view.*
 import java.net.HttpURLConnection
 import java.util.*
 
@@ -55,6 +57,18 @@ class FindTruckRouteFragment : BaseAppFragment() {
     private var endMillis: Long? = null
     private var isFromCitySelected: Boolean = false
     private var isFilterApplied: Boolean = false
+
+
+    private val textWatcher: TextWatcher? = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (count > 2 || count == 0) {
+                onApplyButtonClick(s.toString())
+            }
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
+    }
 
     private val onEnquiryClickListener = View.OnClickListener {
         if (!canHaveFeatureAccess((requireContext()))) return@OnClickListener
@@ -105,6 +119,9 @@ class FindTruckRouteFragment : BaseAppFragment() {
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
         showFilterLayout()
+
+        searchView.searchEditText.hint = getString(R.string.msg_search_load_by_material_type)
+        searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun showFilterLayout() {
@@ -114,6 +131,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         titleTextView3.visibility = View.GONE
         emptyView.visibility = View.GONE
         recyclerview.visibility = View.GONE
+        searchView.visibility = View.GONE
         if (isFilterApplied) {
             editFilterButton.visibility = View.VISIBLE
         } else {
@@ -137,6 +155,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         applyButton.visibility = View.VISIBLE
 
         applyButton.setOnClickListener {
+            searchView.searchEditText.text = null
             onApplyButtonClick()
         }
 
@@ -183,7 +202,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         }
     }
 
-    private fun onApplyButtonClick() {
+    private fun onApplyButtonClick(materialKeyword: String? = null) {
 
         val truckType = truckTypeDropDown.text.toString().trim()
         if (truckType.isNullOrBlank()) {
@@ -224,7 +243,8 @@ class FindTruckRouteFragment : BaseAppFragment() {
             fromPlace,
             toPlace,
             startMillis ?: 0,
-            endMillis ?: 0
+            endMillis ?: 0,
+            materialKeyword
         )
             ?.observe(viewLifecycleOwner, observeTruckRouteList(truckType, fromPlace, toPlace))
     }
@@ -354,6 +374,7 @@ class FindTruckRouteFragment : BaseAppFragment() {
         titleTextView2.visibility = View.VISIBLE
         titleTextView3.visibility = View.VISIBLE
         recyclerview.visibility = View.VISIBLE
+        searchView.visibility = View.VISIBLE
         if (isFilterApplied) {
             editFilterButton.visibility = View.VISIBLE
         } else {

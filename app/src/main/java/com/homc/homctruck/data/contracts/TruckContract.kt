@@ -14,10 +14,15 @@ interface TruckContract {
     suspend fun deleteTruck(truckId: String): DataBound<ApiMessage>
 
     suspend fun addNewTruckRoute(truckRoute: TruckRoute): DataBound<ApiMessage>
-    suspend fun getMyTruckRouteList(): DataBound<MutableList<TruckRoute>>
-    suspend fun getMyPastTruckRouteList(): DataBound<MutableList<TruckRoute>>
+    suspend fun getMyTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>>
+    suspend fun getMyPastTruckRouteList(truckNumberKeyword: String?): DataBound<MutableList<TruckRoute>>
     suspend fun findTruckRouteList(
-        truckType: String, fromCity: String, toCity: String, fromDate: Long, toDate: Long
+        truckType: String,
+        fromCity: String,
+        toCity: String,
+        fromDate: Long,
+        toDate: Long,
+        truckNumberKeyword: String?
     ): DataBound<MutableList<TruckRoute>>
 
     suspend fun updateTruckRouteDetails(
