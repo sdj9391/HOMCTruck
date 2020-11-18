@@ -231,6 +231,7 @@ open class PendingTruckListFragment : BaseAppFragment() {
 
     private fun showSearchView() {
         searchView.visibility = View.VISIBLE
+        searchView.searchEditText.hint = getString(R.string.msg_search_truck_by_truck_number)
         searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 

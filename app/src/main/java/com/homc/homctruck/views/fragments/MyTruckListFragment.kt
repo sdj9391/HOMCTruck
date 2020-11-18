@@ -1,6 +1,7 @@
 package com.homc.homctruck.views.fragments
 
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.item_common_list_layout.emptyView
 import kotlinx.android.synthetic.main.item_common_list_layout.progressBar
 import kotlinx.android.synthetic.main.item_common_list_layout.recyclerview
 import kotlinx.android.synthetic.main.item_common_list_layout.swipeRefreshLayout
+import kotlinx.android.synthetic.main.item_search_view.view.*
 import java.net.HttpURLConnection
 
 class MyTruckListFragment : BaseAppFragment() {
@@ -48,6 +50,17 @@ class MyTruckListFragment : BaseAppFragment() {
         }
 
         showMoreOptionBottomSheet(dataItem)
+    }
+
+    private val textWatcher: TextWatcher? = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (count > 2 || count == 0) {
+                getData(s.toString())
+            }
+        }
+
+        override fun afterTextChanged(s: android.text.Editable?) {}
     }
 
     private fun showMoreOptionBottomSheet(dataItem: Truck) {
@@ -198,19 +211,26 @@ class MyTruckListFragment : BaseAppFragment() {
             onAddTruckClicked()
         }
         getData()
+        showSearchView()
+    }
+
+    private fun showSearchView() {
+        searchView.visibility = View.VISIBLE
+        searchView.searchEditText.hint = getString(R.string.msg_search_truck_by_truck_number)
+        searchView.searchEditText.addTextChangedListener(textWatcher)
     }
 
     private fun onAddTruckClicked() {
         navigationController?.navigate(R.id.action_userTruckListFragment_to_addTruckFragment)
     }
 
-    private fun getData() {
+    private fun getData(truckNumberKeyword: String? = null) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getMyTruckList(truckNumberKeyword = null)
+        viewModel?.getMyTruckList(null, truckNumberKeyword)
             ?.observe(viewLifecycleOwner, observeTruckList)
     }
 
