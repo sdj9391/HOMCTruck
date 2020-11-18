@@ -16,7 +16,8 @@ interface AppApiService {
 
     @GET("users")
     suspend fun getUserList(
-        @Query("verificationStatus") verificationStatus: String
+        @Query("verificationStatus") verificationStatus: String,
+        @Query("keyword") userNameKeyword: String?
     ): Response<MutableList<User>>
 
     @PUT("users/{userId}")

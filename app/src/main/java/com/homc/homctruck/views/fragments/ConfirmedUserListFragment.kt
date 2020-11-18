@@ -6,13 +6,13 @@ import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
 
 class ConfirmedUserListFragment : PendingUserListFragment() {
-    override fun getData() {
+    override fun getData(truckNumberKeyword: String?) {
         if (!isInternetAvailable()) {
             showMessage(getString(R.string.msg_no_internet))
             return
         }
 
-        viewModel?.getUserList(User.USER_STATUS_CONFIRMED)
+        viewModel?.getUserList(User.USER_STATUS_CONFIRMED, truckNumberKeyword)
             ?.observe(viewLifecycleOwner, observeUserList)
     }
 

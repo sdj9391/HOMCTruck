@@ -79,10 +79,10 @@ class AuthenticationRemoteDataSource(
         return DataBound.Success(data)
     }
 
-    override suspend fun getUserList(verificationStatus: String): DataBound<MutableList<User>> {
+    override suspend fun getUserList(verificationStatus: String, userNameKeyword: String?): DataBound<MutableList<User>> {
         val data: MutableList<User>
         try {
-            val response = api.getUserList(verificationStatus)
+            val response = api.getUserList(verificationStatus, userNameKeyword)
             val code = response.code()
             if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 return DataBound.Retry(code)

@@ -6,7 +6,6 @@ import com.homc.homctruck.data.models.ResponsePostalAddress
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
-import javax.inject.Inject
 
 class AuthenticationRepository(var dataSource: AuthenticationRemoteDataSource) :
     AuthenticationContract {
@@ -18,8 +17,8 @@ class AuthenticationRepository(var dataSource: AuthenticationRemoteDataSource) :
         return dataSource.getUserDetails(userId)
     }
 
-    override suspend fun getUserList(verificationStatus: String): DataBound<MutableList<User>> {
-        return dataSource.getUserList(verificationStatus)
+    override suspend fun getUserList(verificationStatus: String, userNameKeyword: String?): DataBound<MutableList<User>> {
+        return dataSource.getUserList(verificationStatus, userNameKeyword)
     }
 
     override suspend fun updateUserDetails(userId: String, user: User): DataBound<ApiMessage> {
