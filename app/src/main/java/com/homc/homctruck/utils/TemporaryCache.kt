@@ -8,7 +8,6 @@ import android.util.LruCache
  * It is a reusable component that can be used to pass the data in/out classes just by using the memory.
  * Can be used in where the objects need to be made parcelable and then passed across into the intent.
  *
- * TODO: 11/14/16 Move to [net.the4thdimension.android.Utils]
  */
 object TemporaryCache {
     private val cache = LruCache<String, Any>(20)

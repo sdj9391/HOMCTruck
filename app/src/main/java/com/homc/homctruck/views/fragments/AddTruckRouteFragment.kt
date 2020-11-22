@@ -302,7 +302,6 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             return null
         }
 
-
         if (startMillis!! > endMillis!!) {
             showMessage(getString(R.string.msg_journey_end_date_greater_journey_start_date))
             return null

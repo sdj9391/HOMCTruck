@@ -72,7 +72,8 @@ class FindLoadFragment : BaseAppFragment() {
     private val textWatcher: TextWatcher? = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (count > 2 || count == 0) {
+            var length = s.length ?: 0
+            if (length > 2 || length == 0) {
                 onApplyButtonClick(s.toString())
             }
         }

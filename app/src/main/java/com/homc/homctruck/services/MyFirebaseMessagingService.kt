@@ -3,6 +3,9 @@ package com.homc.homctruck.services
 import android.content.Context
 import androidx.work.*
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
+import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.worker.UpdateFirebaseMessagingTokenWorker
 
@@ -12,6 +15,11 @@ import com.homc.homctruck.worker.UpdateFirebaseMessagingTokenWorker
 open class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         sendTokenToServer(token, baseContext)
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        DebugLog.e("Firebase Notification: ${Gson().toJson(remoteMessage)}")
     }
 
     companion object {
