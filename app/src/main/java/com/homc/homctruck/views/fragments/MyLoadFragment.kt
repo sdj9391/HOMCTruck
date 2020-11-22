@@ -45,7 +45,7 @@ open class MyLoadFragment : BaseAppFragment() {
     private val textWatcher: TextWatcher? = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            var length = s.length ?: 0
+            val length = s?.length ?: 0
             if (length > 2 || length == 0) {
                 getData(s.toString())
             }
