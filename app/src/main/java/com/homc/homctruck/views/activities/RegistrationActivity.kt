@@ -70,9 +70,9 @@ class RegistrationActivity : BaseAppActivity() {
     private fun onPayClick() {
         try {
             val uri: Uri = Uri.Builder().scheme("upi").authority("pay")
-                .appendQueryParameter("pa", "8698682220@upi") // Payee Vpa
-                .appendQueryParameter("pn", "Sumit Dinesh Jain") // Payee Name
-                .appendQueryParameter("mc", "BCR2DN6TWOH4PQAH") // Payee Merchant Code
+                .appendQueryParameter("pa", "asd@upi") // Payee Vpa
+                .appendQueryParameter("pn", "asd") // Payee Name
+                .appendQueryParameter("mc", "asd") // Payee Merchant Code
                 .appendQueryParameter("tr", "REFT12345") // Transaction Ref Id
                 .appendQueryParameter("tn", "Test transaction") // Description
                 .appendQueryParameter("am", "10.00") // Amount
