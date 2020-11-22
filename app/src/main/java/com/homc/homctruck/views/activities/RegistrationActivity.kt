@@ -40,6 +40,11 @@ class RegistrationActivity : BaseAppActivity() {
         initViewModel()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun initViewModel() {
         val repository =
             TruckRepository(TruckRemoteDataSource(AppApiInstance.api(getAuthToken(this))))

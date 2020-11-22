@@ -18,6 +18,8 @@ import com.homc.homctruck.data.repositories.AuthenticationRepository
 import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
+import com.homc.homctruck.services.MyFirebaseMessagingService
+import com.homc.homctruck.services.cancelNotification
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
@@ -65,6 +67,7 @@ class UserProfileFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cancelNotification(requireActivity(), MyFirebaseMessagingService.NOTIFICATION_ID_USER_STATUS)
         setToolBarTitle(getString(R.string.menu_user_profile))
         getUserDetails()
         setUserDetails()

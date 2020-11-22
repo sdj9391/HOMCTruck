@@ -22,7 +22,8 @@ open class BaseAppActivity : AppCompatActivity() {
         }
 
         if (isBackEnable) {
-            actionBar?.setDisplayHomeAsUpEnabled(true);
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setHomeButtonEnabled(true)
         }
     }
 

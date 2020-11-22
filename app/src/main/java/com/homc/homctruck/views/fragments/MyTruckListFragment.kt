@@ -21,6 +21,8 @@ import com.homc.homctruck.data.repositories.TruckRepository
 import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
+import com.homc.homctruck.services.MyFirebaseMessagingService
+import com.homc.homctruck.services.cancelNotification
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
@@ -221,6 +223,7 @@ class MyTruckListFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cancelNotification(requireActivity(), MyFirebaseMessagingService.NOTIFICATION_ID_USER_STATUS)
         setToolBarTitle(getString(R.string.label_my_trucks))
         navigationController = Navigation.findNavController(requireView())
         swipeRefreshLayout.setOnRefreshListener { getData() }
