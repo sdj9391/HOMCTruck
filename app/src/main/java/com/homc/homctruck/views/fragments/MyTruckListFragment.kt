@@ -1,5 +1,7 @@
 package com.homc.homctruck.views.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -22,6 +24,8 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
+import com.homc.homctruck.views.activities.RegistrationActivity
+import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.TruckListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
@@ -49,6 +53,11 @@ class MyTruckListFragment : BaseAppFragment() {
             return@OnClickListener
         }
 
+        if (dataItem.transactionStatus == Truck.TRANSACTION_STATUS_SUCCESS ||
+            dataItem.transactionStatus == Truck.TRANSACTION_STATUS_SUBMITTED) {
+            DebugLog.w("No need to show menu as truck is already registered for plan or submitted the request")
+            return@OnClickListener
+        }
         showMoreOptionBottomSheet(dataItem)
     }
 
@@ -65,6 +74,14 @@ class MyTruckListFragment : BaseAppFragment() {
 
     private fun showMoreOptionBottomSheet(dataItem: Truck) {
         val sectionItems = mutableListOf<BottomSheetViewItem>()
+        if (!dataItem.verificationStatus.equals(Truck.TRUCK_STATUS_CONFIRMED, true)) {
+            sectionItems.add(
+                BottomSheetViewItem(
+                    ACTION_ID_TRUCK_REGISTRATION, R.drawable.ic_membership_black,
+                    getString(R.string.label_truck_registration), null, dataItem
+                )
+            )
+        }
         sectionItems.add(
             BottomSheetViewItem(
                 ACTION_ID_EDIT, R.drawable.ic_edit_black,
@@ -96,10 +113,17 @@ class MyTruckListFragment : BaseAppFragment() {
             return@OnClickListener
         }
         when (it.id) {
+            ACTION_ID_TRUCK_REGISTRATION -> openTruckRegistration(dataItem)
             ACTION_ID_EDIT -> editTruckItem(dataItem)
             ACTION_ID_DELETE -> deleteTruckItem(dataItem)
             else -> DebugLog.e("Id not matched")
         }
+    }
+
+    private fun openTruckRegistration(dataItem: Truck) {
+        TemporaryCache.put(EditTruckFragment.EXTRA_TRUCK_DETAILS, dataItem)
+        val intent = Intent(requireActivity(), RegistrationActivity::class.java)
+        startActivityForResult(intent, REQUEST_CODE_REGISTRATION)
     }
 
     private fun editTruckItem(dataItem: Truck) {
@@ -304,8 +328,26 @@ class MyTruckListFragment : BaseAppFragment() {
         recyclerview.visibility = View.VISIBLE
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_CODE_REGISTRATION) {
+            if (resultCode == Activity.RESULT_OK) {
+                getData()
+                showMessage(getString(R.string.msg_truck_registration_success))
+                return
+            } else if (requestCode == RESULT_SUBMITTED) {
+                getData()
+                showMessage(getString(R.string.msg_transection_pending))
+                return
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     companion object {
-        const val ACTION_ID_EDIT = 111
-        const val ACTION_ID_DELETE = 222
+        const val ACTION_ID_TRUCK_REGISTRATION = 111
+        const val ACTION_ID_EDIT = 222
+        const val ACTION_ID_DELETE = 333
+        const val REQUEST_CODE_REGISTRATION = 1212
+        const val RESULT_SUBMITTED = -2
     }
 }

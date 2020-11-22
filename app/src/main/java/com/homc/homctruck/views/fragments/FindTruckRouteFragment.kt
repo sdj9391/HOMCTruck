@@ -41,6 +41,7 @@ import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
 import kotlinx.android.synthetic.main.item_search_view.view.*

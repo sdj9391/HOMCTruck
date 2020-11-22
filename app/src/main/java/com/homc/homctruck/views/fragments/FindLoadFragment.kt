@@ -40,6 +40,7 @@ import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.FindLoadListAdapter
 import kotlinx.android.synthetic.main.fragment_find_load.*
 import kotlinx.android.synthetic.main.item_search_view.view.*

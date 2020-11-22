@@ -20,7 +20,10 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
-import com.homc.homctruck.views.adapters.TruckListAdapter
+import com.homc.homctruck.views.activities.RefreshListener
+import com.homc.homctruck.views.activities.RetryListener
+import com.homc.homctruck.views.activities.StatusChangedListener
+import com.homc.homctruck.views.adapters.AllTruckListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
@@ -32,7 +35,7 @@ import java.net.HttpURLConnection
 open class PendingTruckListFragment : BaseAppFragment() {
 
     protected var viewModel: TruckViewModel? = null
-    private var truckAdapter: TruckListAdapter? = null
+    private var truckAdapter: AllTruckListAdapter? = null
     private var bottomSheetListDialogFragment: BottomSheetListDialogFragment? = null
 
     private val textWatcher: TextWatcher? = object : TextWatcher {
@@ -294,7 +297,7 @@ open class PendingTruckListFragment : BaseAppFragment() {
     }
 
     private fun showData(data: MutableList<Truck>) {
-        truckAdapter = TruckListAdapter(data as MutableList<Any>)
+        truckAdapter = AllTruckListAdapter(data as MutableList<Any>)
         truckAdapter?.onMoreClickListener = onMoreClickListener
         recyclerview.adapter = truckAdapter
 

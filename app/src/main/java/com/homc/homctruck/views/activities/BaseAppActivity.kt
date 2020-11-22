@@ -11,13 +11,18 @@ import com.homc.homctruck.utils.DebugLog
 open class BaseAppActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
+    var canRetryApiCall: Boolean = true
 
-    protected fun initToolbar() {
+    protected fun initToolbar(isBackEnable: Boolean = false) {
         toolbar = findViewById(R.id.toolbar)
         if (toolbar != null) {
             setSupportActionBar(toolbar)
         } else {
             DebugLog.w("Toolbar is null")
+        }
+
+        if (isBackEnable) {
+            actionBar?.setDisplayHomeAsUpEnabled(true);
         }
     }
 

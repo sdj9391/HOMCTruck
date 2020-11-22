@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+import com.google.firebase.messaging.FirebaseMessaging
 import com.homc.homctruck.HomcTruckApp
 import com.homc.homctruck.R
 import com.homc.homctruck.data.models.ApiMessage
@@ -19,6 +20,7 @@ import com.homc.homctruck.data.repositories.AuthenticationRepository
 import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
+import com.homc.homctruck.services.sendTokenToServer
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.utils.getAuthToken
@@ -327,8 +329,16 @@ class LoginFragment : BaseFullScreenFragment() {
     }
 
     private fun openMainDrawerActivity() {
-        startActivity(Intent(requireActivity(), MainDrawerActivity::class.java))
-        requireActivity().finish()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                DebugLog.e("Fetching FCM registration token failed ${task.exception}")
+            } else {
+                val token = task.result
+                sendTokenToServer(token, requireActivity())
+            }
+            startActivity(Intent(requireActivity(), MainDrawerActivity::class.java))
+            requireActivity().finish()
+        }
     }
 
     private fun checkForNewUserApiCall(firebaseUser: FirebaseUser) {

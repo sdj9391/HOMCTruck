@@ -45,6 +45,10 @@
             android:name=".views.activities.MainDrawerActivity"
             android:theme="@style/Theme.HOMCTruck" />
 
+        <activity
+            android:name=".views.activities.RegistrationActivity"
+            android:theme="@style/Theme.HOMCTruck" />
+
         <service android:name=".utils.account.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />

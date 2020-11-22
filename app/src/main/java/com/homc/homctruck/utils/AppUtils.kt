@@ -8,7 +8,6 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -20,7 +19,7 @@ import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.views.fragments.RetryListener
+import com.homc.homctruck.views.activities.RetryListener
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection

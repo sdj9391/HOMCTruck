@@ -7,11 +7,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.Load
 import com.homc.homctruck.data.models.Truck
 import com.homc.homctruck.utils.setColorsAndCombineStrings
 
-class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
+open class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
 
     var onMoreClickListener: View.OnClickListener? = null
 
@@ -54,10 +53,19 @@ class TruckListAdapter(data: MutableList<Any>?) : BaseAdapter(data) {
             context.getString(R.string.label_chesse_number),
             dataItem.chesseNumber
         )
+        changeButtonIcon(dataItem, holder)
         holder.moreButton.tag = dataItem
     }
 
-    private inner class TruckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    protected open fun changeButtonIcon(dataItem: Truck, holder: TruckViewHolder) {
+        when (dataItem.transactionStatus) {
+            Truck.TRANSACTION_STATUS_SUCCESS -> holder.moreButton.setImageResource(R.drawable.ic_check)
+            Truck.TRANSACTION_STATUS_SUBMITTED -> holder.moreButton.setImageResource(R.drawable.ic_exclamation)
+            else -> holder.moreButton.setImageResource(R.drawable.ic_more_vertical_black)
+        }
+    }
+
+    protected inner class TruckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView1: TextView = itemView.findViewById(R.id.titleTextView1)
         val titleTextView2: TextView = itemView.findViewById(R.id.titleTextView2)
         val subtitleTextView1: TextView = itemView.findViewById(R.id.subtitleTextView1)

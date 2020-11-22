@@ -178,4 +178,10 @@
     <string name="msg_search_truck_route_by_truck_number">Search truck route by truck number</string>
     <string name="msg_search_user_by_user_name">Search user by user name</string>
     <string name="msg_search_load_by_material_type">Search load by material type</string>
+    <string name="label_truck_registration">Truck Registration</string>
+    <string name="label_registration_period">Registration Period</string>
+    <string name="msg_truck_registration">Register your truck to access truck route creation and get GPS system also</string>
+    <string name="label_pay_x_rs">Pay %1$s ₹</string>
+    <string name="msg_truck_registration_success">Truck Registration Successful</string>
+    <string name="msg_transection_pending">Got pending status from UPI app. If money is cut from your bank account then contact us with transection id of transection</string>
 </resources>

@@ -21,6 +21,7 @@ import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.progressBar
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.saveButton

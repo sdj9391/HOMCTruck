@@ -1,4 +1,4 @@
-package com.homc.homctruck.views.fragments
+package com.homc.homctruck.views.activities
 
 interface StatusChangedListener {
     fun onPending(dataItem: Any)

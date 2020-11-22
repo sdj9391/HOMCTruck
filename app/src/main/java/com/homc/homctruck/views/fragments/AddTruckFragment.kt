@@ -22,6 +22,7 @@ import com.homc.homctruck.utils.getAuthTokenFromFirebase
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_add_truck.*
 import kotlinx.android.synthetic.main.fragment_add_truck.progressBar
 import java.net.HttpURLConnection
@@ -125,6 +126,7 @@ open class AddTruckFragment : BaseAppFragment() {
         truck.type = truckType
         truck.ownerName = ownerName
         truck.chesseNumber = chesseNumber.toUpperCase()
+        truck.verificationStatus = Truck.TRUCK_STATUS_PENDING
         return truck
     }
 

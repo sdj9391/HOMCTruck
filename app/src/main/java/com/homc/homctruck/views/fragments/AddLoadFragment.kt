@@ -33,6 +33,7 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_add_load.*
 import kotlinx.android.synthetic.main.fragment_add_load.expectedPickUpDateEditText
 import kotlinx.android.synthetic.main.fragment_add_load.fromCityEditText

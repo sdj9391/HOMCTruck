@@ -22,6 +22,7 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
+import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.AdapterDataItem
 import com.homc.homctruck.views.adapters.BaseAdapter
 import com.homc.homctruck.views.adapters.LoadListAdapter

@@ -13,7 +13,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.worker.UpdateFirebaseToken
+import com.homc.homctruck.worker.UpdateFirebaseTokenWorker
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -86,7 +86,7 @@ class HomcTruckApp : MultiDexApplication() {
             .build()
 
         val dataSyncWorker = PeriodicWorkRequest.Builder(
-            UpdateFirebaseToken::class.java, 1, TimeUnit.HOURS
+            UpdateFirebaseTokenWorker::class.java, 1, TimeUnit.HOURS
         ).setConstraints(constraints).build()
 
         WorkManager.getInstance(baseContext).enqueue(dataSyncWorker)

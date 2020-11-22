@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.homc.homctruck.R
+import com.homc.homctruck.views.activities.StatusChangedListener
 
 class UserTabFragment : BaseTabFragment() {
     private val pendingFragment = PendingUserListFragment()
