@@ -326,6 +326,7 @@ open class AddLoadFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     showMessage(getString(R.string.msg_load_details_saved_successfully))
                     isDirty = false
+                    requireActivity().onBackPressed()
                 }
                 is DataBound.Error -> {
                     saveButton.isEnabled = true

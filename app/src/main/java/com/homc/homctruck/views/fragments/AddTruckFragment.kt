@@ -153,6 +153,7 @@ open class AddTruckFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     showMessage(getString(R.string.msg_truck_details_saved_successfully))
                     isDirty = false
+                    requireActivity().onBackPressed()
                 }
                 is DataBound.Error -> {
                     saveButton.isEnabled = true

@@ -214,7 +214,6 @@ open class PendingUserListFragment : BaseAppFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initViewModel()
-        showSearchView()
     }
 
     private fun showSearchView() {
@@ -244,6 +243,7 @@ open class PendingUserListFragment : BaseAppFragment() {
         val topOffsetDecoration = TopAndBottomOffset(offsetPx.toInt(), offsetPx.toInt())
         recyclerview.addItemDecoration(topOffsetDecoration)
         getData()
+        showSearchView()
     }
 
     protected open fun getData(truckNumberKeyword: String? = null) {

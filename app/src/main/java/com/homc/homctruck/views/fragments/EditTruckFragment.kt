@@ -50,6 +50,9 @@ class EditTruckFragment : AddTruckFragment() {
             DebugLog.e("Truck Id found null")
             return
         }
+        truck.id = truckDetails?.id
+        truck.ownerId = truckDetails?.ownerId
+        truck.verificationStatus = Truck.TRUCK_STATUS_PENDING
 
         viewModel?.updateTruckDetails(truckId, truck)
             ?.observe(viewLifecycleOwner, observeSaveTruckDetails)

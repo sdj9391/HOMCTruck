@@ -291,6 +291,7 @@ class EditUserProfileFragment : BaseAppFragment() {
                     BaseAccountManager(requireActivity()).userDetails = user
                     showMessage(getString(R.string.msg_user_details_updated_successfully))
                     isDirty = false
+                    requireActivity().onBackPressed()
                 }
                 is DataBound.Error -> {
                     saveButton.isEnabled = true

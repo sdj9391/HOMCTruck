@@ -266,6 +266,7 @@ class EditContractorProfileFragment : BaseAppFragment() {
                     BaseAccountManager(requireActivity()).userDetails = user
                     showMessage(getString(R.string.msg_contractor_profile_updated_successfully))
                     isDirty = false
+                    requireActivity().onBackPressed()
                 }
                 is DataBound.Error -> {
                     saveButton.isEnabled = true
