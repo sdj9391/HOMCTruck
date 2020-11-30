@@ -1,8 +1,6 @@
 package com.homc.homctruck.data.contracts
 
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.data.models.TruckRoute
+import com.homc.homctruck.data.models.*
 import com.homc.homctruck.restapi.DataBound
 
 interface TruckContract {
@@ -24,11 +22,14 @@ interface TruckContract {
         toDate: Long,
         truckNumberKeyword: String?
     ): DataBound<MutableList<TruckRoute>>
-
     suspend fun updateTruckRouteDetails(
         truckRouteId: String,
         truckRoute: TruckRoute
     ): DataBound<ApiMessage>
-
     suspend fun deleteTruckRoute(truckRouteId: String): DataBound<ApiMessage>
+
+    suspend fun addTruckRegistrationInfo(truckRegistrationInfo: TruckRegistrationInfo): DataBound<ApiMessage>
+    suspend fun getTruckRegistrationInfoList(): DataBound<MutableList<TruckRegistrationInfo>>
+    suspend fun updateTruckRegistrationInfo(truckRegistrationInfoId: String, truckRegistrationInfo: TruckRegistrationInfo): DataBound<ApiMessage>
+    suspend fun deleteTruckRegistrationInfo(truckRegistrationInfoId: String): DataBound<ApiMessage>
 }

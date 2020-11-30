@@ -109,6 +109,20 @@ interface AppApiService {
 
     @DELETE("loads/{loadId}")
     suspend fun deleteLoad(@Path("loadId") loadId: String): Response<ApiMessage>
+
+    @POST("user_messages")
+    suspend fun addMessage(@Body message: Message): Response<ApiMessage>
+
+    @GET("user_messages")
+    suspend fun getMessageList(): Response<MutableList<Message>>
+
+    @PUT("user_messages/{messageId}")
+    suspend fun updateMessage(
+        @Path("messageId") messageId: String, @Body message: Message
+    ): Response<ApiMessage>
+
+    @DELETE("user_messages/{messageId}")
+    suspend fun deleteMessage(@Path("messageId") messageId: String): Response<ApiMessage>
 }
 
 interface PostalApiService {

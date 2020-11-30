@@ -75,13 +75,13 @@ class RegistrationActivity : BaseAppActivity() {
     private fun onPayClick() {
         try {
             val uri: Uri = Uri.Builder().scheme("upi").authority("pay")
-                .appendQueryParameter("pa", "9422499677@okbizaxis") // Payee Vpa
-                .appendQueryParameter("pn", "Sumit Dinesh Jain") // Payee Name
-                .appendQueryParameter("mc", "BCR2DN6TWOH3DRT7") // Payee Merchant Code
+                .appendQueryParameter("pa", getString(R.string.payee_upi))
+                .appendQueryParameter("pn", getString(R.string.payee_name))
+                .appendQueryParameter("mc", getString(R.string.payee_merchant_code))
                 .appendQueryParameter("tr", "REFT12345") // Transaction Ref Id
-                .appendQueryParameter("tn", "Test transaction") // Description
+                .appendQueryParameter("tn", getString(R.string.label_truck_registration))
                 .appendQueryParameter("am", "10.00") // Amount
-                .appendQueryParameter("cu", "INR") // Currency
+                .appendQueryParameter("cu", getString(R.string.payee_money_currency_code))
                 .build()
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = uri

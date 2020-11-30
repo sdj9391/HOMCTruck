@@ -117,6 +117,10 @@ android {
             resValue "string", "account_name", valueAccountName
 
             resValue "string", "google_apis_places_and_maps", HOMC_MAP_API_KEY
+            resValue "string", "payee_upi", HOMC_PAYEE_UPI_ID
+            resValue "string", "payee_name", HOMC_PAYEE_NAME
+            resValue "string", "payee_merchant_code", HOMC_PAYEE_MARCHANT_CODE
+            resValue "string", "payee_money_currency_code", HOMC_PAYEE_MONEY_CURRENCY_CODE
         }
     }
 
