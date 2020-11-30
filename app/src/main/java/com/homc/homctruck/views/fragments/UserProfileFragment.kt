@@ -25,7 +25,6 @@ import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.activities.AuthenticationActivity
-import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
 import com.homc.homctruck.views.dialogs.BottomSheetViewData
 import com.homc.homctruck.views.dialogs.BottomSheetViewItem
@@ -124,19 +123,6 @@ class UserProfileFragment : BaseAppFragment() {
                     DebugLog.w("Error: ${dataBound.message}")
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         openLoginScreen()
-                    }
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

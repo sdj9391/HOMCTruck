@@ -20,7 +20,6 @@ import java.util.concurrent.TimeUnit
 class HomcTruckApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
-        initAppConfig()
         if (!BuildConfig.DEBUG) {
             initFirebaseAnalytics()
         }
@@ -50,46 +49,6 @@ class HomcTruckApp : MultiDexApplication() {
             e.printStackTrace()
         }
         return key
-    }
-
-    fun initAppConfig() {
-        val baseAccountManager = BaseAccountManager(baseContext)
-        val isMobileVerified = baseAccountManager.isMobileVerified ?: false
-        if (isMobileVerified) {
-            val user = FirebaseAuth.getInstance().currentUser
-            user?.getIdToken(true)?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val firebaseToken = task.result.token
-                    if (firebaseToken.isNullOrBlank()) {
-                        DebugLog.w("Setting token null.")
-                    } else {
-                        DebugLog.w("Setting token firebaseToken")
-                        baseAccountManager.userAuthToken = firebaseToken
-                    }
-                } else {
-                    DebugLog.w("Setting token null.")
-                }
-            }
-        }
-        startWorkerForAuthTokenUpdate()
-    }
-
-    private fun startWorkerForAuthTokenUpdate() {
-        val isMobileVerified = BaseAccountManager(baseContext).isMobileVerified ?: false
-        if (!isMobileVerified) {
-            return
-        }
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-
-        val dataSyncWorker = PeriodicWorkRequest.Builder(
-            UpdateFirebaseAuthTokenWorker::class.java, 1, TimeUnit.HOURS
-        ).setConstraints(constraints).build()
-
-        WorkManager.getInstance(baseContext).enqueue(dataSyncWorker)
     }
 
     private fun initFirebaseAnalytics() {

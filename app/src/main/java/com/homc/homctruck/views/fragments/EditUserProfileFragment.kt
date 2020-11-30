@@ -21,7 +21,6 @@ import com.homc.homctruck.utils.*
 import com.homc.homctruck.utils.account.BaseAccountManager
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.*
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.progressBar
 import kotlinx.android.synthetic.main.fragment_edit_user_profile.saveButton
@@ -303,23 +302,6 @@ class EditUserProfileFragment : BaseAppFragment() {
                         showMessage("${dataBound.message}")
                     }
                 }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                saveButton.isEnabled = true
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        saveButton.isEnabled = true
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    }
-                }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE
                     saveButton.isEnabled = false
@@ -370,23 +352,6 @@ class EditUserProfileFragment : BaseAppFragment() {
                     progressBar.visibility = View.GONE
                     DebugLog.e("Error: ${dataBound.message}")
                     showMessage("${dataBound.message}")
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                saveButton.isEnabled = true
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        saveButton.isEnabled = true
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

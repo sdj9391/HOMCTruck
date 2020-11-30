@@ -12,9 +12,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
-import com.homc.homctruck.HomcTruckApp
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.data.repositories.AuthenticationRepository
 import com.homc.homctruck.data.sourceremote.AuthenticationRemoteDataSource
@@ -131,6 +129,11 @@ class LoginFragment : BaseFullScreenFragment() {
         val viewModelFactory =
             AuthenticationViewModelFactory(requireActivity().application, repository)
         viewModel = ViewModelProvider(this, viewModelFactory)[AuthenticationViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initViewModel()
     }
 
     override fun onCreateView(
@@ -254,7 +257,7 @@ class LoginFragment : BaseFullScreenFragment() {
                     // Sign in success, update UI with the signed-in user's information
                     DebugLog.v("signInWithCredential:success")
                     val firebaseUser = task.result.user
-                    addUserAccountDetails(firebaseUser)
+                    checkForNewUserApiCall(firebaseUser)
                 } else {
                     // Sign in failed, display a message and update the UI
                     DebugLog.e("signInWithCredential:failure -> ${task.exception}")
@@ -299,35 +302,6 @@ class LoginFragment : BaseFullScreenFragment() {
         }
     }
 
-    private fun addUserAccountDetails(firebaseUser: FirebaseUser?) {
-        BaseAccountManager(requireActivity()).createAccount()
-
-        firebaseUser?.getIdToken(true)?.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val firebaseAuthToken = task.result.token
-                if (firebaseAuthToken.isNullOrBlank()) {
-                    DebugLog.w("Setting token null")
-                    BaseAccountManager(requireActivity()).removeAccount(requireActivity())
-                } else {
-                    DebugLog.w("Setting token $firebaseAuthToken")
-                    val userDetails = User()
-                    userDetails.mobileNumber = mobileNumberEditText.text.toString().trim()
-                    userDetails.id = firebaseUser.uid
-                    userDetails.firebaseAuthToken = firebaseAuthToken
-                    BaseAccountManager(requireActivity()).userDetails = userDetails
-                    BaseAccountManager(requireActivity()).userAuthToken = firebaseAuthToken
-                    BaseAccountManager(requireActivity()).isMobileVerified = true
-                    (requireActivity().application as HomcTruckApp).initAppConfig()
-                    initViewModel()
-                    checkForNewUserApiCall(firebaseUser)
-                }
-            } else {
-                DebugLog.w("Setting token null")
-                BaseAccountManager(requireActivity()).removeAccount(requireActivity())
-            }
-        }
-    }
-
     private fun openMainDrawerActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -341,18 +315,25 @@ class LoginFragment : BaseFullScreenFragment() {
         }
     }
 
-    private fun checkForNewUserApiCall(firebaseUser: FirebaseUser) {
+    private fun checkForNewUserApiCall(firebaseUser: FirebaseUser?) {
+        if (firebaseUser == null) {
+            DebugLog.e("Firebase user is null.")
+            onEditMobileNumberClick()
+            showMessage(getString(R.string.error_something_went_wrong))
+            return
+        }
+
         if (!isInternetAvailable()) {
+            onEditMobileNumberClick()
             showMessage(getString(R.string.msg_no_internet))
-            openMainDrawerActivity()
             return
         }
 
         viewModel?.getUserDetails(firebaseUser.uid)
-            ?.observe(viewLifecycleOwner, observeGetUserDetails)
+            ?.observe(viewLifecycleOwner, observeGetUserDetails(firebaseUser.uid))
     }
 
-    private val observeGetUserDetails = Observer<DataBound<User>> {
+    private fun observeGetUserDetails(uid: String) = Observer<DataBound<User>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -361,26 +342,23 @@ class LoginFragment : BaseFullScreenFragment() {
         it.let { dataBound ->
             when (dataBound) {
                 is DataBound.Success -> {
-                    val user = dataBound.data
-                    BaseAccountManager(requireActivity()).userDetails = user
+                    addUserAccountDetails(dataBound.data)
                     openMainDrawerActivity()
                 }
                 is DataBound.Error -> {
                     if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
                         DebugLog.w("Error: ${dataBound.message}")
-                        val user = BaseAccountManager(requireActivity()).userDetails
-                        user?.verificationStatus = User.USER_STATUS_PENDING
-                        user?.role = User.ROLE_USER
-                        user?.let {
-                            viewModel?.addNewUser(user)
-                                ?.observe(viewLifecycleOwner, observeAddUserDetails)
-                        }
+                        val user = User()
+                        user.verificationStatus = User.USER_STATUS_PENDING
+                        user.role = User.ROLE_USER
+                        user.id = uid
+                        viewModel?.addNewUser(user)
+                            ?.observe(viewLifecycleOwner, observeAddUserDetails)
                     } else {
                         DebugLog.e("Error: ${dataBound.message}")
-                        openMainDrawerActivity()
+                        onEditMobileNumberClick()
+                        showMessage(getString(R.string.error_something_went_wrong_try_again))
                     }
-                }
-                is DataBound.Retry -> {
                 }
                 is DataBound.Loading -> {
                 }
@@ -388,7 +366,7 @@ class LoginFragment : BaseFullScreenFragment() {
         }
     }
 
-    private val observeAddUserDetails = Observer<DataBound<ApiMessage>> {
+    private val observeAddUserDetails = Observer<DataBound<User>> {
         if (it == null) {
             DebugLog.e("ApiMessage is null")
             return@Observer
@@ -397,19 +375,24 @@ class LoginFragment : BaseFullScreenFragment() {
         it.let { dataBound ->
             when (dataBound) {
                 is DataBound.Success -> {
-                    DebugLog.v("${dataBound.data.message}")
+                    addUserAccountDetails(dataBound.data)
                     openMainDrawerActivity()
                 }
                 is DataBound.Error -> {
-                    DebugLog.e("Error: ${dataBound.message}")
-                    openMainDrawerActivity()
-                }
-                is DataBound.Retry -> {
+                    onEditMobileNumberClick()
+                    showMessage(getString(R.string.error_something_went_wrong))
                 }
                 is DataBound.Loading -> {
                 }
             }
         }
+    }
+
+    private fun addUserAccountDetails(user: User) {
+        BaseAccountManager(requireActivity()).createAccount()
+        BaseAccountManager(requireActivity()).userDetails = user
+        BaseAccountManager(requireActivity()).userAuthToken = user.authToken
+        BaseAccountManager(requireActivity()).isMobileVerified = true
     }
 
     companion object {

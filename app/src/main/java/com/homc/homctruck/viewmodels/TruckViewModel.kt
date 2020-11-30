@@ -31,9 +31,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -62,9 +59,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -95,9 +89,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -123,9 +114,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -154,9 +142,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -182,9 +167,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -212,9 +194,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -240,9 +219,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -273,9 +249,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -305,9 +278,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -334,9 +304,6 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

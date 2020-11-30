@@ -19,7 +19,6 @@ import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.User
 import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.utils.account.BaseAccountManager
-import com.homc.homctruck.views.activities.RetryListener
 import retrofit2.Response
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -329,27 +328,4 @@ fun canHaveAppAccess(context: Context): Boolean {
 
 fun getAuthToken(context: Context): String? {
     return BaseAccountManager(context).userAuthToken
-}
-
-fun getAuthTokenFromFirebase(context: Context, retryListener: RetryListener) {
-    val user = FirebaseAuth.getInstance().currentUser
-    if (user == null || !isInternetAvailable()) {
-        DebugLog.e("User is null or internet is not available")
-        return
-    }
-
-    user.getIdToken(true).addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            val firebaseToken = task.result.token
-            if (firebaseToken.isNullOrBlank()) {
-                DebugLog.w("Setting token null.")
-            } else {
-                DebugLog.w("Setting firebaseToken")
-                BaseAccountManager(context).userAuthToken = firebaseToken
-            }
-        } else {
-            DebugLog.w("Setting token null.")
-        }
-        retryListener.retry()
-    }
 }

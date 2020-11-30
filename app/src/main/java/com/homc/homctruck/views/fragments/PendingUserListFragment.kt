@@ -22,7 +22,6 @@ import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.views.activities.RefreshListener
-import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.activities.StatusChangedListener
 import com.homc.homctruck.views.adapters.UserListAdapter
 import com.homc.homctruck.views.dialogs.BottomSheetListDialogFragment
@@ -182,21 +181,6 @@ open class PendingUserListFragment : BaseAppFragment() {
                             showMessage("${dataBound.message}")
                         }
                     }
-                    is DataBound.Retry -> {
-                        if (canRetryApiCall) {
-                            getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                                override fun retry() {
-                                    initViewModel()
-                                    progressBar.visibility = View.GONE
-                                    showMessage(getString(R.string.error_something_went_wrong_try_again))
-                                }
-                            })
-                        } else {
-                            canRetryApiCall = false
-                            progressBar.visibility = View.GONE
-                            showMessage(getString(R.string.error_something_went_wrong))
-                        }
-                    }
                     is DataBound.Loading -> {
                         progressBar.visibility = View.VISIBLE
                     }
@@ -277,23 +261,6 @@ open class PendingUserListFragment : BaseAppFragment() {
                     } else {
                         DebugLog.e("Error: ${dataBound.message}")
                         showMessage("${dataBound.message}")
-                    }
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                swipeRefreshLayout.isRefreshing = false
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        swipeRefreshLayout.isRefreshing = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

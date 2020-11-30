@@ -18,10 +18,8 @@ class AuthenticationViewModel(
 ) :
     ViewModel() {
 
-
-
-    fun addNewUser(user: User): MutableLiveData<DataBound<ApiMessage>> {
-        val liveData = MutableLiveData<DataBound<ApiMessage>>()
+    fun addNewUser(user: User): MutableLiveData<DataBound<User>> {
+        val liveData = MutableLiveData<DataBound<User>>()
 
         val job = viewModelScope.launch {
             try {
@@ -35,9 +33,6 @@ class AuthenticationViewModel(
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -65,9 +60,6 @@ class AuthenticationViewModel(
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -93,9 +85,6 @@ class AuthenticationViewModel(
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -123,9 +112,6 @@ class AuthenticationViewModel(
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -151,9 +137,6 @@ class AuthenticationViewModel(
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

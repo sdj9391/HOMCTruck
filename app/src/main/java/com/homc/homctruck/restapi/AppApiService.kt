@@ -12,7 +12,7 @@ interface AppApiService {
     suspend fun getUserDetail(@Path("userId") userId: String): Response<User>
 
     @POST("users")
-    suspend fun addNewUserDetail(@Body user: User): Response<ApiMessage>
+    suspend fun addNewUserDetail(@Body user: User): Response<User>
 
     @GET("users")
     suspend fun getUserList(

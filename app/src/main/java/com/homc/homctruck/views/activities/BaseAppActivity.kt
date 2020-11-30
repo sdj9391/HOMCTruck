@@ -11,7 +11,6 @@ import com.homc.homctruck.utils.DebugLog
 open class BaseAppActivity : AppCompatActivity() {
 
     private var toolbar: Toolbar? = null
-    var canRetryApiCall: Boolean = true
 
     protected fun initToolbar(isBackEnable: Boolean = false) {
         toolbar = findViewById(R.id.toolbar)

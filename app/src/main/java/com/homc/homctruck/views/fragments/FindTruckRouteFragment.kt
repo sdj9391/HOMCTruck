@@ -41,7 +41,6 @@ import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.FindTruckRouteListAdapter
 import kotlinx.android.synthetic.main.fragment_find_truck_route.*
 import kotlinx.android.synthetic.main.item_search_view.view.*
@@ -301,23 +300,6 @@ class FindTruckRouteFragment : BaseAppFragment() {
                             showMessage("${dataBound.message}")
                         }
                     }
-                    is DataBound.Retry -> {
-                        if (canRetryApiCall) {
-                            getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                                override fun retry() {
-                                    initViewModel()
-                                    swipeRefreshLayout.isRefreshing = false
-                                    progressBar.visibility = View.GONE
-                                    showMessage(getString(R.string.error_something_went_wrong_try_again))
-                                }
-                            })
-                        } else {
-                            canRetryApiCall = false
-                            swipeRefreshLayout.isRefreshing = false
-                            progressBar.visibility = View.GONE
-                            showMessage(getString(R.string.error_something_went_wrong))
-                        }
-                    }
                     is DataBound.Loading -> {
                         swipeRefreshLayout.isRefreshing = false
                         progressBar.visibility = View.VISIBLE
@@ -439,21 +421,6 @@ class FindTruckRouteFragment : BaseAppFragment() {
                 is DataBound.Error -> {
                     DebugLog.w("Error: ${dataBound.message}")
                     progressBar.visibility = View.GONE
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

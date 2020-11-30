@@ -22,7 +22,6 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.AdapterDataItem
 import com.homc.homctruck.views.adapters.BaseAdapter
 import com.homc.homctruck.views.adapters.TruckRouteListAdapter
@@ -155,21 +154,6 @@ open class MyTruckRouteFragment : BaseAppFragment() {
                         showMessage("${dataBound.message}")
                     }
                 }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    }
-                }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE
                 }
@@ -257,23 +241,6 @@ open class MyTruckRouteFragment : BaseAppFragment() {
                     } else {
                         DebugLog.e("Error: ${dataBound.message}")
                         showMessage("${dataBound.message}")
-                    }
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                swipeRefreshLayout.isRefreshing = false
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        swipeRefreshLayout.isRefreshing = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

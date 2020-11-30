@@ -1,14 +1,11 @@
 package com.homc.homctruck.views.fragments
 
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.views.activities.BaseAppActivity
 
 open class BaseAppFragment : Fragment() {
-
-    var canRetryApiCall: Boolean = true
 
     protected fun setToolBarTitle(string: String?) {
         if (!isAdded) {

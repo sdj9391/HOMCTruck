@@ -17,14 +17,11 @@ class AuthenticationRemoteDataSource(
 ) :
     AuthenticationContract {
 
-    override suspend fun addNewUser(user: User): DataBound<ApiMessage> {
-        val data: ApiMessage
+    override suspend fun addNewUser(user: User): DataBound<User> {
+        val data: User
         try {
             val response = api.addNewUserDetail(user)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -53,9 +50,6 @@ class AuthenticationRemoteDataSource(
         try {
             val response = api.getUserDetail(userId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -84,9 +78,6 @@ class AuthenticationRemoteDataSource(
         try {
             val response = api.getUserList(verificationStatus, userNameKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -115,9 +106,6 @@ class AuthenticationRemoteDataSource(
         try {
             val response = api.updateUserDetail(userId, user)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -146,9 +134,6 @@ class AuthenticationRemoteDataSource(
         try {
             val response = postalApi.getPostalAddress(pinCode)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {

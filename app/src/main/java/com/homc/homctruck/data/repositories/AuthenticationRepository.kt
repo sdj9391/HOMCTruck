@@ -9,7 +9,7 @@ import com.homc.homctruck.restapi.DataBound
 
 class AuthenticationRepository(var dataSource: AuthenticationRemoteDataSource) :
     AuthenticationContract {
-    override suspend fun addNewUser(user: User): DataBound<ApiMessage> {
+    override suspend fun addNewUser(user: User): DataBound<User> {
         return dataSource.addNewUser(user)
     }
 

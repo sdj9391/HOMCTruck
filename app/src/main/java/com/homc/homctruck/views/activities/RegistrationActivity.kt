@@ -226,21 +226,6 @@ class RegistrationActivity : BaseAppActivity() {
                         showMessage("${dataBound.message}")
                     }
                 }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(this, object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
-                    }
-                }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE
                 }

@@ -18,11 +18,9 @@ import com.homc.homctruck.restapi.AppApiInstance
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.DebugLog
 import com.homc.homctruck.utils.getAuthToken
-import com.homc.homctruck.utils.getAuthTokenFromFirebase
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_add_truck.*
 import kotlinx.android.synthetic.main.fragment_add_truck.progressBar
 import java.net.HttpURLConnection
@@ -166,23 +164,6 @@ open class AddTruckFragment : BaseAppFragment() {
                     } else {
                         DebugLog.e("Error: ${dataBound.message}")
                         showMessage("${dataBound.message}")
-                    }
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                saveButton.isEnabled = true
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        saveButton.isEnabled = true
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

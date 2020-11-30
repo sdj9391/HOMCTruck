@@ -40,7 +40,6 @@ import com.homc.homctruck.viewmodels.AuthenticationViewModel
 import com.homc.homctruck.viewmodels.AuthenticationViewModelFactory
 import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import com.homc.homctruck.views.adapters.FindLoadListAdapter
 import kotlinx.android.synthetic.main.fragment_find_load.*
 import kotlinx.android.synthetic.main.item_search_view.view.*
@@ -363,21 +362,6 @@ class FindLoadFragment : BaseAppFragment() {
                     DebugLog.w("Error: ${dataBound.message}")
                     progressBar.visibility = View.GONE
                     showMessageView(getString(R.string.error_something_went_wrong))
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                initViewModel()
-                                progressBar.visibility = View.GONE
-                                showMessageView(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        canRetryApiCall = false
-                        progressBar.visibility = View.GONE
-                        showMessageView(getString(R.string.error_something_went_wrong))
-                    }
                 }
                 is DataBound.Loading -> {
                     progressBar.visibility = View.VISIBLE

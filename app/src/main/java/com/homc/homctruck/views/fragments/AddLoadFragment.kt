@@ -33,7 +33,6 @@ import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.*
 import com.homc.homctruck.viewmodels.LoadViewModel
 import com.homc.homctruck.viewmodels.LoadViewModelFactory
-import com.homc.homctruck.views.activities.RetryListener
 import kotlinx.android.synthetic.main.fragment_add_load.*
 import kotlinx.android.synthetic.main.fragment_add_load.expectedPickUpDateEditText
 import kotlinx.android.synthetic.main.fragment_add_load.fromCityEditText
@@ -336,23 +335,6 @@ open class AddLoadFragment : BaseAppFragment() {
                     } else {
                         DebugLog.e("Error: ${dataBound.message}")
                         showMessage("${dataBound.message}")
-                    }
-                }
-                is DataBound.Retry -> {
-                    if (canRetryApiCall) {
-                        getAuthTokenFromFirebase(requireActivity(), object : RetryListener {
-                            override fun retry() {
-                                saveButton.isEnabled = true
-                                initViewModel()
-                                progressBar.visibility = View.GONE
-                                showMessage(getString(R.string.error_something_went_wrong_try_again))
-                            }
-                        })
-                    } else {
-                        saveButton.isEnabled = true
-                        canRetryApiCall = false
-                        progressBar.visibility = View.GONE
-                        showMessage(getString(R.string.error_something_went_wrong))
                     }
                 }
                 is DataBound.Loading -> {

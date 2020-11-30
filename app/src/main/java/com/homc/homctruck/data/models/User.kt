@@ -11,7 +11,7 @@ class User {
     var aadharCardNumber: String? = null
     var role: String? = null
     var verificationStatus: String? = null
-    var firebaseAuthToken: String? = null
+    var authToken: String? = null
     var firebaseMessageToken: String? = null
     var address: Address? = null
     var contractor: Contractor? = null

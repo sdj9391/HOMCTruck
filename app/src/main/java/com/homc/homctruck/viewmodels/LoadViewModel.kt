@@ -30,9 +30,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -59,9 +56,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -87,9 +81,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -120,9 +111,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
                         }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
-                        }
                     }
                 }
             } catch (t: Throwable) {
@@ -148,9 +136,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }
@@ -178,9 +163,6 @@ class LoadViewModel(var app: Application, private val repository: LoadRepository
                         }
                         is DataBound.Error -> {
                             liveData.value = DataBound.Error(it.message, it.code)
-                        }
-                        is DataBound.Retry -> {
-                            liveData.value = DataBound.Retry(it.code)
                         }
                     }
                 }

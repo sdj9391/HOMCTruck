@@ -16,9 +16,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.addNewLoad(load)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -47,9 +44,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.getLoadDetails(loadId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -78,9 +72,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.getMyLoadList(materialKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -109,9 +100,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.getMyPastLoadList(materialKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -142,9 +130,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.findLoadList(fromCity, toCity, pickUpDate, materialKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -173,9 +158,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.updateLoadDetails(loadId, load)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -204,9 +186,6 @@ class LoadRemoteDataSource(private val api: AppApiService) : LoadContract {
         try {
             val response = api.deleteLoad(loadId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {

@@ -17,9 +17,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.addNewTruck(truck)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -48,9 +45,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.getTruckDetails(truckId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -79,9 +73,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.getMyTruckList(verificationStatus, truckNumberKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -110,9 +101,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.getTruckList(verificationStatus, truckNumberKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -141,9 +129,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.updateTruckDetails(truckId, truck)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -172,9 +157,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.deleteTruck(truckId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -203,9 +185,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.addNewTruckRoute(truckRoute)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -234,9 +213,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.getMyTruckRouteList(truckNumberKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -265,9 +241,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.getMyPastTruckRouteList(truckNumberKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -304,9 +277,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
             val response =
                 api.findTruckRouteList(truckType, fromCity, toCity, fromDate, toDate, truckNumberKeyword)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -338,9 +308,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.updateTruckRouteDetails(truckRouteId, truckRoute)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
@@ -369,9 +336,6 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         try {
             val response = api.deleteTruckRoute(truckRouteId)
             val code = response.code()
-            if (code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                return DataBound.Retry(code)
-            }
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
                 return if (message.isNullOrBlank()) {
