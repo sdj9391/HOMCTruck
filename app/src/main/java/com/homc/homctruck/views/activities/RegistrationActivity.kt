@@ -9,10 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.homc.homctruck.R
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.TransactionDetails
-import com.homc.homctruck.data.models.TransactionStatus
-import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.data.models.*
 import com.homc.homctruck.data.repositories.TruckRepository
 import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
 import com.homc.homctruck.restapi.AppApiInstance
@@ -23,6 +20,7 @@ import com.homc.homctruck.viewmodels.TruckViewModelFactory
 import com.homc.homctruck.views.fragments.EditTruckFragment
 import com.homc.homctruck.views.fragments.MyTruckListFragment
 import kotlinx.android.synthetic.main.activity_registration.*
+import kotlinx.android.synthetic.main.message_view.*
 import java.net.HttpURLConnection
 import java.util.*
 
@@ -36,6 +34,7 @@ class RegistrationActivity : BaseAppActivity() {
         setContentView(R.layout.activity_registration)
         initToolbar(true)
         setToolBarTitle(getString(R.string.label_truck_registration))
+        getTruckRegistrationInfo()
         getTruckDetails()
         initViewModel()
     }
@@ -60,27 +59,82 @@ class RegistrationActivity : BaseAppActivity() {
             return
         }
         truck = dataItem
-        showTruckData()
     }
 
-    private fun showTruckData() {
-        truckNumberTextView.text = truck?.truckNumber?.toUpperCase()
-        registrationPeriodTextView.text = "1 Year"
-        payButton.text = getString(R.string.label_pay_x_rs, "2500.00")
-        payButton.setOnClickListener {
-            onPayClick()
+    private fun getTruckRegistrationInfo() {
+        if (!isInternetAvailable()) {
+            showMessage(getString(R.string.msg_no_internet))
+            return
+        }
+
+        viewModel?.getTruckRegistrationInfoList()
+            ?.observe(this, observeTruckRegistrationInfoList)
+    }
+
+    private val observeTruckRegistrationInfoList = Observer<DataBound<MutableList<TruckRegistrationInfo>>> {
+        if (it == null) {
+            DebugLog.e("ApiMessage is null")
+            return@Observer
+        }
+
+        it.let { dataBound ->
+            when (dataBound) {
+                is DataBound.Success -> {
+                    progressBar.visibility = View.GONE
+                    val data = dataBound.data
+                    if (data.size > 0) {
+                        showTruckData(data[0])
+                    } else {
+                        showMessageView(getString(R.string.msg_truck_registration_not_available))
+                    }
+                }
+                is DataBound.Error -> {
+                    progressBar.visibility = View.GONE
+                    if (dataBound.code == HttpURLConnection.HTTP_NOT_FOUND) {
+                        showMessage(getString(R.string.error_something_went_wrong))
+                    } else {
+                        DebugLog.e("Error: ${dataBound.message}")
+                        showMessage("${dataBound.message}")
+                    }
+                }
+                is DataBound.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                }
+            }
         }
     }
 
-    private fun onPayClick() {
+    private fun showMessageView(message: String) {
+        emptyView.visibility = View.VISIBLE
+        messageTitle.text = message
+    }
+
+    private fun showTruckData(truckRegistrationInfo: TruckRegistrationInfo) {
+        infoTextView.visibility = View.VISIBLE
+        truckNumberView.visibility = View.VISIBLE
+        truckNumberTextView.visibility = View.VISIBLE
+        registrationPeriodText.visibility = View.VISIBLE
+        registrationPeriodTextView.visibility = View.VISIBLE
+        payButton.visibility = View.VISIBLE
+
+        truckNumberTextView.text = truck?.truckNumber?.toUpperCase()
+        registrationPeriodTextView.text = truckRegistrationInfo.period
+        payButton.text = getString(R.string.label_pay_x_rs, truckRegistrationInfo.amount)
+        payButton.setOnClickListener {
+            onPayClick(truckRegistrationInfo)
+        }
+    }
+
+    private fun onPayClick(truckRegistrationInfo: TruckRegistrationInfo) {
         try {
             val uri: Uri = Uri.Builder().scheme("upi").authority("pay")
                 .appendQueryParameter("pa", getString(R.string.payee_upi))
                 .appendQueryParameter("pn", getString(R.string.payee_name))
                 .appendQueryParameter("mc", getString(R.string.payee_merchant_code))
-                .appendQueryParameter("tr", "REFT12345") // Transaction Ref Id
+                .appendQueryParameter("tr", getString(R.string.placeholder_x_dash_y_dash_z,
+                    truck?.id, truck?.truckNumber, truckRegistrationInfo.referenceDate.toString()))
                 .appendQueryParameter("tn", getString(R.string.label_truck_registration))
-                .appendQueryParameter("am", "10.00") // Amount
+                .appendQueryParameter("am", truckRegistrationInfo.amount)
                 .appendQueryParameter("cu", getString(R.string.payee_money_currency_code))
                 .build()
             val intent = Intent(Intent.ACTION_VIEW)
@@ -126,28 +180,49 @@ class RegistrationActivity : BaseAppActivity() {
     }
 
     private fun onTransactionCancelled() {
-        showMessage("Payment Canceled")
+        showMessage(getString(R.string.msg_payment_canceled))
     }
 
     private fun onTransactionCompleted(transactionDetails: TransactionDetails) {
         when (transactionDetails.transactionStatus) {
             TransactionStatus.SUCCESS -> {
-                showMessage("Payment SUCCESS")
+                showMessage(getString(R.string.msg_payment_successful))
                 truck?.transactionDetails = transactionDetails
                 truck?.transactionStatus = Truck.TRANSACTION_STATUS_SUCCESS
                 saveTruckDetails()
                 DebugLog.v("TransactionDetails: ${Gson().toJson(transactionDetails)}")
             }
             TransactionStatus.SUBMITTED -> {
-                showMessage("Payment SUBMITTED")
+                showMessage(getString(R.string.msg_payment_submitted))
                 truck?.transactionDetails = transactionDetails
                 truck?.transactionStatus = Truck.TRANSACTION_STATUS_SUBMITTED
                 saveTruckDetails(true)
                 DebugLog.v("TransactionDetails: ${Gson().toJson(transactionDetails)}")
             }
             TransactionStatus.FAILURE -> {
-                showMessage("Payment FAILURE")
+                showMessage(getString(R.string.msg_payment_failure))
                 DebugLog.v("TransactionDetails: ${Gson().toJson(transactionDetails)}")
+            }
+        }
+        showPaymentDetails(transactionDetails)
+    }
+
+    private fun showPaymentDetails(transactionDetails: TransactionDetails) {
+        payButton.visibility = View.GONE
+        statusImageView.visibility = View.VISIBLE
+        statusTextView.visibility = View.VISIBLE
+        when (transactionDetails.transactionStatus) {
+            TransactionStatus.SUCCESS -> {
+                statusImageView.setImageResource(R.drawable.ic_payment_success)
+                statusTextView.text = getString(R.string.msg_payment_successful)
+            }
+            TransactionStatus.SUBMITTED -> {
+                statusImageView.setImageResource(R.drawable.ic_payment_submitted)
+                statusTextView.text = getString(R.string.msg_payment_submitted)
+            }
+            TransactionStatus.FAILURE -> {
+                statusImageView.setImageResource(R.drawable.ic_payment_failure)
+                statusTextView.text = getString(R.string.msg_payment_failure)
             }
         }
     }
@@ -215,7 +290,6 @@ class RegistrationActivity : BaseAppActivity() {
                     } else {
                         setResult(MyTruckListFragment.RESULT_SUBMITTED)
                     }
-                    finish()
                 }
                 is DataBound.Error -> {
                     progressBar.visibility = View.GONE

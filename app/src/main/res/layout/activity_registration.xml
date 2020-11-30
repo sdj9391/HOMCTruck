@@ -25,6 +25,18 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:visibility="visible" />
 
+    <include
+        android:id="@+id/emptyView"
+        layout="@layout/message_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        tools:visibility="visible" />
+
     <TextView
         android:id="@+id/infoTextView"
         android:layout_width="0dp"
@@ -33,12 +45,14 @@
         android:background="@color/white"
         android:gravity="center"
         android:padding="12dp"
-        android:text="@string/msg_truck_registration"
         android:textColor="@color/title_text"
         android:textSize="@dimen/normal_font"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        tools:text="msg_truck_registration"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/truckNumberView"
@@ -47,11 +61,13 @@
         android:layout_margin="12dp"
         android:background="@color/white"
         android:padding="12dp"
+        android:text="@string/label_truck_number"
         android:textColor="@color/title_text"
         android:textSize="@dimen/normal_font"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/infoTextView"
-        android:text="@string/label_truck_number" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/truckNumberTextView"
@@ -62,10 +78,12 @@
         android:padding="12dp"
         android:textColor="@color/title_text"
         android:textSize="@dimen/normal_font"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/truckNumberView"
         app:layout_constraintTop_toBottomOf="@+id/infoTextView"
-        tools:text="MH00AB0000" />
+        tools:text="MH00AB0000"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/registrationPeriodText"
@@ -74,11 +92,13 @@
         android:layout_margin="12dp"
         android:background="@color/white"
         android:padding="12dp"
+        android:text="@string/label_registration_period"
         android:textColor="@color/title_text"
         android:textSize="@dimen/normal_font"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/truckNumberView"
-        android:text="@string/label_registration_period" />
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/registrationPeriodTextView"
@@ -89,25 +109,57 @@
         android:padding="12dp"
         android:textColor="@color/title_text"
         android:textSize="@dimen/normal_font"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/registrationPeriodText"
         app:layout_constraintTop_toBottomOf="@+id/truckNumberView"
-        tools:text="1 Year" />
+        tools:text="1 Year"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/statusImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/statusTextView"
+        app:layout_constraintEnd_toEndOf="@+id/emptyView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registrationPeriodText"
+        tools:src="@drawable/ic_payment_success" />
+
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginTop="12dp"
+        android:textColor="@color/title_text"
+        android:textSize="@dimen/normal_font"
+        app:layout_constraintBottom_toTopOf="@+id/payButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusImageView"
+        tools:text="Money will be debited from your bank. But we do not got reference of it. So please contact us with payment transaction id" />
 
     <Button
         android:id="@+id/payButton"
-        android:layout_width="0dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:visibility="gone"
         app:backgroundTint="@color/white"
-        app:strokeColor="@color/accent"
+        app:icon="@drawable/ic_upi_icon"
+        app:iconPadding="12dp"
+        app:iconTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_margin="12dp"
-        app:icon="@drawable/ic_upi_icon"
-        app:iconTint="@null"
-        app:iconPadding="12dp"
+        app:strokeColor="@color/accent"
         tools:text="Pay 2500.00 ₹"
-        android:layout_height="wrap_content"/>
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

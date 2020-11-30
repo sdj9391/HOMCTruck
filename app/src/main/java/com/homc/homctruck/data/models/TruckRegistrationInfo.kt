@@ -6,5 +6,5 @@ class TruckRegistrationInfo {
     var amount: String? = null
     var period: String? = null
     var details: String? = null
-    var transactionRefId: String? = null
+    var referenceDate: Long? = null
 }
