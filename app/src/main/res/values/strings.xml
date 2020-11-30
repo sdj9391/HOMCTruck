@@ -106,7 +106,7 @@
     <string name="label_to_city">To City</string>
     <string name="label_journey_start_date">Journey Start Date</string>
     <string name="label_journey_end_date">Journey End Date</string>
-    <string name="mag_add_truck_route">Add Truck to Truck Route</string>
+    <string name="mag_add_truck_route">Your Trucks are not approved by admin yet</string>
     <string name="msg_truck_route_details_saved_successfully">Truck Route details saved successfully</string>
     <string name="error_truck_already_added">Truck is already added</string>
     <string name="msg_select_truck_number">Select Truck Number</string>

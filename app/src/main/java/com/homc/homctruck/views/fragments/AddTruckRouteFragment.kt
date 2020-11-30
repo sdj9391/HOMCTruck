@@ -154,6 +154,14 @@ open class AddTruckRouteFragment : BaseAppFragment() {
             datePickerDialog.datePicker.minDate = Calendar.getInstance().timeInMillis
             datePickerDialog.show()
         }
+
+        addTruckButton.setOnClickListener {
+            navigationController?.navigate(R.id.action_addTruckRouteFragment_to_addTruckFragment)
+        }
+
+        contactUsButton.setOnClickListener {
+            navigationController?.navigate(R.id.action_addTruckRouteFragment_to_contactUsFragment)
+        }
     }
 
     private fun getTruckData() {
@@ -211,10 +219,16 @@ open class AddTruckRouteFragment : BaseAppFragment() {
 
     private fun showTruckData(data: MutableList<Truck>) {
         if (data.isNullOrEmpty()) {
-            showToastMessage(getString(R.string.mag_add_truck_route))
-            navigationController?.navigate(R.id.action_addTruckRouteFragment_to_addTruckFragment)
+            showMessage(getString(R.string.mag_add_truck_route))
+            contactUsButton.visibility = View.VISIBLE
+            addTruckButton.visibility = View.VISIBLE
+            scrollView.visibility = View.GONE
+            // navigationController?.navigate(R.id.action_addTruckRouteFragment_to_addTruckFragment)
             return
         }
+        contactUsButton.visibility = View.GONE
+        addTruckButton.visibility = View.GONE
+        scrollView.visibility = View.VISIBLE
 
         trucks = mutableMapOf()
         val items: MutableSet<String> = mutableSetOf()
@@ -316,7 +330,7 @@ open class AddTruckRouteFragment : BaseAppFragment() {
         val truckRoute = TruckRoute()
         truckRoute.truckId = truck.id
         truckRoute.fromCity = fromCity
-        truckRoute.fromCity = fromCity
+        truckRoute.toCity = toCity
         truckRoute.startJourneyDate = startMillis
         truckRoute.endJourneyDate = endMillis
         return truckRoute

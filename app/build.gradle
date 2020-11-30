@@ -7,7 +7,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 
 ext.versionMajor = 1
 ext.versionMinor = 0
-ext.versionPatch = 3
+ext.versionPatch = 4
 ext.minimumSdkVersion = 21
 
 android {

@@ -59,13 +59,4 @@ open class BaseAppFragment : Fragment() {
             DebugLog.e("Not able to show a message!")
         }
     }
-
-    protected fun showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
-        if (view != null) {
-            val toast: Toast = Toast.makeText(requireActivity(), message, duration)
-            toast.show()
-        } else {
-            DebugLog.e("Not able to show a message!")
-        }
-    }
 }

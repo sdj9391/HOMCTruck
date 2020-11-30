@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_addTruckRouteFragment_to_addTruckFragment"
             app:destination="@id/addTruckFragment" />
+        <action
+            android:id="@+id/action_addTruckRouteFragment_to_contactUsFragment"
+            app:destination="@id/contactUsFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactUsFragment"
