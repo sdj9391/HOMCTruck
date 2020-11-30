@@ -123,6 +123,20 @@ interface AppApiService {
 
     @DELETE("user_messages/{messageId}")
     suspend fun deleteMessage(@Path("messageId") messageId: String): Response<ApiMessage>
+
+    @POST("truck_registration")
+    suspend fun addTruckRegistrationInfo(@Body truckRegistrationInfo: TruckRegistrationInfo): Response<ApiMessage>
+
+    @GET("truck_registration")
+    suspend fun getTruckRegistrationInfoList(): Response<MutableList<TruckRegistrationInfo>>
+
+    @PUT("truck_registration/{truckRegistrationInfoId}")
+    suspend fun updateTruckRegistrationInfo(
+        @Path("truckRegistrationInfoId") truckRegistrationInfoId: String, @Body truckRegistrationInfo: TruckRegistrationInfo
+    ): Response<ApiMessage>
+
+    @DELETE("truck_registration/{messageId}")
+    suspend fun deleteTruckRegistrationInfo(@Path("truckRegistrationInfoId") truckRegistrationInfoId: String): Response<ApiMessage>
 }
 
 interface PostalApiService {

@@ -16,17 +16,17 @@ class MessageRemoteDataSource(private val api: AppApiService) : MessageContract 
             val response = api.addMessage(message)
             val code = response.code()
             if (!response.isSuccessful) {
-                val message = parseApiMessage(response).message
-                return if (message.isNullOrBlank()) {
+                val msg = parseApiMessage(response).message
+                return if (msg.isNullOrBlank()) {
                     DataBound.Error(null, parse(code))
                 } else {
-                    DataBound.Error(message, code)
+                    DataBound.Error(msg, code)
                 }
             } else {
                 val responseData = response.body()
                 if (responseData == null) {
-                    val message = parseApiMessage(response).message
-                    return DataBound.Error(message, code)
+                    val msg = parseApiMessage(response).message
+                    return DataBound.Error(msg, code)
                 } else {
                     data = responseData
                 }
@@ -72,17 +72,17 @@ class MessageRemoteDataSource(private val api: AppApiService) : MessageContract 
             val response = api.updateMessage(messageId, message)
             val code = response.code()
             if (!response.isSuccessful) {
-                val message = parseApiMessage(response).message
-                return if (message.isNullOrBlank()) {
+                val msg = parseApiMessage(response).message
+                return if (msg.isNullOrBlank()) {
                     DataBound.Error(null, parse(code))
                 } else {
-                    DataBound.Error(message, code)
+                    DataBound.Error(msg, code)
                 }
             } else {
                 val responseData = response.body()
                 if (responseData == null) {
-                    val message = parseApiMessage(response).message
-                    return DataBound.Error(message, code)
+                    val msg = parseApiMessage(response).message
+                    return DataBound.Error(msg, code)
                 } else {
                     data = responseData
                 }

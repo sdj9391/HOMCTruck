@@ -3,6 +3,7 @@ package com.homc.homctruck.data.repositories
 import com.homc.homctruck.data.contracts.TruckContract
 import com.homc.homctruck.data.models.ApiMessage
 import com.homc.homctruck.data.models.Truck
+import com.homc.homctruck.data.models.TruckRegistrationInfo
 import com.homc.homctruck.data.models.TruckRoute
 import com.homc.homctruck.data.sourceremote.TruckRemoteDataSource
 import com.homc.homctruck.restapi.DataBound
@@ -64,5 +65,24 @@ class TruckRepository(var dataSource: TruckRemoteDataSource) :
 
     override suspend fun deleteTruckRoute(truckRouteId: String): DataBound<ApiMessage> {
         return dataSource.deleteTruckRoute(truckRouteId)
+    }
+
+    override suspend fun addTruckRegistrationInfo(truckRegistrationInfo: TruckRegistrationInfo): DataBound<ApiMessage> {
+        return dataSource.addTruckRegistrationInfo(truckRegistrationInfo)
+    }
+
+    override suspend fun getTruckRegistrationInfoList(): DataBound<MutableList<TruckRegistrationInfo>> {
+        return dataSource.getTruckRegistrationInfoList()
+    }
+
+    override suspend fun updateTruckRegistrationInfo(
+        truckRegistrationInfoId: String,
+        truckRegistrationInfo: TruckRegistrationInfo
+    ): DataBound<ApiMessage> {
+        return dataSource.updateTruckRegistrationInfo(truckRegistrationInfoId, truckRegistrationInfo)
+    }
+
+    override suspend fun deleteTruckRegistrationInfo(truckRegistrationInfoId: String): DataBound<ApiMessage> {
+        return dataSource.deleteTruckRegistrationInfo(truckRegistrationInfoId)
     }
 }

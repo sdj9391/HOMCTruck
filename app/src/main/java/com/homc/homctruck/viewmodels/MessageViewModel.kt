@@ -95,7 +95,6 @@ class MessageViewModel(var app: Application, private val repository: MessageRepo
         return liveData
     }
 
-
     fun deleteMessage(messageId: String): MutableLiveData<DataBound<ApiMessage>> {
         val liveData = MutableLiveData<DataBound<ApiMessage>>()
 

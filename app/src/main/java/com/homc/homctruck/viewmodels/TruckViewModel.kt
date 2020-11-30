@@ -4,9 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.data.models.TruckRoute
+import com.homc.homctruck.data.models.*
 import com.homc.homctruck.data.repositories.TruckRepository
 import com.homc.homctruck.restapi.DataBound
 import kotlinx.coroutines.launch
@@ -296,6 +294,113 @@ class TruckViewModel(var app: Application, private val repository: TruckReposito
             try {
                 liveData.value = DataBound.Loading()
                 val dataBound = repository.deleteTruckRoute(truckRouteId)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
+    fun addTruckRegistrationInfo(truckRegistrationInfo: TruckRegistrationInfo): MutableLiveData<DataBound<ApiMessage>> {
+        val liveData = MutableLiveData<DataBound<ApiMessage>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound = repository.addTruckRegistrationInfo(truckRegistrationInfo)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
+    fun getTruckRegistrationInfoList(): MutableLiveData<DataBound<MutableList<TruckRegistrationInfo>>> {
+        val liveData = MutableLiveData<DataBound<MutableList<TruckRegistrationInfo>>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound = repository.getTruckRegistrationInfoList()
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
+    fun updateTruckRegistrationInfo(
+        truckRegistrationInfoId: String,
+        truckRegistrationInfo: TruckRegistrationInfo
+    ): MutableLiveData<DataBound<ApiMessage>> {
+        val liveData = MutableLiveData<DataBound<ApiMessage>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound = repository.updateTruckRegistrationInfo(truckRegistrationInfoId, truckRegistrationInfo)
+
+                dataBound.let {
+                    when (it) {
+                        is DataBound.Success -> {
+                            liveData.value = DataBound.Success(it.data)
+                        }
+                        is DataBound.Error -> {
+                            liveData.value = DataBound.Error(it.message, it.code)
+                        }
+                    }
+                }
+            } catch (t: Throwable) {
+                liveData.value = DataBound.Error(t.message, null)
+            }
+        }
+
+        return liveData
+    }
+
+    fun deleteTruckRegistrationInfo(truckRegistrationInfoId: String): MutableLiveData<DataBound<ApiMessage>> {
+        val liveData = MutableLiveData<DataBound<ApiMessage>>()
+
+        val job = viewModelScope.launch {
+            try {
+                liveData.value = DataBound.Loading()
+                val dataBound = repository.deleteTruckRegistrationInfo(truckRegistrationInfoId)
 
                 dataBound.let {
                     when (it) {

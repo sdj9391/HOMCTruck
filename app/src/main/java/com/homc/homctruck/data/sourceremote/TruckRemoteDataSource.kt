@@ -1,9 +1,7 @@
 package com.homc.homctruck.data.sourceremote
 
 import com.homc.homctruck.data.contracts.TruckContract
-import com.homc.homctruck.data.models.ApiMessage
-import com.homc.homctruck.data.models.Truck
-import com.homc.homctruck.data.models.TruckRoute
+import com.homc.homctruck.data.models.*
 import com.homc.homctruck.restapi.AppApiService
 import com.homc.homctruck.restapi.DataBound
 import com.homc.homctruck.utils.parse
@@ -335,6 +333,118 @@ class TruckRemoteDataSource(private val api: AppApiService) : TruckContract {
         val data: ApiMessage
         try {
             val response = api.deleteTruckRoute(truckRouteId)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun addTruckRegistrationInfo(truckRegistrationInfo: TruckRegistrationInfo): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.addTruckRegistrationInfo(truckRegistrationInfo)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun getTruckRegistrationInfoList(): DataBound<MutableList<TruckRegistrationInfo>> {
+        val data: MutableList<TruckRegistrationInfo>
+        try {
+            val response = api.getTruckRegistrationInfoList()
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun updateTruckRegistrationInfo(truckRegistrationInfoId: String, truckRegistrationInfo: TruckRegistrationInfo): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.updateTruckRegistrationInfo(truckRegistrationInfoId, truckRegistrationInfo)
+            val code = response.code()
+            if (!response.isSuccessful) {
+                val message = parseApiMessage(response).message
+                return if (message.isNullOrBlank()) {
+                    DataBound.Error(null, parse(code))
+                } else {
+                    DataBound.Error(message, code)
+                }
+            } else {
+                val responseData = response.body()
+                if (responseData == null) {
+                    val message = parseApiMessage(response).message
+                    return DataBound.Error(message, code)
+                } else {
+                    data = responseData
+                }
+            }
+        } catch (t: Throwable) {
+            throw t
+        }
+
+        return DataBound.Success(data)
+    }
+
+    override suspend fun deleteTruckRegistrationInfo(truckRegistrationInfoId: String): DataBound<ApiMessage> {
+        val data: ApiMessage
+        try {
+            val response = api.deleteTruckRegistrationInfo(truckRegistrationInfoId)
             val code = response.code()
             if (!response.isSuccessful) {
                 val message = parseApiMessage(response).message
