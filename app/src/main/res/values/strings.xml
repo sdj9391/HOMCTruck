@@ -181,7 +181,7 @@
     <string name="msg_search_load_by_material_type">Search load by material type</string>
     <string name="label_truck_registration">Truck Registration</string>
     <string name="label_registration_period">Registration Period</string>
-    <string name="label_pay_x_rs">Pay %1$s ₹</string>
+    <string name="label_pay_x_rs">Pay %1$d ₹</string>
     <string name="msg_truck_registration_success">Truck Registration Successful</string>
     <string name="msg_transection_pending">Got pending status from UPI app. If money is cut from your bank account then contact us with transection id of transection</string>
     <string name="msg_truck_registration_not_available">Truck registration not available. Try again later</string>
@@ -189,4 +189,10 @@
     <string name="msg_payment_successful">Payment successful</string>
     <string name="msg_payment_submitted">Money will be debited from your bank. But we do not got reference of it. So please contact us with payment transaction id</string>
     <string name="msg_payment_failure">Payment failure</string>
+    <string name="label_registration_amount">Registration Amount</string>
+    <string name="label_description">Description</string>
+    <string name="msg_enter_registration_amount">Enter registration amount</string>
+    <string name="msg_enter_registration_period">Enter registration period</string>
+    <string name="msg_enter_description">Enter description</string>
+    <string name="msg_truck_registration_details_saved_successfully">Truck registration details saved successfully</string>
 </resources>

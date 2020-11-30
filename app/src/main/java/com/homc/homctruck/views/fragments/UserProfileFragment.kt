@@ -66,7 +66,10 @@ class UserProfileFragment : BaseAppFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cancelNotification(requireActivity(), MyFirebaseMessagingService.NOTIFICATION_ID_USER_STATUS)
+        cancelNotification(
+            requireActivity(),
+            MyFirebaseMessagingService.NOTIFICATION_ID_USER_STATUS
+        )
         setToolBarTitle(getString(R.string.menu_user_profile))
         getUserDetails()
         setUserDetails()
@@ -301,6 +304,12 @@ class UserProfileFragment : BaseAppFragment() {
                 getString(R.string.label_manage_trucks), null, null
             )
         )
+        sectionItems.add(
+            BottomSheetViewItem(
+                ACTION_ID_TRUCK_REGISTRATION, R.drawable.ic_medal,
+                getString(R.string.label_truck_registration), null, null
+            )
+        )
         val sections = mutableListOf<BottomSheetViewSection>()
         sections.add(BottomSheetViewSection(viewItems = sectionItems))
         val bottomSheetViewData = BottomSheetViewData(bottomSheetViewSections = sections)
@@ -314,6 +323,7 @@ class UserProfileFragment : BaseAppFragment() {
         when (it.id) {
             ACTION_ID_MANAGE_USER -> navigationController?.navigate(R.id.action_userProfileFragment_to_userTabFragment)
             ACTION_ID_MANAGE_TRUCK -> navigationController?.navigate(R.id.action_userProfileFragment_to_truckTabFragment)
+            ACTION_ID_TRUCK_REGISTRATION -> navigationController?.navigate(R.id.action_userProfileFragment_to_truckRegistrationDetails)
             else -> DebugLog.e("Id not matched")
         }
     }
@@ -321,5 +331,6 @@ class UserProfileFragment : BaseAppFragment() {
     companion object {
         const val ACTION_ID_MANAGE_USER = 111
         const val ACTION_ID_MANAGE_TRUCK = 222
+        const val ACTION_ID_TRUCK_REGISTRATION = 333
     }
 }

@@ -351,6 +351,7 @@ class LoginFragment : BaseFullScreenFragment() {
                         val user = User()
                         user.verificationStatus = User.USER_STATUS_PENDING
                         user.role = User.ROLE_USER
+                        user.mobileNumber = mobileNumberEditText.text.toString()
                         user.id = uid
                         viewModel?.addNewUser(user)
                             ?.observe(viewLifecycleOwner, observeAddUserDetails)

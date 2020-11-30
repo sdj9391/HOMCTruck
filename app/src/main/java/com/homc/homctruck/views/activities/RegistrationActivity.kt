@@ -119,6 +119,7 @@ class RegistrationActivity : BaseAppActivity() {
 
         truckNumberTextView.text = truck?.truckNumber?.toUpperCase()
         registrationPeriodTextView.text = truckRegistrationInfo.period
+        infoTextView.text = truckRegistrationInfo.details
         payButton.text = getString(R.string.label_pay_x_rs, truckRegistrationInfo.amount)
         payButton.setOnClickListener {
             onPayClick(truckRegistrationInfo)
@@ -126,6 +127,7 @@ class RegistrationActivity : BaseAppActivity() {
     }
 
     private fun onPayClick(truckRegistrationInfo: TruckRegistrationInfo) {
+        payButton.tag = "${truckRegistrationInfo.amount}.00"
         try {
             val uri: Uri = Uri.Builder().scheme("upi").authority("pay")
                 .appendQueryParameter("pa", getString(R.string.payee_upi))
@@ -134,7 +136,7 @@ class RegistrationActivity : BaseAppActivity() {
                 .appendQueryParameter("tr", getString(R.string.placeholder_x_dash_y_dash_z,
                     truck?.id, truck?.truckNumber, truckRegistrationInfo.referenceDate.toString()))
                 .appendQueryParameter("tn", getString(R.string.label_truck_registration))
-                .appendQueryParameter("am", truckRegistrationInfo.amount)
+                .appendQueryParameter("am", "${truckRegistrationInfo.amount}.00")
                 .appendQueryParameter("cu", getString(R.string.payee_money_currency_code))
                 .build()
             val intent = Intent(Intent.ACTION_VIEW)
@@ -152,6 +154,7 @@ class RegistrationActivity : BaseAppActivity() {
     }
 
     private fun getTransactionDetails(response: String): TransactionDetails {
+        val amount = payButton.tag as? String
         DebugLog.v("Transaction Response: ${Gson().toJson(response)}")
         return with(getMapFromQuery(response)) {
             TransactionDetails(
@@ -159,7 +162,7 @@ class RegistrationActivity : BaseAppActivity() {
                 responseCode = get("responseCode"),
                 approvalRefNo = get("ApprovalRefNo"),
                 transactionRefId = get("txnRef"),
-                amount = "2500.00",
+                amount = amount,
                 transactionStatus = TransactionStatus.valueOf(
                     get("Status")?.toUpperCase(Locale.getDefault())
                         ?: TransactionStatus.FAILURE.name

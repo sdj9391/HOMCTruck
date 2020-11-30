@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_truckTabFragment"
             app:destination="@id/truckTabFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_truckRegistrationDetails"
+            app:destination="@id/truckRegistrationDetails" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -168,4 +171,8 @@
         android:id="@+id/truckTabFragment"
         android:name="com.homc.homctruck.views.fragments.TruckTabFragment"
         android:label="TruckTabFragment" />
+    <fragment
+        android:id="@+id/truckRegistrationDetails"
+        android:name="com.homc.homctruck.views.fragments.TruckRegistrationDetails"
+        android:label="TruckRegistrationDetails" />
 </navigation>
