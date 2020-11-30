@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.homc.homctruck.R
@@ -18,12 +19,7 @@ import com.homc.homctruck.utils.getAuthToken
 import com.homc.homctruck.utils.isInternetAvailable
 import com.homc.homctruck.viewmodels.TruckViewModel
 import com.homc.homctruck.viewmodels.TruckViewModelFactory
-import kotlinx.android.synthetic.main.fragment_add_truck.*
 import kotlinx.android.synthetic.main.fragment_truck_registration_details.*
-import kotlinx.android.synthetic.main.fragment_truck_registration_details.progressBar
-import kotlinx.android.synthetic.main.fragment_truck_registration_details.saveButton
-import kotlinx.android.synthetic.main.message_view.*
-import java.net.HttpURLConnection
 
 class TruckRegistrationDetails : BaseAppFragment() {
 
@@ -33,7 +29,7 @@ class TruckRegistrationDetails : BaseAppFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_add_truck, container, false)
+        return inflater.inflate(R.layout.fragment_truck_registration_details, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,14 +92,15 @@ class TruckRegistrationDetails : BaseAppFragment() {
 
     private fun showMessageView(message: String) {
         emptyView.visibility = View.VISIBLE
-        messageTitle.text = message
+        val errorTitle = emptyView.findViewById<TextView>(R.id.messageTitle)
+        errorTitle?.text = message
     }
 
     private fun showRegistrationData(truckRegistrationInfo: TruckRegistrationInfo? = null) {
         saveButton.tag = truckRegistrationInfo
         scrollView.visibility = View.VISIBLE
         registrationPeriodEditText.setText(truckRegistrationInfo?.period)
-        amountEditText.setText(truckRegistrationInfo?.amount?.toString())
+        amountEditText.setText(truckRegistrationInfo?.amount)
         descriptionEditText.setText(truckRegistrationInfo?.details)
     }
 
@@ -147,11 +144,10 @@ class TruckRegistrationDetails : BaseAppFragment() {
             }
 
         truckRegistrationInfo.details = description
-        truckRegistrationInfo.amount = amount as Int
+        truckRegistrationInfo.amount = amount
         truckRegistrationInfo.period = registrationPeriod
 
         return truckRegistrationInfo
-
     }
 
     private fun saveTruckRegistrationInfo(truckRegistrationInfo: TruckRegistrationInfo) {
